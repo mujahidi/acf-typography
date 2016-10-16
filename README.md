@@ -4,7 +4,7 @@ A Typography Add-on for the Advanced Custom Fields Plugin.
 
   - Requires at least: WP 3.5.0
   - Tested up to: WP 4.6.1
-  - Stable: 1.0.0
+  - Stable: 1.1.0
   - License: GPLv2 or later
   - License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -20,13 +20,18 @@ Typography field type for "Advanced Custom Fields" plugin that lets you add diff
 * Text Align
 * Text Color
 * Text Decoration
+* Text Transform
 
 ### Other Features
 * Option to show/hide each subfield individually
 * Option to make each subfield required individually
 * Color Picker for Text Color subfield
 
-### Sample Output for Theme Developers
+### Screenshots
+![Typography Field Screenshot](https://raw.githubusercontent.com/mujahidi/typography/master/screenshot-1.png "Typography Sample Field Settings")
+![Typography Field Screenshot](https://raw.githubusercontent.com/mujahidi/typography/master/screenshot-2.png "Typography Sample Field Content Editing")
+
+### For Developers
 `
 Array
 (
@@ -39,8 +44,13 @@ Array
     [text_align] => center
     [text_color] => #ff0000
     [text_decoration] => underline
+	[text_transform] => uppercase
 )
 `
+```php
+$getTypography = get_field('typography');
+echo $getTypography['font_size'];
+```
 ### Compatibility
 
 This ACF field type is compatible with:
@@ -52,3 +62,6 @@ This ACF field type is compatible with:
 2. Activate the Typography plugin via the plugins admin page
 3. Create a new field via ACF and select the Typography type
 4. Please refer to the description for more info regarding the field type settings
+
+### Changelog
+See changelog on [CHANGELOG.md](CHANGELOG.md) file.

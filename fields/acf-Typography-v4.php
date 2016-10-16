@@ -42,7 +42,8 @@ class acf_field_Typography extends acf_field {
 			'text_align'			=> 'left',
 			'letter_spacing'		=> 0,
 			'text_decoration'		=> 'none',
-			'text_color'			=> '#000'
+			'text_color'			=> '#000',
+			'text_transform'		=> 'none'
 		);
 		
 		$this->font_family = array(
@@ -91,6 +92,14 @@ class acf_field_Typography extends acf_field {
 			'underline' 	=> 'underline',
 			'overline' 		=> 'overline',
 			'line-through' 	=> 'line-through',
+			'initial' 		=> 'initial',
+			'inherit' 		=> 'inherit'
+		);
+		$this->text_transform = array(
+			'none' 			=> 'none',
+			'capitalize' 	=> 'capitalize',
+			'uppercase' 	=> 'uppercase',
+			'lowercase' 	=> 'lowercase',
 			'initial' 		=> 'initial',
 			'inherit' 		=> 'inherit'
 		);
@@ -147,6 +156,7 @@ class acf_field_Typography extends acf_field {
 						'text_align' =>  __("Text Align",'acf'),
 						'text_color' =>  __("Text Color",'acf'),
 						'text_decoration' =>  __("Text Decoration",'acf'),
+						'text_transform' =>  __("Text Transform",'acf'),
 					),
 					'layout'  =>  'horizontal',
 				));
@@ -173,6 +183,7 @@ class acf_field_Typography extends acf_field {
 						'text_align' =>  __("Text Align",'acf'),
 						'text_color' =>  __("Text Color",'acf'),
 						'text_decoration' =>  __("Text Decoration",'acf'),
+						'text_transform' =>  __("Text Transform",'acf'),
 					),
 					'layout'  =>  'horizontal',
 				));
@@ -321,6 +332,23 @@ class acf_field_Typography extends acf_field {
 				?>
 			</td>
 		</tr>
+		<tr class="field_option field_option_<?php echo $this->name; ?>">
+			<td class="label">
+				<label><?php _e("Text Transform (Default)",'acf'); ?></label>
+			</td>
+			<td>
+				<?php
+				do_action('acf/create_field', array(
+					'type'  =>  'select',
+					'name'  =>  'fields['.$key.'][text_transform]',
+					'value' =>  $field['text_transform'],
+					'ui'	=> 1,
+					'choices' => $this->text_transform,
+					'layout'  =>  'horizontal',
+				));
+				?>
+			</td>
+		</tr>
 
 		<?php
 	}
@@ -363,7 +391,7 @@ class acf_field_Typography extends acf_field {
 
 				if( $f == 'font_size' || $f == 'line_height' || $f == 'letter_spacing' ){
 					$numbers[] = $f;
-				}else if( $f == 'font_family' || $f == 'font_weight' || $f == 'font_style' || $f == 'text_align' || $f == 'text_decoration' ){
+				}else if( $f == 'font_family' || $f == 'font_weight' || $f == 'font_style' || $f == 'text_align' || $f == 'text_decoration' || $f == 'text_transform' ){
 					$selects[] = $f;
 				}
 				
