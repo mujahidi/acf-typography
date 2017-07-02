@@ -2,8 +2,8 @@
 Contributors: mujahid158
 Tags: typography, acf, advanced custom fields, addon, admin, field, custom, custom field
 Requires at least: 3.5.0
-Tested up to: 4.6.1
-Stable tag: 1.1.0
+Tested up to: 4.8
+Stable tag: 1.1.1
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -46,6 +46,10 @@ Array
 	[text_transform] => uppercase
 )
 `
+`
+$getTypography = get_field('typography');
+echo $getTypography['font_size'];
+`
 
 = Compatibility =
 
@@ -61,7 +65,7 @@ This ACF field type is compatible with:
 
 == Frequently Asked Questions ==
 = Q. Is it compatible with ACF Pro (v5)? =
-A. No. Currently, the plugin is only compatible with v4 (free version of ACF) but support for v5 will arrive soon.
+A. No. Currently, the plugin is ONLY compatible with v4 (free version of ACF) but support for v5 will arrive soon.
 
 = Q. Does it support Google Fonts? =
 A. No. Currently, it only supports Web Safe Fonts. The support for Google Fonts will arrive soon.
@@ -73,6 +77,9 @@ A. No. Currently, it only supports Web Safe Fonts. The support for Google Fonts 
 2. Typography Field Content Editing
 
 == Changelog ==
+= 1.1.1 =
+* Fixed a bug
+
 = 1.1.0 =
 * [NEW] Text Transform subfield
 

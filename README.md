@@ -3,8 +3,8 @@
 A Typography Add-on for the Advanced Custom Fields Plugin.
 
   - Requires at least: WP 3.5.0
-  - Tested up to: WP 4.6.1
-  - Stable: 1.1.0
+  - Tested up to: WP 4.8
+  - Stable: 1.1.1
   - License: GPLv2 or later
   - License URI: http://www.gnu.org/licenses/gpl-2.0.html
 

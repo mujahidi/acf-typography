@@ -385,7 +385,7 @@ class acf_field_Typography extends acf_field {
 				$numbers = $selects = array();
 				
 				$required = '';
-				if( in_array($f, $field['required_properties']) ){
+				if( is_array($field['required_properties']) && in_array($f, $field['required_properties']) ){
 					$required = 'required';
 				}
 
