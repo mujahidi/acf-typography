@@ -210,7 +210,7 @@ class acf_field_Typography extends acf_field {
 		</tr>
 		<tr class="field_option field_option_<?php echo $this->name; ?>">
 			<td class="label">
-				<label><?php _e("Font Family (Default)",'acf'); ?></label>
+				<label><?php _e("Font Family",'acf'); ?></label>
 				<p class="description">(Default)</p>
 			</td>
 			<td>
@@ -227,7 +227,7 @@ class acf_field_Typography extends acf_field {
 		</tr>
 		<tr class="field_option field_option_<?php echo $this->name; ?>">
 			<td class="label">
-				<label><?php _e("Font Weight (Default)",'acf'); ?></label>
+				<label><?php _e("Font Weight",'acf'); ?></label>
 				<p class="description">(Default)</p>
 			</td>
 			<td>
@@ -244,7 +244,7 @@ class acf_field_Typography extends acf_field {
 		</tr>
 		<tr class="field_option field_option_<?php echo $this->name; ?>">
 			<td class="label">
-				<label><?php _e("Font Style (Default)",'acf'); ?></label>
+				<label><?php _e("Font Style",'acf'); ?></label>
 				<p class="description">(Default)</p>
 			</td>
 			<td>
@@ -262,7 +262,7 @@ class acf_field_Typography extends acf_field {
 		</tr>
 		<tr class="field_option field_option_<?php echo $this->name; ?>">
 			<td class="label">
-				<label><?php _e("Line Height (Default)",'acf'); ?></label>
+				<label><?php _e("Line Height",'acf'); ?></label>
 				<p class="description">(Default)</p>
 			</td>
 			<td>
@@ -278,7 +278,7 @@ class acf_field_Typography extends acf_field {
 		</tr>
 		<tr class="field_option field_option_<?php echo $this->name; ?>">
 			<td class="label">
-				<label><?php _e("Letter Spacing (Default)",'acf'); ?></label>
+				<label><?php _e("Letter Spacing",'acf'); ?></label>
 				<p class="description">(Default)</p>
 			</td>
 			<td>
@@ -294,7 +294,7 @@ class acf_field_Typography extends acf_field {
 		</tr>
 		<tr class="field_option field_option_<?php echo $this->name; ?>">
 			<td class="label">
-				<label><?php _e("Text Align (Default)",'acf'); ?></label>
+				<label><?php _e("Text Align",'acf'); ?></label>
 				<p class="description">(Default)</p>
 			</td>
 			<td>
@@ -312,7 +312,7 @@ class acf_field_Typography extends acf_field {
 		</tr>
 		<tr class="field_option field_option_<?php echo $this->name; ?>">
 			<td class="label">
-				<label><?php _e("Text Color (Default)",'acf'); ?></label>
+				<label><?php _e("Text Color",'acf'); ?></label>
 				<p class="description">(Default)</p>
 			</td>
 			<td>
@@ -327,7 +327,7 @@ class acf_field_Typography extends acf_field {
 		</tr>
 		<tr class="field_option field_option_<?php echo $this->name; ?>">
 			<td class="label">
-				<label><?php _e("Text Decoration (Default)",'acf'); ?></label>
+				<label><?php _e("Text Decoration",'acf'); ?></label>
 				<p class="description">(Default)</p>
 			</td>
 			<td>
@@ -345,7 +345,7 @@ class acf_field_Typography extends acf_field {
 		</tr>
 		<tr class="field_option field_option_<?php echo $this->name; ?>">
 			<td class="label">
-				<label><?php _e("Text Transform (Default)",'acf'); ?></label>
+				<label><?php _e("Text Transform",'acf'); ?></label>
 				<p class="description">(Default)</p>
 			</td>
 			<td>
