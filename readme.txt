@@ -2,8 +2,8 @@
 Contributors: mujahid158
 Tags: typography, acf, advanced custom fields, addon, admin, field, custom, custom field
 Requires at least: 3.5.0
-Tested up to: 4.8
-Stable tag: 1.1.1
+Tested up to: 4.8.1
+Stable tag: 2.0.0
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -54,7 +54,8 @@ echo $getTypography['font_size'];
 = Compatibility =
 
 This ACF field type is compatible with:
-* ACF 4
+* ACF 4 (free version of ACF)
+* ACF 5 (Pro)
 
 == Installation ==
 
@@ -65,7 +66,7 @@ This ACF field type is compatible with:
 
 == Frequently Asked Questions ==
 = Q. Is it compatible with ACF Pro (v5)? =
-A. No. Currently, the plugin is ONLY compatible with v4 (free version of ACF) but support for v5 will arrive soon.
+A. Yes
 
 = Q. Does it support Google Fonts? =
 A. No. Currently, it only supports Web Safe Fonts. The support for Google Fonts will arrive soon.
@@ -77,6 +78,9 @@ A. No. Currently, it only supports Web Safe Fonts. The support for Google Fonts 
 2. Typography Field Content Editing
 
 == Changelog ==
+= 2.0.0 =
+* [NEW] Now supports ACF 5 (Pro version)
+
 = 1.1.1 =
 * Fixed a bug
 

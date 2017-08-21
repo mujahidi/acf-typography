@@ -3,8 +3,8 @@
 A Typography Add-on for the Advanced Custom Fields Plugin.
 
   - Requires at least: WP 3.5.0
-  - Tested up to: WP 4.8
-  - Stable: 1.1.1
+  - Tested up to: WP 4.8.1
+  - Stable: 2.0.0
   - License: GPLv2 or later
   - License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -54,7 +54,8 @@ echo $getTypography['font_size'];
 ### Compatibility
 
 This ACF field type is compatible with:
-* ACF 4
+* ACF 4 (free version of ACF)
+* ACF 5 (Pro)
 
 ### Installation
 

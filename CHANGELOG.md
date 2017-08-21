@@ -1,4 +1,9 @@
 # CHANGELOG
+
+##### 2.0.0
+* [NEW] Now supports ACF 5 (Pro version)
+* Added description to subfields
+
 ##### 1.1.1
 * Fixed a bug which used to appear when none of the sub-field was made required.
 
