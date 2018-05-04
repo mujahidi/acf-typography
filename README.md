@@ -3,8 +3,8 @@
 A Typography Add-on for the Advanced Custom Fields Plugin.
 
   - Requires at least: WP 3.5.0
-  - Tested up to: WP 4.8.1
-  - Stable: 2.0.0
+  - Tested up to: WP 4.9.5
+  - Stable: 2.1.0
   - License: GPLv2 or later
   - License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -15,6 +15,7 @@ Typography field type for "Advanced Custom Fields" plugin that lets you add diff
 * Font Family
 * Font Weight
 * Font Style
+* Font Variant
 * Line Height
 * Letter Spacing
 * Text Align
@@ -39,6 +40,7 @@ Array
     [font_family] => "MS Sans Serif", Geneva, sans-serif
     [font_weight] => 400
     [font_style] => italic
+    [font_variant => small-caps
     [line_height] => 1.5
     [letter_spacing] => 1
     [text_align] => center

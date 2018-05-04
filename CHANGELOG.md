@@ -1,5 +1,8 @@
 # CHANGELOG
 
+##### 2.1.0
+* [NEW] Font Variant subfield
+
 ##### 2.0.0
 * [NEW] Now supports ACF 5 (Pro version)
 * Added description to subfields

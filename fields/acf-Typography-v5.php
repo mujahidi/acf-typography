@@ -58,6 +58,7 @@ class acf_field_Typography extends acf_field {
 			'font_weight'			=> '400',
 			'font_family'			=> 'Arial, Helvetica, sans-serif',
 			'font_style'			=> 'normal',
+            'font_variant'			=> 'normal',
 			'text_align'			=> 'left',
 			'letter_spacing'		=> 0,
 			'text_decoration'		=> 'none',
@@ -97,6 +98,12 @@ class acf_field_Typography extends acf_field {
 			'normal'	=> 'normal',
 			'italic'	=> 'italic',
 			'oblique'	=> 'oblique',
+		);
+        $this->font_variant = array(
+			'normal'     => 'normal',
+            'small-caps' => 'small-caps',
+            'initial'    => 'initial',
+            'inherit'    => 'inherit'
 		);
 		$this->text_align = array(
 			'inherit'	=> 'inherit',
@@ -182,6 +189,7 @@ class acf_field_Typography extends acf_field {
 				'font_family' =>  __("Font Family",'acf'),
 				'font_weight' =>  __("Font Weight",'acf'),
 				'font_style' =>  __("Font Style",'acf'),
+                'font_variant' =>  __("Font Variant",'acf'),
 				'line_height' =>  __("Line Height",'acf'),
 				'letter_spacing' =>  __("Letter Spacing",'acf'),
 				'text_align' =>  __("Text Align",'acf'),
@@ -202,6 +210,7 @@ class acf_field_Typography extends acf_field {
 				'font_family' =>  __("Font Family",'acf'),
 				'font_weight' =>  __("Font Weight",'acf'),
 				'font_style' =>  __("Font Style",'acf'),
+                'font_variant' =>  __("Font Variant",'acf'),
 				'line_height' =>  __("Line Height",'acf'),
 				'letter_spacing' =>  __("Letter Spacing",'acf'),
 				'text_align' =>  __("Text Align",'acf'),
@@ -244,6 +253,15 @@ class acf_field_Typography extends acf_field {
 			'type'			=> 'select',
 			'name'			=> 'font_style',
 			'choices'       => $this->font_style,
+			'layout'        => 'horizontal'
+		));
+        
+        acf_render_field_setting( $field, array(
+			'label'			=> __('Font Variant','acf-Typography'),
+			'instructions'	=> __('Default','acf-Typography'),
+			'type'			=> 'select',
+			'name'			=> 'font_variant',
+			'choices'       => $this->font_variant,
 			'layout'        => 'horizontal'
 		));
 		
@@ -341,7 +359,7 @@ class acf_field_Typography extends acf_field {
 				
 				if( $f == 'font_size' || $f == 'line_height' || $f == 'letter_spacing' ){
 					$numbers[] = $f;
-				}else if( $f == 'font_family' || $f == 'font_weight' || $f == 'font_style' || $f == 'text_align' || $f == 'text_decoration' || $f == 'text_transform' ){
+				}else if( $f == 'font_family' || $f == 'font_weight' || $f == 'font_style' || $f == 'font_variant' || $f == 'text_align' || $f == 'text_decoration' || $f == 'text_transform' ){
 					$selects[] = $f;
 				}
 				
