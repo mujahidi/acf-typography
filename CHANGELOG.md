@@ -1,5 +1,8 @@
 # CHANGELOG
 
+##### 2.2.0
+* [NEW] Font Stretch subfield
+
 ##### 2.1.0
 * [NEW] Font Variant subfield
 
