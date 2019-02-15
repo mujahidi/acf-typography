@@ -37,7 +37,7 @@ class acf_field_Typography extends acf_field {
 		*  label (string) Multiple words, can include spaces, visible when selecting a field type
 		*/
 		
-		$this->label = __('Typography', 'acf-Typography');
+		$this->label = __('Typography', 'acf-typography');
 		
 		
 		/*
@@ -137,7 +137,7 @@ class acf_field_Typography extends acf_field {
 		*/
 		
 		$this->l10n = array(
-			'error'	=> __('Error! Please enter a higher value', 'acf-Typography'),
+			'error'	=> __('Error! Please enter a higher value', 'acf-typography'),
 		);
 		
 		
@@ -180,8 +180,8 @@ class acf_field_Typography extends acf_field {
 		*/
 		
 		acf_render_field_setting( $field, array(
-			'label'			=> __('Display Properties','acf-Typography'),
-			'instructions'	=> __('Select fields to display on edit page','acf-Typography'),
+			'label'			=> __('Display Properties','acf-typography'),
+			'instructions'	=> __('Select fields to display on edit page','acf-typography'),
 			'type'			=> 'checkbox',
 			'name'			=> 'display_properties',
 			'choices' =>  array(
@@ -201,8 +201,8 @@ class acf_field_Typography extends acf_field {
 		));
 		
 		acf_render_field_setting( $field, array(
-			'label'			=> __('Required Properties','acf-Typography'),
-			'instructions'	=> __('Select fields which are required on edit page','acf-Typography'),
+			'label'			=> __('Required Properties','acf-typography'),
+			'instructions'	=> __('Select fields which are required on edit page','acf-typography'),
 			'type'			=> 'checkbox',
 			'name'			=> 'required_properties',
 			'choices' =>  array(
@@ -222,16 +222,16 @@ class acf_field_Typography extends acf_field {
 		));
 		
 		acf_render_field_setting( $field, array(
-			'label'			=> __('Font Size','acf-Typography'),
-			'instructions'	=> __('Default','acf-Typography'),
+			'label'			=> __('Font Size','acf-typography'),
+			'instructions'	=> __('Default','acf-typography'),
 			'type'			=> 'number',
 			'name'			=> 'font_size',
 			'append'        => 'px'
 		));
 		
 		acf_render_field_setting( $field, array(
-			'label'			=> __('Font Family','acf-Typography'),
-			'instructions'	=> __('Default','acf-Typography'),
+			'label'			=> __('Font Family','acf-typography'),
+			'instructions'	=> __('Default','acf-typography'),
 			'type'			=> 'select',
 			'name'			=> 'font_family',
 			'choices'       => $this->font_family,
@@ -239,8 +239,8 @@ class acf_field_Typography extends acf_field {
 		));
 		
 		acf_render_field_setting( $field, array(
-			'label'			=> __('Font Weight','acf-Typography'),
-			'instructions'	=> __('Default','acf-Typography'),
+			'label'			=> __('Font Weight','acf-typography'),
+			'instructions'	=> __('Default','acf-typography'),
 			'type'			=> 'select',
 			'name'			=> 'font_weight',
 			'choices'       => $this->font_weight,
@@ -248,8 +248,8 @@ class acf_field_Typography extends acf_field {
 		));
 		
 		acf_render_field_setting( $field, array(
-			'label'			=> __('Font Style','acf-Typography'),
-			'instructions'	=> __('Default','acf-Typography'),
+			'label'			=> __('Font Style','acf-typography'),
+			'instructions'	=> __('Default','acf-typography'),
 			'type'			=> 'select',
 			'name'			=> 'font_style',
 			'choices'       => $this->font_style,
@@ -257,8 +257,8 @@ class acf_field_Typography extends acf_field {
 		));
         
         acf_render_field_setting( $field, array(
-			'label'			=> __('Font Variant','acf-Typography'),
-			'instructions'	=> __('Default','acf-Typography'),
+			'label'			=> __('Font Variant','acf-typography'),
+			'instructions'	=> __('Default','acf-typography'),
 			'type'			=> 'select',
 			'name'			=> 'font_variant',
 			'choices'       => $this->font_variant,
@@ -266,24 +266,24 @@ class acf_field_Typography extends acf_field {
 		));
 		
 		acf_render_field_setting( $field, array(
-			'label'			=> __('Line Height','acf-Typography'),
-			'instructions'	=> __('Default','acf-Typography'),
+			'label'			=> __('Line Height','acf-typography'),
+			'instructions'	=> __('Default','acf-typography'),
 			'type'			=> 'number',
 			'name'			=> 'line_height',
 			'append'        => 'px'
 		));
 		
 		acf_render_field_setting( $field, array(
-			'label'			=> __('Letter Spacing','acf-Typography'),
-			'instructions'	=> __('Default','acf-Typography'),
+			'label'			=> __('Letter Spacing','acf-typography'),
+			'instructions'	=> __('Default','acf-typography'),
 			'type'			=> 'number',
 			'name'			=> 'letter_spacing',
 			'append'        => 'px'
 		));
 		
 		acf_render_field_setting( $field, array(
-			'label'			=> __('Text Align','acf-Typography'),
-			'instructions'	=> __('Default','acf-Typography'),
+			'label'			=> __('Text Align','acf-typography'),
+			'instructions'	=> __('Default','acf-typography'),
 			'type'			=> 'select',
 			'name'			=> 'text_align',
 			'choices'       => $this->text_align,
@@ -291,15 +291,15 @@ class acf_field_Typography extends acf_field {
 		));
 		
 		acf_render_field_setting( $field, array(
-			'label'			=> __('Text Color','acf-Typography'),
-			'instructions'	=> __('Default','acf-Typography'),
+			'label'			=> __('Text Color','acf-typography'),
+			'instructions'	=> __('Default','acf-typography'),
 			'type'			=> 'text',
 			'name'			=> 'text_color',
 		));
 		
 		acf_render_field_setting( $field, array(
-			'label'			=> __('Text Decoration','acf-Typography'),
-			'instructions'	=> __('Default','acf-Typography'),
+			'label'			=> __('Text Decoration','acf-typography'),
+			'instructions'	=> __('Default','acf-typography'),
 			'type'			=> 'select',
 			'name'			=> 'text_decoration',
 			'choices'       => $this->text_decoration,
@@ -307,8 +307,8 @@ class acf_field_Typography extends acf_field {
 		));
 		
 		acf_render_field_setting( $field, array(
-			'label'			=> __('Text Transform','acf-Typography'),
-			'instructions'	=> __('Default','acf-Typography'),
+			'label'			=> __('Text Transform','acf-typography'),
+			'instructions'	=> __('Default','acf-typography'),
 			'type'			=> 'select',
 			'name'			=> 'text_transform',
 			'choices'       => $this->text_transform,
@@ -368,7 +368,7 @@ class acf_field_Typography extends acf_field {
 				    <div class="acf-field acf-field-number acf-field-<?php echo $f; ?>" data-name="<?php echo $f; ?>" data-type="number" data-key="<?php echo $key; ?>" <?php echo $data_required; ?>>
                     	<div class="acf-label">
                     		<label for="acf-field-<?php echo $f; ?>">
-                    		    <?php echo ucfirst(str_replace('_', ' ', $f)); ?>
+                    		    <?php echo __(ucfirst(str_replace('_', ' ', $f)), 'acf-typography'); ?>
                     		    <?php if($required != NULL){ ?>
 									<span class="acf-required">*</span></label>
 								<?php } ?>
@@ -386,7 +386,7 @@ class acf_field_Typography extends acf_field {
 			        <div class="acf-field acf-field-select acf-field-<?php echo $f; ?>" data-name="<?php echo $f; ?>" data-type="select" data-key="<?php echo $key; ?>" <?php echo $data_required; ?>>
                     	<div class="acf-label">
                     		<label for="acf-field-<?php echo $f; ?>">
-                    		    <?php echo ucfirst(str_replace('_', ' ', $f)); ?>
+                    		    <?php echo __(ucfirst(str_replace('_', ' ', $f)), 'acf-typography'); ?>
                     		    <?php if($required != NULL){ ?>
 									<span class="acf-required">*</span></label>
 								<?php } ?>
@@ -412,7 +412,7 @@ class acf_field_Typography extends acf_field {
 			    	<div class="acf-field acf-field-color-picker acf-field-<?php echo $f; ?>" data-name="<?php echo $f; ?>" data-type="color_picker" data-key="<?php echo $key; ?>" <?php echo $data_required; ?>>
                     	<div class="acf-label">
                     		<label for="acf-field-<?php echo $f; ?>">
-                    		    <?php echo ucfirst(str_replace('_', ' ', $f)); ?>
+                    		    <?php echo __(ucfirst(str_replace('_', ' ', $f)), 'acf-typography'); ?>
                     		    <?php if($required != NULL){ ?>
 									<span class="acf-required">*</span></label>
 								<?php } ?>
