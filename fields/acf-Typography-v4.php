@@ -40,6 +40,7 @@ class acf_field_Typography extends acf_field {
 			'font_family'			=> 'Arial, Helvetica, sans-serif',
 			'font_style'			=> 'normal',
             'font_variant'			=> 'normal',
+            'font_stretch'			=> 'normal',
 			'text_align'			=> 'left',
 			'letter_spacing'		=> 0,
 			'text_decoration'		=> 'none',
@@ -85,6 +86,19 @@ class acf_field_Typography extends acf_field {
             'small-caps' => 'small-caps',
             'initial'    => 'initial',
             'inherit'    => 'inherit'
+		);
+		$this->font_stretch = array(
+			'ultra-condensed'   => 'ultra-condensed',
+			'extra-condensed'   => 'extra-condensed',
+			'condensed'         => 'condensed',
+			'semi-condensed'    => 'semi-condensed',
+			'normal'            => 'normal',
+			'semi-expanded'     => 'semi-expanded',
+			'expanded'          => 'expanded',
+			'extra-expanded'    => 'extra-expanded',
+			'ultra-expanded'    => 'ultra-expanded',
+			'initial'           => 'initial',
+			'inherit'           => 'inherit'
 		);
 		$this->text_align = array(
 			'inherit'	=> 'inherit',
@@ -160,6 +174,7 @@ class acf_field_Typography extends acf_field {
 						'font_weight' =>  __("Font Weight",'acf-typography'),
 						'font_style' =>  __("Font Style",'acf-typography'),
                         'font_variant' =>  __("Font Variant",'acf-typography'),
+                        'font_stretch' =>  __("Font Stretch",'acf-typography'),
 						'line_height' =>  __("Line Height",'acf-typography'),
 						'letter_spacing' =>  __("Letter Spacing",'acf-typography'),
 						'text_align' =>  __("Text Align",'acf-typography'),
@@ -189,6 +204,7 @@ class acf_field_Typography extends acf_field {
 						'font_weight' =>  __("Font Weight",'acf-typography'),
 						'font_style' =>  __("Font Style",'acf-typography'),
                         'font_variant' =>  __("Font Variant",'acf-typography'),
+                        'font_stretch' =>  __("Font Stretch",'acf-typography'),
 						'line_height' =>  __("Line Height",'acf-typography'),
 						'letter_spacing' =>  __("Letter Spacing",'acf-typography'),
 						'text_align' =>  __("Text Align",'acf-typography'),
@@ -282,6 +298,24 @@ class acf_field_Typography extends acf_field {
 					'value' =>  $field['font_variant'],
 					'ui'	=> 1,
 					'choices' =>  $this->font_variant,
+					'layout'  =>  'horizontal',
+				));
+				?>
+			</td>
+		</tr>
+		<tr class="field_option field_option_<?php echo $this->name; ?>">
+			<td class="label">
+				<label><?php _e("Font Stretch",'acf-typography'); ?></label>
+				<p class="description"><?php _e('(Default)', 'acf-typography'); ?></p>
+			</td>
+			<td>
+				<?php
+				do_action('acf/create_field', array(
+					'type'  =>  'select',
+					'name'  =>  'fields['.$key.'][font_stretch]',
+					'value' =>  $field['font_stretch'],
+					'ui'	=> 1,
+					'choices' =>  $this->font_stretch,
 					'layout'  =>  'horizontal',
 				));
 				?>
@@ -430,7 +464,7 @@ class acf_field_Typography extends acf_field {
 
 				if( $f == 'font_size' || $f == 'line_height' || $f == 'letter_spacing' ){
 					$numbers[] = $f;
-				}else if( $f == 'font_family' || $f == 'font_weight' || $f == 'font_style' || $f == 'font_variant' || $f == 'text_align' || $f == 'text_decoration' || $f == 'text_transform' ){
+				}else if( $f == 'font_family' || $f == 'font_weight' || $f == 'font_style' || $f == 'font_variant' || $f == 'font_stretch' || $f == 'text_align' || $f == 'text_decoration' || $f == 'text_transform' ){
 					$selects[] = $f;
 				}
 				

@@ -3,7 +3,7 @@ Contributors: mujahid158
 Tags: typography, acf, advanced custom fields, addon, admin, field, custom, custom field
 Requires at least: 3.5.0
 Tested up to: 5.0.3
-Stable tag: 2.1.0
+Stable tag: 2.2.0
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -19,6 +19,7 @@ Typography field type for "Advanced Custom Fields" plugin that lets you add diff
 * Font Weight
 * Font Style
 * Font Variant
+* Font Stretch
 * Line Height
 * Letter Spacing
 * Text Align
@@ -40,6 +41,7 @@ Array
     [font_weight] => 400
     [font_style] => italic
     [font_variant => small-caps
+    [font_stretch] => expanded
     [line_height] => 1.5
     [letter_spacing] => 1
     [text_align] => center
@@ -80,6 +82,9 @@ A. No. Currently, it only supports Web Safe Fonts. But the support for Google Fo
 2. Typography Field Content Editing
 
 == Changelog ==
+= 2.2.0 =
+* [NEW] Font Stretch subfield
+
 = 2.1.0 =
 * [NEW] Font Variant subfield
 
