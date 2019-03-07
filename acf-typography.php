@@ -2,8 +2,9 @@
 
 /*
 Plugin Name: Advanced Custom Fields: Typography Field
+Plugin URI: https://wordpress.org/plugins/acf-typography-field
 Description: A Typography Add-on for the Advanced Custom Fields Plugin.
-Version: 2.2.0
+Version: 3.0.0 beta
 Author: Mujahid Ishtiaq
 Author URI: https://github.com/mujahidi
 License: GPLv2 or later
@@ -36,17 +37,14 @@ class acf_plugin_Typography {
 		
 		// vars
 		$this->settings = array(
-			'version'	=> '2.2.0',
+			'version'	=> '3.0.0 beta',
 			'url'		=> plugin_dir_url( __FILE__ ),
 			'path'		=> plugin_dir_path( __FILE__ )
 		);
 		
-		
-		// set text domain
-		// https://codex.wordpress.org/Function_Reference/load_plugin_textdomain
-		//load_plugin_textdomain( 'acf-Typography', false, plugin_basename( dirname( __FILE__ ) ) . '/lang' ); 
-		
-		
+		// include files
+		require plugin_dir_path( __FILE__ ) . 'includes/api-template.php';
+
 		// include field
 		add_action('acf/include_field_types', 	array($this, 'include_field_types')); // v5
 		add_action('acf/register_fields', 		array($this, 'include_field_types')); // v4
