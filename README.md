@@ -3,7 +3,7 @@
 A Typography Add-on for the Advanced Custom Fields Plugin.
 
   - Requires at least: WP 3.5.0
-  - Tested up to: WP 5.0.3
+  - Tested up to: WP 5.1.1
   - Stable: 2.2.0
   - License: GPLv2 or later
   - License URI: http://www.gnu.org/licenses/gpl-2.0.html
@@ -41,7 +41,7 @@ Array
     [font_family] => "MS Sans Serif", Geneva, sans-serif
     [font_weight] => 400
     [font_style] => italic
-    [font_variant => small-caps
+    [font_variant] => small-caps
     [font_stretch] => expanded
     [line_height] => 1.5
     [letter_spacing] => 1
@@ -58,8 +58,7 @@ echo $getTypography['font_size'];
 ### Compatibility
 
 This ACF field type is compatible with:
-* ACF 4 (free version of ACF)
-* ACF 5 (Pro)
+* Free and paid versions of the ACF plugin
 
 ### Installation
 

@@ -2,6 +2,8 @@
 
 /**
  *  get_typography_field()
+ * 
+ *  @since		3.0.0
  */
 function get_typography_field( $selector, $property, $post_id = false, $format_value = true ) {
 	
@@ -44,6 +46,8 @@ function get_typography_field( $selector, $property, $post_id = false, $format_v
 
 /**
  *  the_typography_field()
+ * 
+ *  @since		3.0.0
  */
 function the_typography_field( $selector, $property, $post_id = false, $format_value = true ) {
 	
@@ -57,10 +61,12 @@ function the_typography_field( $selector, $property, $post_id = false, $format_v
 	
 }
 
-/*
+/**
 *  acf_typography_shortcode()
 *
 *  [acf_typography field="heading" property="font_size" post_id="123" format_value="1"]
+*
+*  @since		3.0.0
 */
 
 function acf_typography_shortcode( $atts ) {

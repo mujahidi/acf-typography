@@ -33,7 +33,7 @@ class acf_field_Typography extends acf_field {
 		$this->defaults = array(
 			// add default here to merge into your field. 
 			// This makes life easy when creating the field options as you don't need to use any if( isset('') ) logic. eg:
-			'display_properties'	=> array( 'font_size', 'font_family' ),
+			'display_properties'	=> array(),
 			'required_properties'	=> array(),
 			'font_size'				=> 15,
 			'font_weight'			=> '400',

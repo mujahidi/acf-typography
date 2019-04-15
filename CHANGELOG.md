@@ -1,5 +1,9 @@
 # CHANGELOG
 
+##### 3.0.0
+* [NEW] Introduces functions and shortcodes
+* [NEW] Hides nonselected properties in fieldgroup edit page
+
 ##### 2.2.0
 * [NEW] Font Stretch subfield
 

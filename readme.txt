@@ -2,7 +2,7 @@
 Contributors: mujahid158
 Tags: typography, acf, advanced custom fields, addon, admin, field, custom, custom field
 Requires at least: 3.5.0
-Tested up to: 5.0.3
+Tested up to: 5.1.1
 Stable tag: 2.2.0
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
@@ -40,7 +40,7 @@ Array
     [font_family] => "MS Sans Serif", Geneva, sans-serif
     [font_weight] => 400
     [font_style] => italic
-    [font_variant => small-caps
+    [font_variant] => small-caps
     [font_stretch] => expanded
     [line_height] => 1.5
     [letter_spacing] => 1
@@ -57,9 +57,7 @@ echo $getTypography['font_size'];
 
 = Compatibility =
 
-This ACF field type is compatible with:
-* ACF 4 (free version of ACF)
-* ACF 5 (Pro)
+This ACF field type is compatible with both free and paid versions of the ACF plugin
 
 == Installation ==
 
@@ -69,8 +67,8 @@ This ACF field type is compatible with:
 4. Please refer to the description for more info regarding the field type settings
 
 == Frequently Asked Questions ==
-= Q. Is it compatible with ACF Pro (v5)? =
-A. Yes
+= Q. Is it compatible with ACF Pro? =
+A. Yes. This plugin is compatiable with both free and paid ACF plugins.
 
 = Q. Does it support Google Fonts? =
 A. No. Currently, it only supports Web Safe Fonts. But the support for Google Fonts is coming in next major release soon.
@@ -82,6 +80,11 @@ A. No. Currently, it only supports Web Safe Fonts. But the support for Google Fo
 2. Typography Field Content Editing
 
 == Changelog ==
+= 3.0.0 =
+* Introduces shortcode
+* Introduces functions for developers
+* Hides nonselected properties in fieldgroup edit page
+
 = 2.2.0 =
 * [NEW] Font Stretch subfield
 
