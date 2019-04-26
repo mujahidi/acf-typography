@@ -3,11 +3,11 @@
 /**
  *  Update Google Fonts JSON file
  * 
- *  update_gf_json_file()
+ *  acft_update_gf_json_file()
  * 
  *  @since		3.0.0
  */
-function update_gf_json_file( $API_KEY ) {
+function acft_update_gf_json_file( $API_KEY ) {
 
     $dir = plugin_dir_path( dirname(__FILE__) );
     $filename = $dir . 'google_fonts.json';
@@ -35,15 +35,15 @@ function update_gf_json_file( $API_KEY ) {
 /**
  *  Get google fonts for Font-Family drop-down subfield
  * 
- *  get_google_font_family()
+ *  acft_get_google_font_family()
  * 
  *  @since		3.0.0
  */
-function get_google_font_family(){
+function acft_get_google_font_family(){
 
     if ( !defined('YOUR_API_KEY') ) return;
 
-    update_gf_json_file( YOUR_API_KEY );
+    acft_update_gf_json_file( YOUR_API_KEY );
 
     // Load json file for extra seting
     $dir = plugin_dir_path( dirname(__FILE__) );
@@ -66,5 +66,23 @@ function get_google_font_family(){
     }
 
     return $font_family;
+
+}
+
+/**
+ *  Enqueue Google Fonts file
+ * 
+ *  acft_enqueue_google_fonts_file()
+ * 
+ *  @since		3.0.0
+ */
+add_action( 'wp_head', 'acft_enqueue_google_fonts_file' );
+function acft_enqueue_google_fonts_file() {
+    
+    global $post;
+
+    $font_family = get_typography_field( 'typo', 'font_family', $post->ID );
+
+    wp_enqueue_style( 'acft-gf', 'https://fonts.googleapis.com/css?family='.$font_family );
 
 }
