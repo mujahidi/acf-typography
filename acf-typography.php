@@ -17,7 +17,7 @@ if( ! defined( 'ABSPATH' ) ) exit;
 $acft_options = get_option( 'acft_settings' );
 
 if( $acft_options['google_key'] )
-	define('YOUR_API_KEY', 'AIzaSyD6kL15KaUQpZLBN42WzXadai8hDgoINUg');
+	define('YOUR_API_KEY', $acft_options['google_key']);
 
 // check if class already exists
 if( !class_exists('acf_plugin_Typography') ) :
