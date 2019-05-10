@@ -62,6 +62,49 @@ function the_typography_field( $selector, $property, $post_id = false, $format_v
 }
 
 /**
+ *  get_typography_sub_field()
+ * 
+ *  @since		3.0.0
+ */
+function get_typography_sub_field( $selector, $property, $format_value = true, $load_value = true ) {
+
+	// get sub field
+	$sub_field = get_sub_field_object( $selector, $format_value );
+	
+	
+	// bail early if no sub field
+	if( !$sub_field ) return false;
+	
+	if( is_array($sub_field['value']) && array_key_exists( $property, $sub_field['value'] ) )
+		$property_value = $sub_field['value'][$property];
+    else
+		$property_value = '';
+
+	// return 
+	return $property_value;
+
+}
+
+/**
+ *  the_typography_sub_field()
+ * 
+ *  @since		3.0.0
+ */
+function the_typography_sub_field( $field_name, $property, $format_value = true ) {
+	
+	$value = get_typography_sub_field( $field_name, $property, $format_value );
+	
+	if( is_array($value) ) {
+		
+		$value = implode(', ',$value);
+		
+	}
+	
+	echo $value;
+	
+}
+
+/**
 *  acf_typography_shortcode()
 *
 *  [acf_typography field="heading" property="font_size" post_id="123" format_value="1"]
