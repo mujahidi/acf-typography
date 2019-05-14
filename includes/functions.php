@@ -76,13 +76,21 @@ function acft_get_google_font_family(){
  * 
  *  @since		3.0.0
  */
-add_action( 'wp_head', 'acft_enqueue_google_fonts_file' );
+add_action( 'wp_enqueue_scripts', 'acft_enqueue_google_fonts_file' );
 function acft_enqueue_google_fonts_file() {
     
     global $post;
+    
+    $all_fields = get_fields( $post->ID, false );
+    $font_family = array();
 
-    $font_family = get_typography_field( 'typo', 'font_family', $post->ID );
+    array_walk_recursive($all_fields, function($item, $key) use (&$font_family) {
+        if( $key === 'font_family' )
+            $font_family[] = $item;
+    });
 
+    $font_family = implode( '|', $font_family );
+    
     wp_enqueue_style( 'acft-gf', 'https://fonts.googleapis.com/css?family='.$font_family );
 
 }
