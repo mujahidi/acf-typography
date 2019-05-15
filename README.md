@@ -5,7 +5,7 @@ A Typography Add-on for the Advanced Custom Fields Plugin.
   - Requires at least: WP 3.5.0
   - Tested up to: WP 5.2.0
   - Stable: 2.2.0
-  - Latest: 3.0.0
+  - Latest: 3.0.0 (pre-release)
 
 ## Version 3.0.0 introduces
 
@@ -39,6 +39,7 @@ Typography field type for "Advanced Custom Fields" plugin that lets you add diff
 ## Screenshots
 ![Typography Field Screenshot](https://raw.githubusercontent.com/mujahidi/typography/master/screenshot-1.png "Typography Sample Field Settings")
 ![Typography Field Screenshot](https://raw.githubusercontent.com/mujahidi/typography/master/screenshot-2.png "Typography Sample Field Content Editing")
+![Typography Field Screenshot](https://raw.githubusercontent.com/mujahidi/typography/master/screenshot-3.png "Google Key Field required for Google Fonts")
 
 ## Documentation
 ```php
@@ -68,7 +69,7 @@ This ACF field type is compatible with:
 - Google API Key is required for Google Fonts. Please add one by going to `WordPress Admin Dashboard > Settings > ACF Typography Settings`
 
 ## Limitations
-- Google Fonts CSS is automatically enqueued to only posts and pages.
+- Google Fonts CSS gets enqueued only on the front-end of posts and pages.
 
 ## Changelog
 See changelog on [CHANGELOG.md](CHANGELOG.md) file.

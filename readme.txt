@@ -40,7 +40,7 @@ Typography field type for "Advanced Custom Fields" plugin that lets you add diff
 * Color Picker for Text Color subfield
 
 = Documentation =
-```
+`
 // Returns the value of a specific property
 get_typography_field( $selector, $property, [$post_id], [$format_value] );
 
@@ -52,7 +52,7 @@ get_typography_sub_field( $selector, $property, [$format_value] );
 
 // Displays the value of a specific property from a sub field.
 the_typography_sub_field( $selector, $property, [$format_value] );
-```
+`
 
 = Shortcode =
 `[acf_typography field="field-name" property="font_size" post_id="123" format_value="1"]`
@@ -79,8 +79,11 @@ A. Yes. This plugin is compatiable with both free and paid ACF plugins.
 = Q. Does it support Google Fonts? =
 A. Version 3.0.0 and greater supports Google Fonts
 
+= Q. Why I do not see Google Fonts in the Font Family drop down?
+A. Google API Key is required for Google Fonts. Please add one by going to `WordPress Admin Dashboard > Settings > ACF Typography Settings`
+
 = Q. Does it enqueue selected Google Fonts? =
-A. Yes. This plugin automatically enqueues user selected Google Fonts to posts/pages.
+A. Yes. This plugin automatically enqueues user selected Google Fonts to front-end of posts/pages.
 
 = Q. How can I contribute? =
 A. Join in on [Github repository][https://github.com/mujahidi/acf-typography]
@@ -90,6 +93,8 @@ A. Join in on [Github repository][https://github.com/mujahidi/acf-typography]
 1. Typography Field Settings
 
 2. Typography Field Content Editing
+
+3. Google Key Field required for Google Fonts
 
 == Changelog ==
 = 3.0.0 =
