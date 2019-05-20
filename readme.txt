@@ -96,6 +96,11 @@ A. Join in on [Github repository][https://github.com/mujahidi/acf-typography]
 
 3. Google Key Field required for Google Fonts
 
+== Upgrade Notice ==
+ 
+= 3.0.0 =
+Added support for Google Fonts. This upgrade also introduces plugin functions.
+
 == Changelog ==
 = 3.0.0 =
 * [NEW] Introduces functions and shortcode
