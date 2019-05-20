@@ -18,7 +18,7 @@ function acft_update_gf_json_file( $API_KEY ) {
         $now = date ( "Ymd", time() );
         $time = $now - $file_date;
         
-        if ($time > 2) {
+        if ( !filesize($filename) || $time > 2 ) {
 
             $json = file_get_contents('https://www.googleapis.com/webfonts/v1/webfonts?key=' . $API_KEY);
 

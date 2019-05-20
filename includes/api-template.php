@@ -36,7 +36,7 @@ function get_typography_field( $selector, $property, $post_id = false, $format_v
     
     // get property
     if( is_array($value) && array_key_exists( $property, $value ) )
-        $property_value = $value[ $property ];
+        $property_value = esc_attr($value[ $property ]);
     else
         $property_value = '';
     
@@ -76,7 +76,7 @@ function get_typography_sub_field( $selector, $property, $format_value = true, $
 	if( !$sub_field ) return false;
 	
 	if( is_array($sub_field['value']) && array_key_exists( $property, $sub_field['value'] ) )
-		$property_value = $sub_field['value'][$property];
+		$property_value = esc_attr($sub_field['value'][$property]);
     else
 		$property_value = '';
 
