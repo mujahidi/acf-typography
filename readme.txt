@@ -1,9 +1,9 @@
 === Advanced Custom Fields: Typography Field ===
 Contributors: mujahid158
-Tags: typography, acf, advanced custom fields, addon, admin, field, custom, custom field
+Tags: typography, acf, advanced custom fields, addon, admin, field, custom, custom field, acf typography, acf google fonts, google fonts
 Requires at least: 3.5.0
-Tested up to: 5.0.3
-Stable tag: 2.2.0
+Tested up to: 5.2
+Stable tag: 3.0.0
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -12,6 +12,11 @@ A Typography Add-on for the Advanced Custom Fields Plugin.
 == Description ==
 
 Typography field type for "Advanced Custom Fields" plugin that lets you add different text properties e.g. Font Size, Font Family, Font Color etc.
+
+= Version 3.0.0 Introduces =
+> - Support for Google Fonts
+> - The selected Google Fonts CSS is automatically enqueued on front-end of posts/pages
+> - Plugin functions and shortcode to fetch properties
 
 = Supported Subfields =
 * Font Size
@@ -28,52 +33,60 @@ Typography field type for "Advanced Custom Fields" plugin that lets you add diff
 * Text Transform
 
 = Other Features =
+* Support for Google Fonts
+* The selected Google Fonts CSS is automatically enqueued on front-end of posts/pages
 * Option to show/hide each subfield individually
 * Option to make each subfield required individually
 * Color Picker for Text Color subfield
 
-= Sample Output for Theme Developers =
+= Documentation =
 `
-Array
-(
-    [font_size] => 18
-    [font_family] => "MS Sans Serif", Geneva, sans-serif
-    [font_weight] => 400
-    [font_style] => italic
-    [font_variant => small-caps
-    [font_stretch] => expanded
-    [line_height] => 1.5
-    [letter_spacing] => 1
-    [text_align] => center
-    [text_color] => #ff0000
-    [text_decoration] => underline
-	[text_transform] => uppercase
-)
+// Returns the value of a specific property
+get_typography_field( $selector, $property, [$post_id], [$format_value] );
+
+// Displays the value of a specific property
+the_typography_field( $selector, $property, [$post_id], [$format_value] );
+
+// Returns the value of a specific property from a sub field.
+get_typography_sub_field( $selector, $property, [$format_value] );
+
+// Displays the value of a specific property from a sub field.
+the_typography_sub_field( $selector, $property, [$format_value] );
 `
-`
-$getTypography = get_field('typography');
-echo $getTypography['font_size'];
-`
+
+= Shortcode =
+`[acf_typography field="field-name" property="font_size" post_id="123" format_value="1"]`
+
+= [Github repository](https://github.com/mujahidi/acf-typography) =
 
 = Compatibility =
 
 This ACF field type is compatible with:
-* ACF 4 (free version of ACF)
-* ACF 5 (Pro)
+* Free and paid versions of the ACF plugin
 
 == Installation ==
 
-1. Copy the `acf-typography` folder into your `wp-content/plugins` folder
+1. Copy the `acf-typography-field` folder into your `wp-content/plugins` folder
 2. Activate the Typography plugin via the plugins admin page
-3. Create a new field via ACF and select the Typography type
-4. Please refer to the description for more info regarding the field type settings
+3. Google API Key is required for Google Fonts. Please add one by going to `WordPress Admin Dashboard > Settings > ACF Typography Settings`
+4. Create a new field via ACF and select the Typography type
+5. Please refer to the description for more info regarding the field type settings
 
 == Frequently Asked Questions ==
-= Q. Is it compatible with ACF Pro (v5)? =
-A. Yes
+= Q. Is it compatible with ACF Pro? =
+A. Yes. This plugin is compatiable with both free and paid ACF plugins.
 
 = Q. Does it support Google Fonts? =
-A. No. Currently, it only supports Web Safe Fonts. But the support for Google Fonts is coming in next major release soon.
+A. Version 3.0.0 and greater supports Google Fonts
+
+= Q. Why I do not see Google Fonts in the Font Family drop down?
+A. Google API Key is required for Google Fonts. Please add one by going to `WordPress Admin Dashboard > Settings > ACF Typography Settings`
+
+= Q. Does it enqueue selected Google Fonts? =
+A. Yes. This plugin automatically enqueues user selected Google Fonts to front-end of posts/pages.
+
+= Q. How can I contribute? =
+A. Join in on [Github repository][https://github.com/mujahidi/acf-typography]
 
 == Screenshots ==
 
@@ -81,7 +94,20 @@ A. No. Currently, it only supports Web Safe Fonts. But the support for Google Fo
 
 2. Typography Field Content Editing
 
+3. Google Key Field required for Google Fonts
+
+== Upgrade Notice ==
+ 
+= 3.0.0 =
+Added support for Google Fonts. This upgrade also introduces plugin functions.
+
 == Changelog ==
+= 3.0.0 =
+* [NEW] Introduces functions and shortcode
+* [NEW] Hides nonselected properties in fieldgroup edit page
+* [NEW] Supports Google Fonts
+* [NEW] Enqueue google fonts CSS on page/post
+
 = 2.2.0 =
 * [NEW] Font Stretch subfield
 

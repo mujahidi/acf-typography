@@ -52,7 +52,7 @@ class acf_field_Typography extends acf_field {
 		*/
 		
 		$this->defaults = array(
-			'display_properties'	=> array( 'font_size', 'font_family' ),
+			'display_properties'	=> array(),
 			'required_properties'	=> array(),
 			'font_size'				=> 15,
 			'font_weight'			=> '400',
@@ -86,6 +86,15 @@ class acf_field_Typography extends acf_field {
 			'"Trebuchet MS", Helvetica, sans-serif'                 => '"Trebuchet MS", Helvetica, sans-serif',
 			'Verdana, Geneva, sans-serif'                           => 'Verdana, Geneva, sans-serif',
 		);
+
+		$google_font_family = acft_get_google_font_family(); // get google fonts from json file
+
+		// merge web-safe-fonts and google fonts arrays
+		if( is_array( $google_font_family ) )
+			$this->font_family = array_merge( $this->font_family, $google_font_family ); 
+
+		// sort array by array key
+		ksort( $this->font_family );
 		
 		$this->font_weight = array(
 			'100'		=> '100',
@@ -393,7 +402,7 @@ class acf_field_Typography extends acf_field {
 				    <div class="acf-field acf-field-number acf-field-<?php echo $f; ?>" data-name="<?php echo $f; ?>" data-type="number" data-key="<?php echo $key; ?>" <?php echo $data_required; ?>>
                     	<div class="acf-label">
                     		<label for="acf-field-<?php echo $f; ?>">
-                    		    <?php echo __(ucfirst(str_replace('_', ' ', $f)), 'acf-typography'); ?>
+                    		    <?php echo __(ucwords(str_replace('_', ' ', $f)), 'acf-typography'); ?>
                     		    <?php if($required != NULL){ ?>
 									<span class="acf-required">*</span></label>
 								<?php } ?>
@@ -411,7 +420,7 @@ class acf_field_Typography extends acf_field {
 			        <div class="acf-field acf-field-select acf-field-<?php echo $f; ?>" data-name="<?php echo $f; ?>" data-type="select" data-key="<?php echo $key; ?>" <?php echo $data_required; ?>>
                     	<div class="acf-label">
                     		<label for="acf-field-<?php echo $f; ?>">
-                    		    <?php echo __(ucfirst(str_replace('_', ' ', $f)), 'acf-typography'); ?>
+                    		    <?php echo __(ucwords(str_replace('_', ' ', $f)), 'acf-typography'); ?>
                     		    <?php if($required != NULL){ ?>
 									<span class="acf-required">*</span></label>
 								<?php } ?>
@@ -437,7 +446,7 @@ class acf_field_Typography extends acf_field {
 			    	<div class="acf-field acf-field-color-picker acf-field-<?php echo $f; ?>" data-name="<?php echo $f; ?>" data-type="color_picker" data-key="<?php echo $key; ?>" <?php echo $data_required; ?>>
                     	<div class="acf-label">
                     		<label for="acf-field-<?php echo $f; ?>">
-                    		    <?php echo __(ucfirst(str_replace('_', ' ', $f)), 'acf-typography'); ?>
+                    		    <?php echo __(ucwords(str_replace('_', ' ', $f)), 'acf-typography'); ?>
                     		    <?php if($required != NULL){ ?>
 									<span class="acf-required">*</span></label>
 								<?php } ?>

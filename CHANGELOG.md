@@ -1,5 +1,11 @@
 # CHANGELOG
 
+##### 3.0.0
+* [NEW] Introduces functions and shortcode
+* [NEW] Hides nonselected properties in fieldgroup edit page
+* [NEW] Supports Google Fonts
+* [NEW] Enqueue google fonts CSS on page/post
+
 ##### 2.2.0
 * [NEW] Font Stretch subfield
 
