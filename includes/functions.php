@@ -77,25 +77,33 @@ function acft_get_google_font_family(){
  *  @since		3.0.0
  */
 add_action( 'wp_enqueue_scripts', 'acft_enqueue_google_fonts_file' );
+add_action( 'wp_footer', 'acft_enqueue_google_fonts_file' );
 function acft_enqueue_google_fonts_file() {
     
     global $post;
     
     $all_fields = get_fields( $post->ID, false );
-    $font_family = array();
+    $font_family = $font_weight = array();
 
     if( is_array($all_fields) ){
         
-        array_walk_recursive($all_fields, function($item, $key) use (&$font_family) {
+        array_walk_recursive($all_fields, function($item, $key) use (&$font_family, &$font_weight) {
             if( $key === 'font_family' )
                 $font_family[] = $item;
+            elseif( $key === 'font_weight' )
+                $font_weight[] = $item;
         });
 
     }
 
     if( is_array($font_family) && count($font_family) > 0 ){
 
-        $font_family = implode( ':400,700|', $font_family );
+        if( is_array($font_weight) && count($font_weight) > 0 ){
+            $font_weight = implode( ',', $font_weight );
+            $font_family = implode( ':'.$font_weight.'|', $font_family );
+        }else{
+            $font_family = implode( ':400,700|', $font_family );
+        }
         
         wp_enqueue_style( 'acft-gf', 'https://fonts.googleapis.com/css?family='.$font_family );
 
