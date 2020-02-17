@@ -77,7 +77,6 @@ function acft_get_google_font_family(){
  *  @since		3.0.0
  */
 add_action( 'wp_enqueue_scripts', 'acft_enqueue_google_fonts_file' );
-add_action( 'wp_footer', 'acft_enqueue_google_fonts_file' );
 function acft_enqueue_google_fonts_file() {
     
     global $post;
