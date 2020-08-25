@@ -109,3 +109,44 @@ function acft_enqueue_google_fonts_file() {
     }
 
 }
+
+
+/**
+ *  Enqueue Google Fonts file for fields on the options page
+ * 
+ *  acft_enqueue_google_fonts_file()
+ * 
+ *  @since      3.0.0
+ */
+add_action( 'wp_enqueue_scripts', 'acft_enqueue_options_google_fonts_file' );
+function acft_enqueue_options_google_fonts_file() {
+    
+    $all_fields = get_fields('option', false );
+
+    $font_family = $font_weight = array();
+
+    if( is_array($all_fields) ){
+        
+        array_walk_recursive($all_fields, function($item, $key) use (&$font_family, &$font_weight) {
+            if( $key === 'font_family' )
+                $font_family[] = $item;
+            elseif( $key === 'font_weight' )
+                $font_weight[] = $item;
+        });
+
+    }
+
+    if( is_array($font_family) && count($font_family) > 0 ){
+
+        if( is_array($font_weight) && count($font_weight) > 0 ){
+            $font_weight = implode( ',', $font_weight );
+            $font_family = implode( ':'.$font_weight.'|', $font_family );
+        }else{
+            $font_family = implode( ':400,700|', $font_family );
+        }
+        
+        wp_enqueue_style( 'acft-gf-options', 'https://fonts.googleapis.com/css?family='.$font_family );
+
+    }
+
+}
