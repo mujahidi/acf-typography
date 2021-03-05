@@ -42,8 +42,11 @@ function acft_settings_init(){
 function acft_google_key_field(){ 
 
 	$acft_options = get_option( 'acft_settings' );
+	$google_key = '';
+	if( $acft_options && $acft_options['google_key'] )
+		$google_key = $acft_options['google_key']
 	?>
-	<input type='text' name='acft_settings[google_key]' value='<?php echo $acft_options['google_key']; ?>'>
+	<input type='text' name='acft_settings[google_key]' value='<?php echo $google_key; ?>'>
 	<?php
 
 }

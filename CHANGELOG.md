@@ -1,5 +1,9 @@
 # CHANGELOG
 
+##### 3.1.0
+* [NEW] Google Fonts support for ACF Options
+* [BUG] Different font weights were not enqueued when used in a repeater field
+
 ##### 3.0.0
 * [NEW] Introduces functions and shortcode
 * [NEW] Hides nonselected properties in fieldgroup edit page

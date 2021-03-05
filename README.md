@@ -3,15 +3,9 @@
 A Typography Add-on for the Advanced Custom Fields Plugin.
 
   - Requires at least: WP 3.5.0
-  - Tested up to: WP 5.2.0
-  - Stable: [3.0.0](releases/tag/3.0.0)
-  - Latest: [3.0.0](releases/tag/3.0.0)
-
-## Version 3.0.0 introduces
-
-* Support for Google Fonts
-* The selected Google Fonts CSS is automatically enqueued on front-end of posts/pages
-* Plugin functions and shortcode to fetch properties
+  - Tested up to: WP 5.6.2
+  - Stable: 3.1.0
+  - Latest: 3.1.0
 
 ## Description
 Typography field type for "Advanced Custom Fields" plugin that lets you add different text properties e.g. Font Size, Font Family, Font Color etc.
@@ -30,8 +24,7 @@ Typography field type for "Advanced Custom Fields" plugin that lets you add diff
 * Text Transform
 
 ### Other Features
-* Support for Google Fonts
-* The selected Google Fonts CSS is automatically enqueued on front-end of posts/pages
+* Supports Google Fonts. The selected Google Fonts are automatically enqueued on front-end of posts/pages. Google Fonts also work with ACF Options.
 * Option to show/hide each subfield individually
 * Option to make each subfield required individually
 * Color Picker for Text Color subfield
@@ -65,11 +58,8 @@ This ACF field type is compatible with:
 
 ## Installation
 
-- Download the plugin from [WordPress Repository](https://wordpress.org/plugins/acf-typography-field/) or use the [Latest Release](releases)
+- Download the plugin from [WordPress Repository](https://wordpress.org/plugins/acf-typography-field/) or use the latest release from this repository.
 - Google API Key is required for Google Fonts. Please add one by going to `WordPress Admin Dashboard > Settings > ACF Typography Settings`
-
-## Limitations
-- Google Fonts CSS gets enqueued only on the front-end of posts and pages.
 
 ## Changelog
 See changelog on [CHANGELOG.md](CHANGELOG.md) file.

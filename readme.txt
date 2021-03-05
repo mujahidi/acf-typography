@@ -2,8 +2,8 @@
 Contributors: mujahid158
 Tags: typography, acf, advanced custom fields, addon, admin, field, custom, custom field, acf typography, acf google fonts, google fonts
 Requires at least: 3.5.0
-Tested up to: 5.2
-Stable tag: 3.0.0
+Tested up to: 5.6.2
+Stable tag: 3.1.0
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -12,11 +12,6 @@ A Typography Add-on for the Advanced Custom Fields Plugin.
 == Description ==
 
 Typography field type for "Advanced Custom Fields" plugin that lets you add different text properties e.g. Font Size, Font Family, Font Color etc.
-
-= Version 3.0.0 Introduces =
-> - Support for Google Fonts
-> - The selected Google Fonts CSS is automatically enqueued on front-end of posts/pages
-> - Plugin functions and shortcode to fetch properties
 
 = Supported Subfields =
 * Font Size
@@ -33,8 +28,7 @@ Typography field type for "Advanced Custom Fields" plugin that lets you add diff
 * Text Transform
 
 = Other Features =
-* Support for Google Fonts
-* The selected Google Fonts CSS is automatically enqueued on front-end of posts/pages
+* Supports Google Fonts. The selected Google Fonts are automatically enqueued on front-end of posts/pages. Google Fonts also work with ACF Options.
 * Option to show/hide each subfield individually
 * Option to make each subfield required individually
 * Color Picker for Text Color subfield
@@ -57,7 +51,7 @@ the_typography_sub_field( $selector, $property, [$format_value] );
 = Shortcode =
 `[acf_typography field="field-name" property="font_size" post_id="123" format_value="1"]`
 
-= [Github repository](https://github.com/mujahidi/acf-typography) =
+= Github repository: https://github.com/mujahidi/acf-typography =
 
 = Compatibility =
 
@@ -86,7 +80,7 @@ A. Google API Key is required for Google Fonts. Please add one by going to `Word
 A. Yes. This plugin automatically enqueues user selected Google Fonts to front-end of posts/pages.
 
 = Q. How can I contribute? =
-A. Join in on [Github repository][https://github.com/mujahidi/acf-typography]
+A. Join in on Github repository https://github.com/mujahidi/acf-typography
 
 == Screenshots ==
 
@@ -98,10 +92,18 @@ A. Join in on [Github repository][https://github.com/mujahidi/acf-typography]
 
 == Upgrade Notice ==
  
+= 3.1.0 =
+* [NEW] Google Fonts support for ACF Options
+* [BUG] Different font weights were not enqueued when used in a repeater field
+
 = 3.0.0 =
 Added support for Google Fonts. This upgrade also introduces plugin functions.
 
 == Changelog ==
+= 3.1.0 =
+* [NEW] Google Fonts support for ACF Options
+* [BUG] Different font weights were not enqueued when used in a repeater field
+
 = 3.0.0 =
 * [NEW] Introduces functions and shortcode
 * [NEW] Hides nonselected properties in fieldgroup edit page
