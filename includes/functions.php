@@ -81,8 +81,8 @@ function acft_enqueue_google_fonts_file() {
     
     global $post;
     
-    $all_post_fields = get_fields( $post->ID, false );
-    $all_option_fields = get_fields( 'option', false );
+    $all_post_fields = get_fields( $post->ID, false ) ?: array();
+    $all_option_fields = get_fields( 'option', false ) ?: array();
     $font_family = $font_weight = array();
 
     $all_fields = array_merge_recursive( $all_post_fields, $all_option_fields );
