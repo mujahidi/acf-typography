@@ -95,6 +95,9 @@ class acf_field_Typography extends acf_field {
 
 		// sort array by array key
 		ksort( $this->font_family );
+        
+        // add 'initial' and 'inherit' property values to top of the array
+        $this->font_family = array_merge( array( 'initial' => 'initial', 'inherit' => 'inherit' ), $this->font_family );
 		
 		$this->font_weight = array(
 			'100'		=> '100',
