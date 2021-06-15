@@ -101,15 +101,13 @@ A. Join in on Github repository [@mujahidi/acf-typography](https://github.com/mu
 * [NEW] Added 'initial' and 'inherit' values for 'font-family' property.
 * [NEW] Added support for ACF Blocks.
 * [BUG] Fixed a PHP notice when any post does not have ACF Typography fields setup.
- 
-= 3.1.0 =
-* [NEW] Google Fonts support for ACF Options
-* [BUG] Different font weights were not enqueued when used in a repeater field
-
-= 3.0.0 =
-Added support for Google Fonts. This upgrade also introduces plugin functions.
 
 == Changelog ==
+= 3.2.0 =
+* [NEW] Added 'initial' and 'inherit' values for 'font-family' property.
+* [NEW] Added support for ACF Blocks.
+* [BUG] Fixed a PHP notice when any post does not have ACF Typography fields setup.
+
 = 3.1.0 =
 * [NEW] Google Fonts support for ACF Options
 * [BUG] Different font weights were not enqueued when used in a repeater field
