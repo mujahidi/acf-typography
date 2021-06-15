@@ -3,9 +3,9 @@
 A Typography Add-on for the Advanced Custom Fields Plugin.
 
   - Requires at least: WP 3.5.0
-  - Tested up to: WP 5.6.2
-  - Stable: 3.1.0
-  - Latest: 3.1.0
+  - Tested up to: WP 5.7.2
+  - Stable: 3.2.0
+  - Latest: 3.2.0
 
 ## Description
 Typography field type for "Advanced Custom Fields" plugin that lets you add different text properties e.g. Font Size, Font Family, Font Color etc.
@@ -25,6 +25,7 @@ Typography field type for "Advanced Custom Fields" plugin that lets you add diff
 
 ### Other Features
 * Supports Google Fonts. The selected Google Fonts are automatically enqueued on front-end of posts/pages. Google Fonts also work with ACF Options.
+* Supports Gutenberg Blocks created with ACF.
 * Option to show/hide each subfield individually
 * Option to make each subfield required individually
 * Color Picker for Text Color subfield

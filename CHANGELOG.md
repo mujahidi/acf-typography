@@ -1,5 +1,10 @@
 # CHANGELOG
 
+##### 3.2.0
+* [NEW] Added 'initial' and 'inherit' values for 'font-family' property. #19
+* [NEW] Added support for ACF Blocks. #18
+* [BUG] Fixed #17
+
 ##### 3.1.0
 * [NEW] Google Fonts support for ACF Options
 * [BUG] Different font weights were not enqueued when used in a repeater field
