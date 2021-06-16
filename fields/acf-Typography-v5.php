@@ -406,7 +406,7 @@ class acf_field_Typography extends acf_field {
                     	<div class="acf-label">
                     		<label for="acf-field-<?php echo $f; ?>">
                     		    <?php echo __(ucwords(str_replace('_', ' ', $f)), 'acf-typography'); ?>
-                    		    <?php if($required != NULL){ ?>
+                    		    <?php if(!empty($required)){ ?>
 									<span class="acf-required">*</span></label>
 								<?php } ?>
                     	</div>
@@ -424,7 +424,7 @@ class acf_field_Typography extends acf_field {
                     	<div class="acf-label">
                     		<label for="acf-field-<?php echo $f; ?>">
                     		    <?php echo __(ucwords(str_replace('_', ' ', $f)), 'acf-typography'); ?>
-                    		    <?php if($required != NULL){ ?>
+                    		    <?php if(!empty($required)){ ?>
 									<span class="acf-required">*</span></label>
 								<?php } ?>
                     	</div>
@@ -450,7 +450,7 @@ class acf_field_Typography extends acf_field {
                     	<div class="acf-label">
                     		<label for="acf-field-<?php echo $f; ?>">
                     		    <?php echo __(ucwords(str_replace('_', ' ', $f)), 'acf-typography'); ?>
-                    		    <?php if($required != NULL){ ?>
+                    		    <?php if(!empty($required)){ ?>
 									<span class="acf-required">*</span></label>
 								<?php } ?>
                     	</div>
