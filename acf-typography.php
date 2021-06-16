@@ -41,7 +41,7 @@ if( !class_exists('acf_plugin_Typography') ) :
 			
 			// vars
 			$this->settings = array(
-				'version'	=> '3.0.0',
+				'version'	=> '3.2.0',
 				'url'		=> plugin_dir_url( __FILE__ ),
 				'path'		=> plugin_dir_path( __FILE__ )
 			);
