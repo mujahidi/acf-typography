@@ -118,7 +118,7 @@ class acf_field_Typography extends acf_field {
 			'right'		=> 'right', 
 			'center'	=> 'center', 
 			'justify'	=> 'justify', 
-			'inital'	=> 'initial'
+			'initial'	=> 'initial'
 		);
 		$this->text_decoration = array(
 			'none' 			=> 'none',
