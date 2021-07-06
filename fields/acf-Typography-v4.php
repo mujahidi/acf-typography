@@ -463,7 +463,7 @@ class acf_field_Typography extends acf_field {
 		
 		// create Field HTML
 		
-		if( sizeof($field['display_properties']) > 0){
+		if( !empty( $field['display_properties'] ) && sizeof($field['display_properties']) > 0){
 
 			foreach( $field['display_properties'] as $f ){
 				
