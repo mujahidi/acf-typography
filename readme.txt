@@ -97,12 +97,11 @@ A. Join in on Github repository [@mujahidi/acf-typography](https://github.com/mu
 
 == Upgrade Notice ==
 
-= 3.2.0 =
-* [NEW] Added 'initial' and 'inherit' values for 'font-family' property.
-* [NEW] Added support for ACF Blocks.
-* [BUG] Fixed a PHP notice when any post does not have ACF Typography fields setup.
 
 == Changelog ==
+= 3.2.1 =
+* Fixed typo and bugs
+
 = 3.2.0 =
 * [NEW] Added 'initial' and 'inherit' values for 'font-family' property.
 * [NEW] Added support for ACF Blocks.

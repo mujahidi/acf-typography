@@ -1,5 +1,9 @@
 # CHANGELOG
 
+##### 3.2.1
+* Fixed typo
+* Fixed a few bugs
+
 ##### 3.2.0
 * [NEW] Added 'initial' and 'inherit' values for 'font-family' property. #19
 * [NEW] Added support for ACF Blocks. #18
