@@ -101,12 +101,15 @@ function acft_enqueue_google_fonts_file() {
     $all_fields = array_merge_recursive( $all_post_fields, $all_option_fields );
 
     if( is_array($all_fields) ){
-        
+
         array_walk_recursive($all_fields, function($item, $key) use (&$font_family, &$font_weight) {
             if( $key === 'font_family' )
                 $font_family[] = $item;
-            elseif( $key === 'font_weight' )
-                $font_weight[] = $item;
+            elseif( $key === 'font_weight' ) {
+				if (!in_array($item, $font_weight)) {
+					$font_weight[] = $item;
+				}
+			}
         });
 
     }
