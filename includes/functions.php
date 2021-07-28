@@ -104,7 +104,9 @@ function acft_enqueue_google_fonts_file() {
 
         array_walk_recursive($all_fields, function($item, $key) use (&$font_family, &$font_weight) {
             if( $key === 'font_family' )
-                $font_family[] = $item;
+			    if (!in_array($item, $font_family)) {
+				$font_family[] = $item;
+			}
             elseif( $key === 'font_weight' ) {
 				if (!in_array($item, $font_weight)) {
 					$font_weight[] = $item;
