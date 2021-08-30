@@ -1,5 +1,8 @@
 # CHANGELOG
 
+##### 3.2.2
+* #23
+
 ##### 3.2.1
 * Fixed typo
 * Fixed a few bugs

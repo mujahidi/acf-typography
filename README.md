@@ -3,9 +3,9 @@
 A Typography Add-on for the Advanced Custom Fields Plugin.
 
   - Requires at least: WP 3.5.0
-  - Tested up to: WP 5.7.2
-  - Stable: 3.2.1
-  - Latest: 3.2.1
+  - Tested up to: WP 5.8
+  - Stable: 3.2.2
+  - Latest: 3.2.2
 
 ## Description
 Typography field type for "Advanced Custom Fields" plugin that lets you add different text properties e.g. Font Size, Font Family, Font Color etc.
