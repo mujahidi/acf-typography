@@ -3,7 +3,7 @@
 A Typography Add-on for the Advanced Custom Fields Plugin.
 
   - Requires at least: WP 3.5.0
-  - Tested up to: WP 5.8
+  - Tested up to: WP 5.9
   - Stable: 3.2.2
   - Latest: 3.2.2
 
