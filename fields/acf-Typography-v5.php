@@ -101,11 +101,14 @@ class acf_field_Typography extends acf_field {
 		
 		$this->font_weight = array(
 			'100'		=> '100',
+			'200'		=> '200',
 			'300'		=> '300',
 			'400'		=> '400',
+			'500'		=> '500',
 			'600'		=> '600',
 			'700'		=> '700',
-			'800'		=> '800'
+			'800'		=> '800',
+			'900'		=> '900'
 		);
 		$this->font_style = array(
 			'normal'	=> 'normal',
