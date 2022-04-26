@@ -1,5 +1,8 @@
 # CHANGELOG
 
+##### 3.2.3
+* Added new font-weight values
+
 ##### 3.2.2
 * #23
 

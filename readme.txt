@@ -99,6 +99,9 @@ A. Join in on Github repository [@mujahidi/acf-typography](https://github.com/mu
 
 
 == Changelog ==
+= 3.2.3 =
+* Added new font-weight values
+
 = 3.2.2 =
 * Fixed google fonts url too long issue
 
