@@ -3,6 +3,7 @@ Contributors: mujahid158
 Tags: typography, acf, advanced custom fields, addon, admin, field, custom, custom field, acf typography, acf google fonts, google fonts
 Requires at least: 3.5.0
 Tested up to: 6.0
+Tested up to: PHP 8.2
 Stable tag: 3.2.3
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
@@ -10,8 +11,6 @@ License URI: http://www.gnu.org/licenses/gpl-2.0.html
 A Typography Add-on for the Advanced Custom Fields Plugin.
 
 == Description ==
-
-Currently the default plugin by mujahid158. Will be adding options to save Google fonts locally, serve them locally, and include the URL and/or file path for the font file for selected fonts.
 
 Typography field type for "Advanced Custom Fields" plugin that lets you add different text properties e.g. Font Size, Font Family, Font Color etc.
 
