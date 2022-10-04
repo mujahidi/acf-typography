@@ -81,6 +81,11 @@ function acft_enqueue_google_fonts_file() {
     
     global $post;
     
+    // anticipate 404 errors or non-object queries where there is no $post->ID, just return.
+    if ( is_404() || !is_object($post) ) {
+    	return;
+    }
+
     $all_post_fields = get_fields( $post->ID, false ) ?: array();
     $all_option_fields = get_fields( 'option', false ) ?: array();
     
