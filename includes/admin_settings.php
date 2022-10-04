@@ -34,6 +34,14 @@ function acft_settings_init(){
 		'acf-typography-field', 
 		'acft_acf-typography-field_section' 
 	);
+        
+        add_settings_field( 
+		'acft_radio_field_1', 
+		__( 'Font Files Source', 'acf' ), 
+		'acft_files_source_field', 
+		'acf-typography-field', 
+		'acft_acf-typography-field_section' 
+	);
 
 
 }
@@ -43,10 +51,38 @@ function acft_google_key_field(){
 
 	$acft_options = get_option( 'acft_settings' );
 	$google_key = '';
-	if( $acft_options && $acft_options['google_key'] )
-		$google_key = $acft_options['google_key']
+	if( $acft_options && isset($acft_options['google_key']) )
+		$google_key = $acft_options['google_key'];
 	?>
 	<input type='text' name='acft_settings[google_key]' value='<?php echo $google_key; ?>'>
+	<?php
+
+}
+
+
+function acft_files_source_field(){ 
+
+	$acft_options = get_option( 'acft_settings' );
+	$files_source = 'remote';
+	if( $acft_options && isset($acft_options['files_source']) )
+		$files_source = $acft_options['files_source'];
+	?>
+        <fieldset>
+            <legend><strong>Serve Font Files Remotely, or Locally?</strong></legend>
+
+                <div>
+                        <input type="radio" id="acftSourceRemote" name="acft_settings[files_source]" value="remote" 
+                        <?php echo (($files_source == 'remote') ? "checked" : "" )?>>
+                        <label for="remote">Remote</label>
+                </div>
+
+                <div>
+                        <input type="radio" id="acftSourceLocal" name="acft_settings[files_source]" value="local"
+                        <?php echo (($files_source == 'local') ? "checked" : "" )?>>
+                        <label for="local">Local</label>
+                </div>
+
+        </fieldset> 
 	<?php
 
 }
