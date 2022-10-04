@@ -4,15 +4,12 @@ A Typography Add-on for the Advanced Custom Fields Plugin.
 
   - Requires at least: WP 3.5.0
   - Tested up to: WP 6.0
+  - Tested up to: PHP 8.2
   - Stable: 3.2.3
   - Latest: 3.2.3
 
 ## Description
-
-Currently the default plugin by mujahid158. Will be adding options to save Google fonts locally, serve them locally, and include the URL and/or file path for the font file for selected fonts.
-
 Typography field type for "Advanced Custom Fields" plugin that lets you add different text properties e.g. Font Size, Font Family, Font Color etc.
-
 ### Supported Subfields
 * Font Size
 * Font Family
