@@ -60,7 +60,9 @@ the_typography_sub_field( $selector, $property, [$format_value] );
 ```
 #### Shortcodes
 Retrieve typography field values for display or use anywhere you want. 
-`[acf_typography field="field-name" property="font_size" post_id="123" format_value="1"]`
+```php
+[acf_typography field="field-name" property="font_size" post_id="123" format_value="1"]
+```
 
 Retrieve either link or style HTML tag codes for font stylesheets to use in-line anywhere you want.
 ```php
