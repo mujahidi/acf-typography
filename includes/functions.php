@@ -374,7 +374,6 @@ function acft_get_all_fields( $opt_post_id = false ) {
  */
 function acft_merge_all_fields( $all_fields = array() ) {
     
-    //$font_family = $font_weight = $merged_array = array();
     $merged_array = array();
     $merged_array['font_family'] = $merged_array['font_weight'] = array();
 
