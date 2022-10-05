@@ -11,7 +11,7 @@ function get_typography_field( $selector, $property, $post_id = false, $format_v
 	$post_id = acf_get_valid_post_id( $post_id );
 	
 	// get field
-    $field = acf_maybe_get_field( $selector, $post_id );
+        $field = acf_maybe_get_field( $selector, $post_id );
 	
 	// create dummy field
 	if( !$field ) {	
@@ -26,7 +26,7 @@ function get_typography_field( $selector, $property, $post_id = false, $format_v
 	}
 	
 	// get value for field
-    $value = acf_get_value( $post_id, $field );
+        $value = acf_get_value( $post_id, $field );
 	
 	// format value
 	if( $format_value ) {	
@@ -40,9 +40,10 @@ function get_typography_field( $selector, $property, $post_id = false, $format_v
     else
         $property_value = '';
     
-	return $property_value;
+    return $property_value;
  
 }
+
 
 /**
  *  the_typography_field()
@@ -61,6 +62,7 @@ function the_typography_field( $selector, $property, $post_id = false, $format_v
 	
 }
 
+
 /**
  *  get_typography_sub_field()
  * 
@@ -77,13 +79,14 @@ function get_typography_sub_field( $selector, $property, $format_value = true, $
 	
 	if( is_array($sub_field['value']) && array_key_exists( $property, $sub_field['value'] ) )
 		$property_value = esc_attr($sub_field['value'][$property]);
-    else
+        else
 		$property_value = '';
 
 	// return 
 	return $property_value;
 
 }
+
 
 /**
  *  the_typography_sub_field()
@@ -104,6 +107,7 @@ function the_typography_sub_field( $field_name, $property, $format_value = true 
 	
 }
 
+
 /**
 *  acf_typography_shortcode()
 *
@@ -111,10 +115,9 @@ function the_typography_sub_field( $field_name, $property, $format_value = true 
 *
 *  @since		3.0.0
 */
-
 function acf_typography_shortcode( $atts ) {
 	
-	// extract attributs
+	// extract attributes
 	extract( shortcode_atts( array(
 		'field'			=> '',
 		'property'		=> '',
@@ -122,10 +125,8 @@ function acf_typography_shortcode( $atts ) {
 		'format_value'	=> true
 	), $atts ) );
 	
-	
 	// get value and return it
 	$value = get_typography_field( $field, $property, $post_id, $format_value );
-	
 	
 	// array
 	if( is_array($value) ) {
@@ -134,10 +135,53 @@ function acf_typography_shortcode( $atts ) {
 		
 	}
 	
-	
 	// return
 	return $value;
 	
 }
 
 add_shortcode('acf_typography', 'acf_typography_shortcode');
+
+
+/**
+*  acf_typography_stylesheet_shortcode()
+*
+*  [acf_typography_stylesheet link_type="link" post_id="123"]
+*
+*  @param	$link_type (str) (optional) (default: 'link')
+*               The type of stylesheet linking method
+*  @param	$post_id (str) (optional) (default: current_post_id)
+*               A specific $post_id to retrieve the stylesheet(s) for 
+*
+*  @return	$stylesheet (str) 
+*               Returns standard link for link_type = 'link'
+*               // <link rel="stylesheet" ... />
+*               Returns style for link_type = 'style'
+*               // <style> ... </style>
+*
+*  @since       3.3.0
+*/
+
+function acf_typography_stylesheet_shortcode( $atts ) {
+
+    // extract attributes
+    extract( shortcode_atts( array(
+            'link_type'     => '',
+            'post_id'       => false,
+    ), $atts ) );
+    
+    require_once plugin_dir_path( __FILE__ ) . 'functions.php';
+
+    // get value and return it
+    $value = acft_get_typography_stylesheet( $link_type, $post_id );
+    
+    // filter hook to alter the output
+    // example use-case: changing URLs to Dir Paths for use in a custom PDF export function
+    apply_filters( 'acf_alter_typography_stylesheet', $value );
+    
+    // return
+    return $value;   
+
+}
+
+add_shortcode('acf_typography_stylesheet', 'acf_typography_stylesheet_shortcode');
