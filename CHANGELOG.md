@@ -1,5 +1,19 @@
 # CHANGELOG
 
+##### 3.3.0
+* [UPDATE] Fixed consistent textdomain usage for i18n translations.
+* [UPDATE] Made sure displayed strings are all i18n translation-ready.
+* [UPDATE] Added a few minor additional checks for some variables to prevent possible errors in the future.
+* [BUG] Fixed 'Notice: Trying to get property ID of non-object' when enqueueing font files on non-objects.
+* [NEW] Google Fonts can now be saved and served locally.
+* [NEW] Admin Settings Option to choose between serving font stylesheets and font files Remotely or Locally.
+* [NEW] Description and link provided for getting Google Fonts API key in Admin Settings page.
+* [NEW] Shortcode to print in-line stylesheet link or style HTML code (acf_typography_stylesheet).
+* [NEW] Filter hook for the new acf_typography_stylesheet shortcode to alter the output of the in-line stylesheet links/styles.
+* [NEW] Tested up to PHP 8.2
+* [UPDATE] Minor code cleanup for readability. 
+* [UPDATE] Added new screenshot for new Admin Settings Page Options. 
+
 ##### 3.2.3
 * Added new font-weight values
 
