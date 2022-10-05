@@ -4,7 +4,7 @@
 Plugin Name: Advanced Custom Fields: Typography Field
 Plugin URI: https://wordpress.org/plugins/acf-typography-field
 Description: A Typography Add-on for the Advanced Custom Fields Plugin.
-Version: 3.2.3
+Version: 3.3.0
 Author: Mujahid Ishtiaq
 Author URI: https://github.com/mujahidi
 License: GPLv2 or later
@@ -18,6 +18,9 @@ $acft_options = get_option( 'acft_settings' );
 
 if( $acft_options && $acft_options['google_key'] )
 	define('YOUR_API_KEY', $acft_options['google_key']);
+
+if( $acft_options && isset($acft_options['files_source']) )
+	define('FONT_FILE_SOURCE', $acft_options['files_source']);
 
 // check if class already exists
 if( !class_exists('acf_plugin_Typography') ) :
@@ -41,7 +44,7 @@ if( !class_exists('acf_plugin_Typography') ) :
 			
 			// vars
 			$this->settings = array(
-				'version'	=> '3.2.2',
+				'version'	=> '3.3.0',
 				'url'		=> plugin_dir_url( __FILE__ ),
 				'path'		=> plugin_dir_path( __FILE__ )
 			);
@@ -52,8 +55,8 @@ if( !class_exists('acf_plugin_Typography') ) :
 			require plugin_dir_path( __FILE__ ) . 'includes/functions.php';
 
 			// include field
-			add_action('acf/include_field_types', 	array($this, 'include_field_types')); // v5
-			add_action('acf/register_fields', 		array($this, 'include_field_types')); // v4
+			add_action('acf/include_field_types', array($this, 'include_field_types')); // v5
+			add_action('acf/register_fields', array($this, 'include_field_types')); // v4
 			add_action('acf/field_group/admin_enqueue_scripts', array($this, 'field_group_admin_enqueue_scripts'));
 			
 		}
@@ -94,7 +97,6 @@ if( !class_exists('acf_plugin_Typography') ) :
 
 	// initialize
 	new acf_plugin_Typography();
-
 
 // class_exists check
 endif;
