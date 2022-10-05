@@ -1,8 +1,8 @@
 === Advanced Custom Fields: Typography Field ===
-Contributors: mujahid158
+Contributors: mujahid158, codejp3
 Tags: typography, acf, advanced custom fields, addon, admin, field, custom, custom field, acf typography, acf google fonts, google fonts
-Requires at least: 3.5.0
-Tested up to: 6.0
+Requires at least: WP 3.5.0
+Tested up to: WP 6.0
 Tested up to: PHP 8.2
 Stable tag: 3.2.3
 License: GPLv2 or later
@@ -13,6 +13,8 @@ A Typography Add-on for the Advanced Custom Fields Plugin.
 == Description ==
 
 Typography field type for "Advanced Custom Fields" plugin that lets you add different text properties e.g. Font Size, Font Family, Font Color etc.
+
+If you want any kind of font/typography features within ACF, this is the plugin for you! There's nothing else like it!
 
 = Supported Subfields =
 * Font Size
@@ -30,10 +32,15 @@ Typography field type for "Advanced Custom Fields" plugin that lets you add diff
 
 = Other Features =
 * Supports Google Fonts. The selected Google Fonts are automatically enqueued on front-end of posts/pages. Google Fonts also work with ACF Options.
+* Supports serving Google Fonts remotely, or locally.
 * Supports Gutenberg Blocks created with ACF.
-* Option to show/hide each subfield individually
-* Option to make each subfield required individually
-* Color Picker for Text Color subfield
+* Supports Option pages created with ACF.
+* Automatically enqueues stylesheet on front-end of site when typography values are present.
+* Option to show/hide each subfield individually.
+* Option to make each subfield required individually.
+* Color Picker for Text Color subfield.
+* Shortcode for getting typography field values.
+* Shortcode for displaying link/style HTML code in-line.
 
 = Documentation =
 `
@@ -50,8 +57,37 @@ get_typography_sub_field( $selector, $property, [$format_value] );
 the_typography_sub_field( $selector, $property, [$format_value] );
 `
 
-= Shortcode =
-`[acf_typography field="field-name" property="font_size" post_id="123" format_value="1"]`
+= Shortcodes =
+Retrieve typography field values for display or use anywhere you want. 
+`
+[acf_typography field="field-name" property="font_size" post_id="123" format_value="1"]
+`
+
+Retrieve either link or style HTML tag codes for font stylesheets to use in-line anywhere you want.
+`
+[acf_typography_stylesheet link_type="link" post_id="123"]
+
+// link_type = "link" or "style" (str) (optional) (default: "link") 
+
+// Returns link code for link_type="link"
+// <link rel="stylesheet" ... />
+
+// Returns style code for link_type="style"
+// <style> ... </style>  
+
+// post_id = a specific post_id to get the stylsheets for (str) (optional) (default: current post_id)
+`
+Want to alter the output for the link/style code returned?
+Use the Filter Hook (acf_alter_typography_stylesheet) like this:
+`
+function myprefix_change_stylesheet_output( $output ) {
+
+	// code to do something with the output string
+
+	return $output;
+}
+add_filter( 'acf_alter_typography_stylesheet', 'myprefix_change_stylesheet_output' );
+`
 
 = Github repository =
 [@mujahidi/acf-typography](https://github.com/mujahidi/acf-typography)
@@ -85,6 +121,9 @@ A. Yes. This plugin automatically enqueues user selected Google Fonts to front-e
 = Q. Does it support Gutenberg Blocks? =
 A. Yes. This plugin does support Gutenberg Blocks created with ACF.
 
+= Q. Is it GDPR compliant? =
+A. Depends. If you choose the admin option to serve files locally, then YES (after the first page load where font styles are used). If you choose the admin option to serve files remotely, then NO.
+
 = Q. How can I contribute? =
 A. Join in on Github repository [@mujahidi/acf-typography](https://github.com/mujahidi/acf-typography)
 
@@ -94,12 +133,26 @@ A. Join in on Github repository [@mujahidi/acf-typography](https://github.com/mu
 
 2. Typography Field Content Editing
 
-3. Google Key Field required for Google Fonts
+3. Admin Settings Page Options
 
 == Upgrade Notice ==
 
 
 == Changelog ==
+= 3.3.0 =
+* [UPDATE] Fixed consistent textdomain usage for i18n translations.
+* [UPDATE] Made sure displayed strings are all i18n translation-ready.
+* [UPDATE] Added a few minor additional checks for some variables to prevent possible errors in the future.
+* [BUG] Fixed 'Notice: Trying to get property ID of non-object' when enqueueing font files on non-objects.
+* [NEW] Google Fonts can now be saved and served locally.
+* [NEW] Admin Settings Option to choose between serving font stylesheets and font files Remotely or Locally.
+* [NEW] Description and link provided for getting Google Fonts API key in Admin Settings page.
+* [NEW] Shortcode to print in-line stylesheet link or style HTML code (acf_typography_stylesheet).
+* [NEW] Filter hook for the new acf_typography_stylesheet shortcode to alter the output of the in-line stylesheet links/styles.
+* [NEW] Tested up to PHP 8.2
+* [UPDATE] Minor code cleanup for readability. 
+* [UPDATE] Added new screenshot for new Admin Settings Page Options. 
+
 = 3.2.3 =
 * Added new font-weight values
 
