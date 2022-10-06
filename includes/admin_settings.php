@@ -61,9 +61,8 @@ function acft_google_key_field(){
 		$google_key = $acft_options['google_key'];
 	?>
 	<input type='text' name='acft_settings[google_key]' value='<?php echo $google_key; ?>'>
-        <p><?php 
-	/* translators: 1: google fonts api url, 2: target="_blank" to open in new tab */
-	echo sprintf( 
+        <p><?php echo sprintf( 
+            /* translators: 1: google fonts api url, 2: target="_blank to open in new tab" */    
             __( 'You can get an API key <a href="%1$s" %2$s title="Google Fonts API">HERE</a>.', 'acf-typography' ), 
             esc_url( 'https://developers.google.com/fonts/docs/developer_api' ),
             'target="_blank"'
