@@ -38,6 +38,7 @@ If you want any kind of font/typography features within ACF, this is the plugin 
 * Color Picker for Text Color subfield.
 * Shortcode for getting typography field values.
 * Shortcode for displaying link/style HTML code in-line.
+* Translation-ready .pot file
 
 ## Screenshots
 ![Typography Field Screenshot](https://raw.githubusercontent.com/mujahidi/typography/master/screenshot-1.png "Typography Sample Field Settings")
