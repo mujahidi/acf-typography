@@ -4,6 +4,7 @@
 * [UPDATE] Fixed consistent textdomain usage for i18n translations.
 * [UPDATE] Made sure displayed strings are all i18n translation-ready.
 * [UPDATE] Added a few minor additional checks for some variables to prevent possible errors in the future.
+* [NEW] Plugin now 100% translation-ready and initial .pot file generated!
 * [BUG] Fixed 'Notice: Trying to get property ID of non-object' when enqueueing font files on non-objects.
 * [NEW] Google Fonts can now be saved and served locally.
 * [NEW] Admin Settings Option to choose between serving font stylesheets and font files Remotely or Locally.
