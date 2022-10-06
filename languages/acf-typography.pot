@@ -1,0 +1,243 @@
+# Copyright (C) 2022 Mujahid Ishtiaq$
+# This file is distributed under the GPLv2 or later.$
+msgid ""$
+msgstr ""$
+"Project-Id-Version: Advanced Custom Fields: Typography Field 3.3.0\n"$
+"Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/acf-typography-field\n"$
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"$
+"Language-Team: LANGUAGE <LL@li.org>\n"$
+"MIME-Version: 1.0\n"$
+"Content-Type: text/plain; charset=UTF-8\n"$
+"Content-Transfer-Encoding: 8bit\n"$
+"POT-Creation-Date: 2022-10-06T01:58:01+00:00\n"$
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"$
+"X-Generator: WP-CLI 2.6.0\n"$
+"X-Domain: acf-typography\n"$
+$
+#. Plugin Name of the plugin$
+msgid "Advanced Custom Fields: Typography Field"$
+msgstr ""$
+$
+#. Plugin URI of the plugin$
+msgid "https://wordpress.org/plugins/acf-typography-field"$
+msgstr ""$
+$
+#. Description of the plugin$
+msgid "A Typography Add-on for the Advanced Custom Fields Plugin."$
+msgstr ""$
+$
+#. Author of the plugin$
+msgid "Mujahid Ishtiaq"$
+msgstr ""$
+$
+#. Author URI of the plugin$
+msgid "https://github.com/mujahidi"$
+msgstr ""$
+$
+#: fields/acf-Typography-v4.php:31$
+#: fields/acf-Typography-v5.php:40$
+msgid "Typography"$
+msgstr ""$
+$
+#: fields/acf-Typography-v4.php:32$
+msgid "Content"$
+msgstr ""$
+$
+#: fields/acf-Typography-v4.php:177$
+#: fields/acf-Typography-v5.php:212$
+msgid "Display Properties"$
+msgstr ""$
+$
+#: fields/acf-Typography-v4.php:178$
+#: fields/acf-Typography-v5.php:213$
+msgid "Select fields to display on edit page"$
+msgstr ""$
+$
+#: fields/acf-Typography-v4.php:187$
+#: fields/acf-Typography-v4.php:217$
+#: fields/acf-Typography-v4.php:237$
+#: fields/acf-Typography-v5.php:217$
+#: fields/acf-Typography-v5.php:239$
+#: fields/acf-Typography-v5.php:256$
+msgid "Font Size"$
+msgstr ""$
+$
+#: fields/acf-Typography-v4.php:188$
+#: fields/acf-Typography-v4.php:218$
+#: fields/acf-Typography-v4.php:253$
+#: fields/acf-Typography-v5.php:218$
+#: fields/acf-Typography-v5.php:240$
+#: fields/acf-Typography-v5.php:264$
+msgid "Font Family"$
+msgstr ""$
+$
+#: fields/acf-Typography-v4.php:189$
+#: fields/acf-Typography-v4.php:219$
+#: fields/acf-Typography-v4.php:270$
+#: fields/acf-Typography-v5.php:219$
+#: fields/acf-Typography-v5.php:241$
+#: fields/acf-Typography-v5.php:273$
+msgid "Font Weight"$
+msgstr ""$
+$
+#: fields/acf-Typography-v4.php:190$
+#: fields/acf-Typography-v4.php:220$
+#: fields/acf-Typography-v4.php:287$
+#: fields/acf-Typography-v5.php:220$
+#: fields/acf-Typography-v5.php:242$
+#: fields/acf-Typography-v5.php:282$
+msgid "Font Style"$
+msgstr ""$
+$
+#: fields/acf-Typography-v4.php:191$
+#: fields/acf-Typography-v4.php:221$
+#: fields/acf-Typography-v4.php:305$
+#: fields/acf-Typography-v5.php:221$
+#: fields/acf-Typography-v5.php:243$
+#: fields/acf-Typography-v5.php:291$
+msgid "Font Variant"$
+msgstr ""$
+$
+#: fields/acf-Typography-v4.php:192$
+#: fields/acf-Typography-v4.php:222$
+#: fields/acf-Typography-v4.php:323$
+#: fields/acf-Typography-v5.php:222$
+#: fields/acf-Typography-v5.php:244$
+#: fields/acf-Typography-v5.php:300$
+msgid "Font Stretch"$
+msgstr ""$
+$
+#: fields/acf-Typography-v4.php:193$
+#: fields/acf-Typography-v4.php:223$
+#: fields/acf-Typography-v4.php:341$
+#: fields/acf-Typography-v5.php:223$
+#: fields/acf-Typography-v5.php:245$
+#: fields/acf-Typography-v5.php:309$
+msgid "Line Height"$
+msgstr ""$
+$
+#: fields/acf-Typography-v4.php:194$
+#: fields/acf-Typography-v4.php:224$
+#: fields/acf-Typography-v4.php:357$
+#: fields/acf-Typography-v5.php:224$
+#: fields/acf-Typography-v5.php:246$
+#: fields/acf-Typography-v5.php:317$
+msgid "Letter Spacing"$
+msgstr ""$
+$
+#: fields/acf-Typography-v4.php:195$
+#: fields/acf-Typography-v4.php:225$
+#: fields/acf-Typography-v4.php:373$
+#: fields/acf-Typography-v5.php:225$
+#: fields/acf-Typography-v5.php:247$
+#: fields/acf-Typography-v5.php:325$
+msgid "Text Align"$
+msgstr ""$
+$
+#: fields/acf-Typography-v4.php:196$
+#: fields/acf-Typography-v4.php:226$
+#: fields/acf-Typography-v4.php:391$
+#: fields/acf-Typography-v5.php:226$
+#: fields/acf-Typography-v5.php:248$
+#: fields/acf-Typography-v5.php:334$
+msgid "Text Color"$
+msgstr ""$
+$
+#: fields/acf-Typography-v4.php:197$
+#: fields/acf-Typography-v4.php:227$
+#: fields/acf-Typography-v4.php:406$
+#: fields/acf-Typography-v5.php:227$
+#: fields/acf-Typography-v5.php:249$
+#: fields/acf-Typography-v5.php:341$
+msgid "Text Decoration"$
+msgstr ""$
+$
+#: fields/acf-Typography-v4.php:198$
+#: fields/acf-Typography-v4.php:228$
+#: fields/acf-Typography-v4.php:424$
+#: fields/acf-Typography-v5.php:228$
+#: fields/acf-Typography-v5.php:250$
+#: fields/acf-Typography-v5.php:350$
+msgid "Text Transform"$
+msgstr ""$
+$
+#: fields/acf-Typography-v4.php:207$
+#: fields/acf-Typography-v5.php:234$
+msgid "Required Properties"$
+msgstr ""$
+$
+#: fields/acf-Typography-v4.php:208$
+#: fields/acf-Typography-v5.php:235$
+msgid "Select fields which are required on edit page"$
+msgstr ""$
+$
+#: fields/acf-Typography-v4.php:238$
+#: fields/acf-Typography-v4.php:254$
+#: fields/acf-Typography-v4.php:271$
+#: fields/acf-Typography-v4.php:288$
+#: fields/acf-Typography-v4.php:306$
+#: fields/acf-Typography-v4.php:324$
+#: fields/acf-Typography-v4.php:342$
+#: fields/acf-Typography-v4.php:358$
+#: fields/acf-Typography-v4.php:374$
+#: fields/acf-Typography-v4.php:392$
+#: fields/acf-Typography-v4.php:407$
+#: fields/acf-Typography-v4.php:425$
+msgid "(Default)"$
+msgstr ""$
+$
+#: fields/acf-Typography-v5.php:169$
+msgid "Error! Please enter a higher value"$
+msgstr ""$
+$
+#: fields/acf-Typography-v5.php:257$
+#: fields/acf-Typography-v5.php:265$
+#: fields/acf-Typography-v5.php:274$
+#: fields/acf-Typography-v5.php:283$
+#: fields/acf-Typography-v5.php:292$
+#: fields/acf-Typography-v5.php:301$
+#: fields/acf-Typography-v5.php:310$
+#: fields/acf-Typography-v5.php:318$
+#: fields/acf-Typography-v5.php:326$
+#: fields/acf-Typography-v5.php:335$
+#: fields/acf-Typography-v5.php:342$
+#: fields/acf-Typography-v5.php:351$
+msgid "Default"$
+msgstr ""$
+$
+#: includes/admin_settings.php:32$
+msgid "Google Fonts Key"$
+msgstr ""$
+$
+#: includes/admin_settings.php:40$
+msgid "Font Files Source"$
+msgstr ""$
+$
+#. translators: 1: google fonts api url, 2: target="_blank to open in new tab"$
+#: includes/admin_settings.php:66$
+msgid "You can get an API key <a href=\"%1$s\" %2$s title=\"Google Fonts API\">HERE</a>."$
+msgstr ""$
+$
+#: includes/admin_settings.php:90$
+msgid "Serve Font Files Remotely, or Locally?"$
+msgstr ""$
+$
+#: includes/admin_settings.php:92$
+msgid "Remote fonts are ideal for keeping the size of your site small, and minimizing server resources."$
+msgstr ""$
+$
+#: includes/admin_settings.php:93$
+msgid "Local fonts are ideal for GDPR compliance, and limiting 3rd-party resources on page loads."$
+msgstr ""$
+$
+#: includes/admin_settings.php:98$
+msgid "Remote"$
+msgstr ""$
+$
+#: includes/admin_settings.php:104$
+msgid "Local"$
+msgstr ""$
+$
+#: includes/admin_settings.php:121$
+msgid "ACF Typography Settings"$
+msgstr ""$
