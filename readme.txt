@@ -40,7 +40,7 @@ If you want any kind of font/typography features within ACF, this is the plugin 
 * Color Picker for Text Color subfield.
 * Shortcode for getting typography field values.
 * Shortcode for displaying link/style HTML code in-line.
-* translation-ready .pot file.
+* Translation-ready .pot file.
 
 = Documentation =
 `
