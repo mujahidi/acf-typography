@@ -7,6 +7,7 @@ Description: A Typography Add-on for the Advanced Custom Fields Plugin.
 Version: 3.3.0
 Author: Mujahid Ishtiaq
 Author URI: https://github.com/mujahidi
+Text Domain: acf-typography
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 */
@@ -21,6 +22,12 @@ if( $acft_options && $acft_options['google_key'] )
 
 if( $acft_options && isset($acft_options['files_source']) )
 	define('FONT_FILE_SOURCE', $acft_options['files_source']);
+
+// load translation files for textdomain
+function acft_load_textdomain() {
+	load_plugin_textdomain( 'acf-typography', false, dirname( plugin_basename( __FILE__ ) ) . '/languages' ); 
+}
+add_action( 'init', 'acft_load_textdomain' );
 
 // check if class already exists
 if( !class_exists('acf_plugin_Typography') ) :
