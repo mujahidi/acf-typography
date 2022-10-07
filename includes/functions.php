@@ -397,9 +397,8 @@ function acft_get_all_fields( $post_id = false ) {
  * 
  *  @since      3.3.0
  */
-function acft_merge_all_fields( $all_fields = array() ) {
+function acft_merge_all_fields( $all_fields = false ) {
     
-    //$font_family = $font_weight = $merged_array = array();
     $merged_array = array();
     $merged_array['font_family'] = $merged_array['font_weight'] = array();
 
@@ -501,28 +500,28 @@ function acft_get_typography_stylesheet( $link_type = 'link', $post_id = false )
             // suppress errors for now
             $url_content = @file_get_contents($url);
             
-            if ($link_type === 'style') {
+            // if we didn't get an error, use the url or url_content for in-line display
+            if ($url_content != false) {
+            
+                // style code link_type
+                if ($link_type === 'style') {
 
-                // if we didn't get an error, use the returned stylesheet style tag for display
-                if ($url_content != false) {
                         $results .= '<style>';
                         $results .= $url_content;
                         $results .= '</style>';
-                }
+                
+                // link code link_type
+                } else {
 
-            } else {
-
-                // if we didn't get an error, use the returned stylesheet URL link tag for display
-                if ($url_content != false) {
                         $results .= '<link rel="stylesheet" href="'.$url.'" media="all" />';
-
+                
                 }
                 
-            }
+            } // end if url error check
             
-        }
+        } // end if for local / remote check
         
-    }
+    } // end if for font_family array has values 
     
     return $results;
  
@@ -569,6 +568,7 @@ function acft_enqueue_google_fonts_file() {
             
         // enqueue remote google fonts    
         } else {
+            
             if( is_array($font_weight) && count($font_weight) > 0 ){
                 $font_weight = implode( ',', $font_weight );
                 $font_family = implode( ':'.$font_weight.'|', $font_family );
@@ -581,9 +581,8 @@ function acft_enqueue_google_fonts_file() {
             // to prevent 404 errors when a font family name has a space in the name
             wp_enqueue_style( 'acft-gf', 'https://fonts.googleapis.com/css?family='.str_replace(' ', '+', $font_family) );
             
-        }
-
+        } // end if for local / remote enqueueig check
         
-    }
+    } // end if for font_family array has values 
 
 }
