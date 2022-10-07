@@ -22,7 +22,7 @@ function acft_settings_init(){
 
 	add_settings_section(
 		'acft_acf-typography-field_section', 
-		__( '', 'acf-typography' ), 
+		'', // as per WP Docs, empty strings should not be translated
 		'acft_settings_section_callback', 
 		'acf-typography-field'
 	);
@@ -57,17 +57,73 @@ function acft_google_key_field(){
 
 	$acft_options = get_option( 'acft_settings' );
 	$google_key = '';
-	if( $acft_options && $acft_options['google_key'] )
+	if( $acft_options && $acft_options['google_key'] ) {
 		$google_key = $acft_options['google_key'];
+                
+        }
 	?>
 	<input type='text' name='acft_settings[google_key]' value='<?php echo $google_key; ?>'>
+        
+        <?php $g_api_url = esc_url( 'https://developers.google.com/fonts/docs/developer_api' ); ?>
+        
         <p><?php echo sprintf( 
             /* translators: 1: google fonts api url, 2: target="_blank to open in new tab" */    
             __( 'You can get an API key <a href="%1$s" %2$s title="Google Fonts API">HERE</a>.', 'acf-typography' ), 
-            esc_url( 'https://developers.google.com/fonts/docs/developer_api' ),
+            $g_api_url,
             'target="_blank"'
         ); ?></p>
 	<?php
+        
+        if (!empty($google_key)) {
+            
+            // if google key present, test it out and suppress errors for now
+            $url = esc_url('https://www.googleapis.com/webfonts/v1/webfonts?key=' . $google_key);
+            $url_test = @file_get_contents($url);
+            // if we got back a bad response, display a message
+            if ($url_test == false) {?>
+                <div id="setting-error-settings_updated" class="notice notice-error settings-error is-dismissible">
+                    
+                    <h3><strong>
+                        <?php _e("Bad Response from Google API.", 'acf-typography') ?>
+                    </strong></h3>
+                    
+                    <?php if (isset($http_response_header[0])) { ?>
+                            <?php echo 
+                                /* translators: Used for displaying HTTP Header Response Error Messages */ 
+                                __("HTTP Response Error: ", 'acf-typography').'<strong>'.$http_response_header[0].'</strong><br />'; 
+                            ?>
+                    <?php } ?>
+                        
+                    <?php 
+                    $context = stream_context_create(['http' => ['ignore_errors' => true]]);
+                    $url_response = json_decode(file_get_contents($url, false, $context), true);
+                    if (isset($url_response['error']['message'])) { ?>
+                            <?php echo 
+                                /* translators: Used for displaying Google API Error Messages */ 
+                                __("Google Error: ", 'acf-typography').'<strong>'.$url_response['error']['message'].'</strong><br />'; 
+                            ?>
+                    <?php } ?>
+                      
+                    <br />
+                    <p><?php echo __("Check your API Key to make sure it is correct, check your settings in the Developer API to ensure that you have allowed this API key to be used without restrictions for this domain, and check the Google API Fonts link below to ensure you're actually getting back results.", 'acf-typography'); ?></p>
+                    <br />
+                    
+                    <?php echo __("Google Developer API: ", 'acf-typography').'<a href="'.$g_api_url.'" target="_blank">'.$g_api_url.'</a>'; ?>
+                    <br />
+                    <?php echo __("Google API Fonts: ", 'acf-typography').'<a href="'.$url.'" target="_blank">'.$url.'</a>'; ?>
+                    
+                    <button type="button" class="notice-dismiss"><span class="screen-reader-text">
+                        <?php 
+                            /* translators: Used for screen-reader-text to dismiss admin panel error messages. */ 
+                            _e("Dismiss this notice.", 'acf-typography'); 
+                        ?>
+
+                    </span></button>
+                </div>
+
+            <?php }
+            
+        }
 
 }
 
@@ -95,13 +151,19 @@ function acft_files_source_field(){
             <div>
                 <input type="radio" id="acftSourceRemote" name="acft_settings[files_source]" value="remote" 
                 <?php echo (($files_source == 'remote') ? "checked" : "" )?>>
-                <label for="remote"><?php _e("Remote", 'acf-typography'); ?></label>
+                <label for="remote"><?php 
+                    /* translators: Adjective, Context: Remote Fonts - serving font files remotely  */  
+                    _e("Remote", 'acf-typography'); 
+                ?></label>
             </div>
 
             <div>
                 <input type="radio" id="acftSourceLocal" name="acft_settings[files_source]" value="local"
                 <?php echo (($files_source == 'local') ? "checked" : "" )?>>
-                <label for="local"><?php _e("Local", 'acf-typography'); ?></label>
+                <label for="local"><?php
+                    /* translators: Adjective, Context: Local Fonts - serving font files locally  */ 
+                    _e("Local", 'acf-typography'); 
+                ?></label>
             </div>
 
         </fieldset> 
