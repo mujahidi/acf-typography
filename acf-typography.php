@@ -29,6 +29,7 @@ function acft_load_textdomain() {
 }
 add_action( 'init', 'acft_load_textdomain' );
 
+
 // check if class already exists
 if( !class_exists('acf_plugin_Typography') ) :
 
