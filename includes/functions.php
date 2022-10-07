@@ -4,20 +4,18 @@
  *  Create directory if not exists
  * 
  *  Helper function for saving stylesheets and font files locally.
- *  If needed, it creates the directory, sets permissions, and
- *  adds an empty index.php file to prevent direct access.
+ *  If needed, it creates the directory and sets permissions.
  * 
- *  acft_create_dir_if_not_exists($path) 
+ *  acft_create_dir_if_not_exists( $path, $index=false ) 
  * 
  *  @param	$path (str) The dir path to check/create
  *  @return	n/a
  * 
  *  @since	3.3.0
  */
-function acft_create_dir_if_not_exists($path) {
+function acft_create_dir_if_not_exists( $path ) {
     if (!is_dir($path))
         mkdir($path, 0755, true);
-        file_put_contents($path.'index.php', '<?php // silence is golden');
     return;
 }
 
@@ -165,12 +163,9 @@ function acft_save_local_font_stylesheet($font_family) {
     
     $ss_fn = esc_html(strtolower(str_replace(' ', '', $font_family).'-'.$ff_ver).'.css');
     $font_stylesheet = $stylesheet_dir.$ss_fn;    
-    
 
     // breakdown variants to get query string for google file saving
     // eg- :ital,wght@0,400;0,700;1,400;1,700
-    $gf_q_string = ':'.(in_array('italic', $ff_variants) ? 'ital,' : '').'wght@';
-
     // loop through file variants and add relevant values to an array
     foreach($ff_files as $k => $v) {
         // regular default weight
@@ -184,8 +179,14 @@ function acft_save_local_font_stylesheet($font_family) {
         if (count($w_i_test)>1 && !empty($w_i_test[0])) { $fw_arr[] = '1,'.str_replace('italic', '', $k).';'; }
     }
     
-    // sort array to follow google order standards, convert to string, and append to URL query string
-    $gf_q_string .= implode('', sort($fw_arr));
+    // sort array to follow google order standards, make sure we have more than one array item, convert to string, and append to URL query string
+    sort($fw_arr);
+    $gf_q_string = ''; // empty string to add to URL, or query vars below
+    if (count($fw_arr) > 1) {
+        $gf_q_string .= ':'.(in_array('italic', $ff_variants) ? 'ital,' : '').'wght@';
+        $gf_q_string .= implode('', $fw_arr);
+    }
+    
     
 
     // create the URL string for the full font family and all variants
@@ -197,10 +198,13 @@ function acft_save_local_font_stylesheet($font_family) {
     // suppress errors for now
     $url_content = @file_get_contents($url);
     
-    // if we didn't get an error, save stylesheet locally
-    if ($url_content != false) {
-            file_put_contents($font_stylesheet, $url_content);
+    // if we got an error or stylesheet doesn't start with @font, then return. nothing to process for now
+    if ( $url_content == false || !strncmp($url_content, "@font", 5) === 0 ) {
+            return;
     }
+    
+
+    file_put_contents($font_stylesheet, $url_content);
     
     
     // since we just had to save the stylesheet, we already know we need the font files too
@@ -263,9 +267,9 @@ function acft_save_local_font_stylesheet($font_family) {
         file_put_contents($font_stylesheet, implode('', 
             array_map(function($ss) use ($v_loc_fn, $new_line) {
                 // Google sucks at consistent filenames for font files.
-                // Only thing they have standard is the first 24 chars of the filename,
+                // Only thing they have standard is the first 16 chars of the filename,
                 // so that's what we check for in each line, and replace the line that matches
-                return stristr($ss, substr($v_loc_fn, 0, 24)) ? $new_line : $ss;
+                return stristr($ss, substr($v_loc_fn, 0, 16)) ? $new_line : $ss;
             }, file($font_stylesheet))
         ));
 
