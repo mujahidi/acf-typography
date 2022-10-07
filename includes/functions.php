@@ -188,14 +188,12 @@ function acft_save_local_font_stylesheet($font_family) {
         $gf_q_string .= ':'.(in_array('italic', $ff_variants) ? 'ital,' : '').'wght@';
         $gf_q_string .= implode('', $fw_arr);
     }
-    
-    echo var_dump($gf_q_string);
+
     
     // create the URL string for the full font family and all variants
     // strip last ';' to prevent 404 errors
     $url = 'https://fonts.googleapis.com/css2?family='.str_replace(' ', '+', $font_family).substr($gf_q_string, 0, -1);
-    
-    echo var_dump($url);
+
     
     // save google stylesheet file locally
     // suppress errors for now
