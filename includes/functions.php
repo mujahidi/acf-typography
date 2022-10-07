@@ -338,9 +338,9 @@ function acft_get_valid_post_id( $post_id = false ) {
 
 
 /**
- *  Get all fields for an object (post, block, option page)
+ *  Get all fields for an object (post, block, option)
  * 
- *  acft_get_all_fields( $opt_post_id )
+ *  acft_get_all_fields( $post_id )
  * 
  *  @param	$post_id (str) (optional) A post_id to retrieve fields
  *  @return	(array) An array of any fields it could find for current object
@@ -351,7 +351,7 @@ function acft_get_all_fields( $post_id = false ) {
     
     $post_id = acft_get_valid_post_id( $post_id );   
             
-    // fields for options pages
+    // fields for options
     $all_option_fields = get_fields( 'option', false ) ?: array();
             
     // if still no post_id, there's nothing to grab values for, so just return option fields array
