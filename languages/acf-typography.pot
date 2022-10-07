@@ -10,7 +10,7 @@ msgstr ""$
 "Content-Type: text/plain; charset=UTF-8\n"$
 "Content-Transfer-Encoding: 8bit\n"$
 "POT-Creation-Date: 2022-10-06T01:58:01+00:00\n"$
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"$
+"PO-Revision-Date: 2022-10-07T02:45:15+00:00\n"$
 "X-Generator: WP-CLI 2.6.0\n"$
 "X-Domain: acf-typography\n"$
 $
@@ -214,30 +214,63 @@ msgid "Font Files Source"$
 msgstr ""$
 $
 #. translators: 1: google fonts api url, 2: target="_blank to open in new tab"$
-#: includes/admin_settings.php:66$
+#: includes/admin_settings.php:71$
 msgid "You can get an API key <a href=\"%1$s\" %2$s title=\"Google Fonts API\">HERE</a>."$
 msgstr ""$
 $
-#: includes/admin_settings.php:90$
+#: includes/admin_settings.php:87$
+msgid "Bad Response from Google API."$
+msgstr ""$
+$
+#. translators: Used for displaying HTTP Header Response Error Messages$
+#: includes/admin_settings.php:93$
+msgid "HTTP Response Error: "$
+msgstr ""$
+$
+#. translators: Used for displaying Google API Error Messages$
+#: includes/admin_settings.php:103$
+msgid "Google Error: "$
+msgstr ""$
+$
+#: includes/admin_settings.php:108$
+msgid "Check your API Key to make sure it is correct, check your settings in the Developer API to ensure that you have allowed this API key to be used without restrictions for this domain, and check the Google API Fonts link below to ensure you're actually getting back results."$
+msgstr ""$
+$
+#: includes/admin_settings.php:111$
+msgid "Google Developer API: "$
+msgstr ""$
+$
+#: includes/admin_settings.php:113$
+msgid "Google API Fonts: "$
+msgstr ""$
+$
+#. translators: Used for screen-reader-text to dismiss admin panel error messages.$
+#: includes/admin_settings.php:118$
+msgid "Dismiss this notice."$
+msgstr ""$
+$
+#: includes/admin_settings.php:146$
 msgid "Serve Font Files Remotely, or Locally?"$
 msgstr ""$
 $
-#: includes/admin_settings.php:92$
+#: includes/admin_settings.php:148$
 msgid "Remote fonts are ideal for keeping the size of your site small, and minimizing server resources."$
 msgstr ""$
 $
-#: includes/admin_settings.php:93$
+#: includes/admin_settings.php:149$
 msgid "Local fonts are ideal for GDPR compliance, and limiting 3rd-party resources on page loads."$
 msgstr ""$
 $
-#: includes/admin_settings.php:98$
+#. translators: Adjective, Context: Remote Fonts - serving font files remotely$
+#: includes/admin_settings.php:156$
 msgid "Remote"$
 msgstr ""$
 $
-#: includes/admin_settings.php:104$
+#. translators: Adjective, Context: Local Fonts - serving font files locally$
+#: includes/admin_settings.php:165$
 msgid "Local"$
 msgstr ""$
 $
-#: includes/admin_settings.php:121$
+#: includes/admin_settings.php:183$
 msgid "ACF Typography Settings"$
 msgstr ""$
