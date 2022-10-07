@@ -42,11 +42,15 @@ function acft_update_gf_json_file( $API_KEY ) {
         
         if ( !filesize($filename) || $time > 2 ) {
 
-            $json = file_get_contents('https://www.googleapis.com/webfonts/v1/webfonts?key=' . $API_KEY);
-
-            $gf_file = fopen($filename, 'wb');
-            fwrite($gf_file, $json);
-            fclose( $gf_file );
+            // suppress errors for now
+            $json = @file_get_contents('https://www.googleapis.com/webfonts/v1/webfonts?key=' . $API_KEY);
+            
+            // if we didn't get an error, save json data to file
+            if ($json != false) {
+                    $gf_file = fopen($filename, 'wb');
+                    fwrite($gf_file, $json);
+                    fclose( $gf_file );
+            }
 
         }
 
@@ -117,12 +121,14 @@ function acft_get_font_stylesheet_data($font_family) {
     $font_arr = array($font_family);
     
     // get latest values for this font family from the saved json file
-    foreach ($json_arr['items'] as $gf_item) {
-        if ($gf_item['family'] == $font_family) {
-            $font_arr[$font_family]['version'] = $gf_item['version'];
-            $font_arr[$font_family]['variants'] = $gf_item['variants'];
-            $font_arr[$font_family]['files'] = $gf_item['files'];
-            break;
+    if( $json_arr ){
+        foreach ($json_arr['items'] as $gf_item) {
+            if ($gf_item['family'] == $font_family) {
+                $font_arr[$font_family]['version'] = $gf_item['version'];
+                $font_arr[$font_family]['variants'] = $gf_item['variants'];
+                $font_arr[$font_family]['files'] = $gf_item['files'];
+                break;
+            }
         }
     }
     
@@ -178,9 +184,8 @@ function acft_save_local_font_stylesheet($font_family) {
         if (count($w_i_test)>1 && !empty($w_i_test[0])) { $fw_arr[] = '1,'.str_replace('italic', '', $k).';'; }
     }
     
-    // sort array to follow google standards, convert to string, and append to URL query string
-    sort($fw_arr);
-    $gf_q_string .= implode('', $fw_arr);
+    // sort array to follow google order standards, convert to string, and append to URL query string
+    $gf_q_string .= implode('', sort($fw_arr));
     
 
     // create the URL string for the full font family and all variants
@@ -189,8 +194,13 @@ function acft_save_local_font_stylesheet($font_family) {
 
     
     // save google stylesheet file locally
-    $url_content = file_get_contents($url);
-    file_put_contents($font_stylesheet, $url_content);
+    // suppress errors for now
+    $url_content = @file_get_contents($url);
+    
+    // if we didn't get an error, save stylesheet locally
+    if ($url_content != false) {
+            file_put_contents($font_stylesheet, $url_content);
+    }
     
     
     // since we just had to save the stylesheet, we already know we need the font files too
@@ -208,8 +218,10 @@ function acft_save_local_font_stylesheet($font_family) {
         acft_create_dir_if_not_exists($ffv_path);
 
           
-        // get the extension and format text for the supplied font
-        $v_loc_fn = esc_html(basename($v));
+        // get the extension and format string for the supplied font
+        // Google changes the format returned based on the server making the request
+        // We match what Google returns for this particular server
+        $v_loc_fn = basename(esc_url($v));
         switch (pathinfo($v_loc_fn, PATHINFO_EXTENSION)) {
             case 'woff':
                 $format_ext = 'woff';
@@ -226,13 +238,21 @@ function acft_save_local_font_stylesheet($font_family) {
         
         
         // save font file locally
-        $v_content = file_get_contents($v);
-        file_put_contents($ffv_path.$v_loc_fn, $v_content);
+        // suppress errors for now
+        $v_content = @file_get_contents(esc_url($v));
+    
+        // if we didn't get an error, save font file locally
+        if ($v_content != false) {
+                file_put_contents($ffv_path.$v_loc_fn, $v_content);
+        }
+        
+        
 
         // set url for new font file
+        // mimic Google URL path
         // ../fonts/fontfamily/ver/filename
         $ff_base_url = $font_css_rel_url.trailingslashit(strtolower(str_replace(' ', '', $font_family))).trailingslashit($ff_ver);
-        $v_url = substr(esc_url($ff_base_url.$v_loc_fn), 7);
+        $v_url = substr(esc_url($ff_base_url.$v_loc_fn), 7); // strip off the leading http:// WP adds by default
         
         
         // prepare new replacement line
@@ -242,8 +262,8 @@ function acft_save_local_font_stylesheet($font_family) {
         // replace line in stylesheet file to point to the local font file
         file_put_contents($font_stylesheet, implode('', 
             array_map(function($ss) use ($v_loc_fn, $new_line) {
-                // google sucks at consistent filenames for font files.
-                // only thing they have standard is the first 24 chars of the filename,
+                // Google sucks at consistent filenames for font files.
+                // Only thing they have standard is the first 24 chars of the filename,
                 // so that's what we check for in each line, and replace the line that matches
                 return stristr($ss, substr($v_loc_fn, 0, 24)) ? $new_line : $ss;
             }, file($font_stylesheet))
@@ -289,19 +309,8 @@ function acft_get_local_font_stylesheet($font_family) {
     return $ss_url;
 }
 
-
-/**
- *  Get all fields for an object (post, block, option page)
- * 
- *  acft_get_all_fields( $opt_post_id )
- * 
- *  @param	$opt_post_id (str) (optional) A post_id to retrieve fields
- *  @return	(array) An array of any fields it could find for current object
- * 
- *  @since      3.3.0
- */
-function acft_get_all_fields( $opt_post_id = false ) {
-    
+// get_valid_post_id
+function acft_get_valid_post_id( $opt_post_id = false ) {
     $post_id = false;
     
     // supplied a post_id, use it
@@ -315,18 +324,33 @@ function acft_get_all_fields( $opt_post_id = false ) {
     if ($post_id == false) {
         global $post;
         if (is_object($post)) {
-            $post_obj = $post;
-            $post_id = $post_obj->ID;
+            $post_id = $post->ID;
     }}
 
     // if still no post_id, try getting post_id if called outside the loop
     if ($post_id == false) {
         global $wp_query; 
-        if (is_object($wp_query)) {
-            $post_obj = $wp_query->post;
-            $post_id = $post_obj->ID;
+        if (is_object($wp_query->post)) {
+            $post_id = $wp_query->post->ID;
     }}
     
+    return $post_id;
+}
+
+
+/**
+ *  Get all fields for an object (post, block, option page)
+ * 
+ *  acft_get_all_fields( $opt_post_id )
+ * 
+ *  @param	$post_id (str) (optional) A post_id to retrieve fields
+ *  @return	(array) An array of any fields it could find for current object
+ * 
+ *  @since      3.3.0
+ */
+function acft_get_all_fields( $post_id = false ) {
+    
+    $post_id = acft_get_valid_post_id( $post_id );   
             
     // fields for options pages
     $all_option_fields = get_fields( 'option', false ) ?: array();
@@ -339,6 +363,8 @@ function acft_get_all_fields( $opt_post_id = false ) {
     
     // fields for posts
     $all_post_fields = get_fields( $post_id, false ) ?: array();
+    
+    $post_obj = get_post($post_id); 
 
     // fields for Gutenberg Blocks
     $blocks = parse_blocks( $post_obj->post_content );
@@ -374,6 +400,7 @@ function acft_get_all_fields( $opt_post_id = false ) {
  */
 function acft_merge_all_fields( $all_fields = array() ) {
     
+    //$font_family = $font_weight = $merged_array = array();
     $merged_array = array();
     $merged_array['font_family'] = $merged_array['font_weight'] = array();
 
@@ -437,6 +464,7 @@ function acft_get_typography_stylesheet( $link_type = 'link', $post_id = false )
     
     if( is_array($font_family) && count($font_family) > 0 ){
 
+        
         // handle local stylesheets
         if ( defined('FONT_FILE_SOURCE') && FONT_FILE_SOURCE == 'local' ) {
             
@@ -457,8 +485,10 @@ function acft_get_typography_stylesheet( $link_type = 'link', $post_id = false )
 
             }
   
+            
         // handle remote stylesheets 
         } else {
+            
             if( is_array($font_weight) && count($font_weight) > 0 ){
                 $font_weight = implode( ',', $font_weight );
                 $font_family = implode( ':'.$font_weight.'|', $font_family );
@@ -466,13 +496,29 @@ function acft_get_typography_stylesheet( $link_type = 'link', $post_id = false )
                 $font_family = implode( ':400,700|', $font_family );
             }
             
+            // url to query
+            $url = 'https://fonts.googleapis.com/css?family='.str_replace(' ', '+', $font_family);
+            
+            // suppress errors for now
+            $url_content = @file_get_contents($url);
+            
             if ($link_type === 'style') {
-                $results .= '<style>';
-                $results .= file_get_contents('https://fonts.googleapis.com/css?family='.str_replace(' ', '+', $font_family));
-                $results .= '</style>';
+
+                // if we didn't get an error, use the returned stylesheet style tag for display
+                if ($url_content != false) {
+                        $results .= '<style>';
+                        $results .= $url_content;
+                        $results .= '</style>';
+                }
 
             } else {
-                $results .= '<link rel="stylesheet" href="https://fonts.googleapis.com/css?family='.str_replace(' ', '+', $font_family).'" media="all" />';
+
+                // if we didn't get an error, use the returned stylesheet URL link tag for display
+                if ($url_content != false) {
+                        $results .= '<link rel="stylesheet" href="'.$url.'" media="all" />';
+
+                }
+                
             }
             
         }
@@ -507,6 +553,7 @@ function acft_enqueue_google_fonts_file() {
     // let's do the enqueueing if there's actually something to enqueue
     if( is_array($font_family) && count($font_family) > 0 ){
   
+        
         // enqueue locally saved/served fonts
         if ( defined('FONT_FILE_SOURCE') && FONT_FILE_SOURCE == 'local' ) {
             
@@ -520,6 +567,7 @@ function acft_enqueue_google_fonts_file() {
 
             }
   
+            
         // enqueue remote google fonts    
         } else {
             if( is_array($font_weight) && count($font_weight) > 0 ){
@@ -529,10 +577,14 @@ function acft_enqueue_google_fonts_file() {
                 $font_family = implode( ':400,700|', $font_family );
             }
             
+            // wp_enqueue_style automatically replaces ' ' with '+', but some themes like (twentytwentytwo) include these 
+            // enqueued files through another method that does properly encode the URL string. We just go ahead and do it
+            // to prevent 404 errors when a font family name has a space in the name
             wp_enqueue_style( 'acft-gf', 'https://fonts.googleapis.com/css?family='.str_replace(' ', '+', $font_family) );
             
         }
 
+        
     }
 
 }
