@@ -213,7 +213,7 @@ $
 msgid "Font Files Source"$
 msgstr ""$
 $
-#. translators: 1: google fonts api url, 2: target="_blank to open in new tab"$
+#. translators: 1: google fonts api url, 2: target="_blank" to open in new tab$
 #: includes/admin_settings.php:71$
 msgid "You can get an API key <a href=\"%1$s\" %2$s title=\"Google Fonts API\">HERE</a>."$
 msgstr ""$
