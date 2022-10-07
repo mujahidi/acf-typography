@@ -310,12 +310,11 @@ function acft_get_local_font_stylesheet($font_family) {
 }
 
 // get_valid_post_id
-function acft_get_valid_post_id( $opt_post_id = false ) {
-    $post_id = false;
+function acft_get_valid_post_id( $post_id = false ) {
     
     // supplied a post_id, use it
-    if ($opt_post_id) {
-        $post_obj = get_post(intval($opt_post_id));
+    if ($post_id) {
+        $post_obj = get_post(intval($post_id));
         if (is_object($post_obj) && !is_wp_error($post_obj)) {
             $post_id = $post_obj->ID;
     }}
