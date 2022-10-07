@@ -355,7 +355,7 @@ function acft_get_all_fields( $post_id = false ) {
     $all_option_fields = get_fields( 'option', false ) ?: array();
             
     // if still no post_id, there's nothing to grab values for, so just return option fields array
-    if ($post_id === false) { return $all_option_fields; }
+    if ($post_id == false) { return $all_option_fields; }
     
     
     // we have a post_id, so let's grab post and block fields for it
