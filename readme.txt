@@ -40,7 +40,6 @@ If you want any kind of font/typography features within ACF, this is the plugin 
 * Color Picker for Text Color subfield.
 * Shortcode for getting typography field values.
 * Shortcode for displaying link/style HTML code in-line.
-* Translation-ready .pot file.
 
 = Documentation =
 `
@@ -78,15 +77,45 @@ Retrieve either link or style HTML tag codes for font stylesheets to use in-line
 // post_id = a specific post_id to get the stylsheets for (str) (optional) (default: current post_id)
 `
 Want to alter the output for the link/style code returned?
-Use the Filter Hook (acf_alter_typography_stylesheet) like this:
 `
-function myprefix_change_stylesheet_output( $output ) {
-
-	// code to do something with the output string
+function myprefix_change_stylesheet_output( $output, $tag, $attr ) {
+	
+	//make sure it is the right shortcode
+	if('acf_typography_stylesheet' != $tag){ 
+		return $output;
+	}
+	
+	// general code to do something with the output string 
+	// some examples are shown below
+	
+	// check for specific link_type
+	if(isset($attr['link_type'])){
+		// only do something based on supplied link_type ("link" or "style")
+		if ($attr['link_type'] === "style") {
+			// example to partially "minify" in-line CSS stylesheet code 
+			$output = str_replace(array("\r", "\n"), "", $output);
+		}
+	}
+	
+	// check for specific post_id
+	if(isset($attr['post_id'])){
+		// only do something based on supplied post_id
+	}
+	
+	// get current object ID if you did not supply a post_id
+	if (!isset($attr['post_id'])) {
+		$object_id = get_queried_object_id();
+		// only do something based on current object_id
+		
+		// get post_type for current object_id
+		if (get_post_type($object_id) == "my_custom_post_type") {
+                        // only do something based on a specific post_type
+		}
+	}
 
 	return $output;
 }
-add_filter( 'acf_alter_typography_stylesheet', 'myprefix_change_stylesheet_output' );
+add_filter( 'do_shortcode_tag', 'myprefix_change_stylesheet_output', 10, 3 );
 `
 
 = Github repository =
@@ -142,18 +171,18 @@ A. Join in on Github repository [@mujahidi/acf-typography](https://github.com/mu
 = 3.3.0 =
 * [UPDATE] Fixed consistent textdomain usage for i18n translations.
 * [UPDATE] Made sure displayed strings are all i18n translation-ready.
+* [NEW] Plugin now 100% translation-ready and initial .pot file generated! #24
 * [UPDATE] Added a few minor additional checks for some variables to prevent possible errors in the future.
-* [NEW] Plugin now 100% translation-ready and initial .pot file generated!
-* [BUG] Fixed 'Notice: Trying to get property ID of non-object' when enqueueing font files on non-objects.
+* [BUG] Fixed 'Notice: Trying to get property ID of non-object' when enqueueing font files on non-objects. ( WP Support )
+* [BUG] Fixed 'Warning: failed to open stream: HTTP request failed' when bad API Key supplied, or other API connection issues. #27
+* [NEW] Admin Settings checks and help messages for Google API Key/connection issues.
 * [NEW] Google Fonts can now be saved and served locally.
 * [NEW] Admin Settings Option to choose between serving font stylesheets and font files Remotely or Locally.
 * [NEW] Description and link provided for getting Google Fonts API key in Admin Settings page.
 * [NEW] Shortcode to print in-line stylesheet link or style HTML code (acf_typography_stylesheet).
-* [NEW] Filter hook for the new acf_typography_stylesheet shortcode to alter the output of the in-line stylesheet links/styles.
 * [NEW] Tested up to PHP 8.2
 * [UPDATE] Minor code cleanup for readability. 
 * [UPDATE] Added new screenshot for new Admin Settings Page Options. 
-
 
 = 3.2.3 =
 * Added new font-weight values
