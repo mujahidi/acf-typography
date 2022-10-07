@@ -190,7 +190,7 @@ function acft_save_local_font_stylesheet($font_family) {
 
     // create the URL string for the full font family and all variants
     // strip last ';' to prevent 404 errors
-    $url = esc_url('https://fonts.googleapis.com/css2?family='.str_replace(' ', '+', $font_family).substr($gf_q_string, 0, -1));
+    $url = 'https://fonts.googleapis.com/css2?family='.str_replace(' ', '+', $font_family).substr($gf_q_string, 0, -1);
 
     
     // save google stylesheet file locally
@@ -221,7 +221,7 @@ function acft_save_local_font_stylesheet($font_family) {
         // get the extension and format string for the supplied font
         // Google changes the format returned based on the server making the request
         // We match what Google returns for this particular server
-        $v_loc_fn = basename(esc_url($v));
+        $v_loc_fn = basename($v);
         switch (pathinfo($v_loc_fn, PATHINFO_EXTENSION)) {
             case 'woff':
                 $format_ext = 'woff';
@@ -239,7 +239,7 @@ function acft_save_local_font_stylesheet($font_family) {
         
         // save font file locally
         // suppress errors for now
-        $v_content = @file_get_contents(esc_url($v));
+        $v_content = @file_get_contents($v);
     
         // if we didn't get an error, save font file locally
         if ($v_content != false) {
