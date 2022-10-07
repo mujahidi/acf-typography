@@ -169,11 +169,13 @@ function acft_save_local_font_stylesheet($font_family) {
     // loop through file variants and add relevant values to an array
     foreach($ff_files as $k => $v) {
         // regular default weight
-        if ($k == 'regular') { $fw_arr[] = '0,400;'; }
+        // only add leading "0" if italic is also availaible for this font_family variants
+        if ($k == 'regular') { $fw_arr[] = in_array('italic', $ff_variants) ? '0,400;' : '400;'; }
         // italic default weight
         if ($k == 'italic') { $fw_arr[] = '1,400;'; }
         // other weight
-        if (is_int($k)) { $fw_arr[] = '0,'.$k.';'; }
+        // only add leading "0" if italic is also availaible for this font_family variants
+        if (is_int($k)) { $fw_arr[] = in_array('italic', $ff_variants) ? '0,'.$k.';' : $k.';'; }
         // other italic weight
         $w_i_test = explode('italic', $k);
         if (count($w_i_test)>1 && !empty($w_i_test[0])) { $fw_arr[] = '1,'.str_replace('italic', '', $k).';'; }
@@ -187,12 +189,13 @@ function acft_save_local_font_stylesheet($font_family) {
         $gf_q_string .= implode('', $fw_arr);
     }
     
+    echo var_dump($gf_q_string);
     
-
     // create the URL string for the full font family and all variants
     // strip last ';' to prevent 404 errors
     $url = 'https://fonts.googleapis.com/css2?family='.str_replace(' ', '+', $font_family).substr($gf_q_string, 0, -1);
-
+    
+    echo var_dump($url);
     
     // save google stylesheet file locally
     // suppress errors for now
@@ -241,7 +244,7 @@ function acft_save_local_font_stylesheet($font_family) {
         }
         
         
-        // save font file locally
+        // save font file locally, get file first
         // suppress errors for now
         $v_content = @file_get_contents($v);
     
@@ -251,7 +254,32 @@ function acft_save_local_font_stylesheet($font_family) {
         }
         
         
-
+        /* 
+         * We have to upate the local stylesheet with the new local font files.
+         * For consistency, we want the files saved and linked in stylesheets
+         * to match what's in the google_fonts.json file.
+         * 
+         * Google sucks at consistent filenames for font files.
+         * They can be as short as 8 chars, or over 36 chars.
+         * what gets reterned in the stylesheet does not match what gets
+         * returned in the json file.
+         * 
+         * It's about the worst-case scenario I've seen trying to do any
+         * kind of find/replace.
+         * 
+         * After trying multiple different ways to get consistenet/accurate
+         * filename/path replacements, I've settled on building out an array
+         * that counts the # of chars in common between the json file data and
+         * what Google returns in the stylesheet, saving the filename that best 
+         * matches to the line it best matches.
+         *
+         * Then we loop through the file and update those specific lines with
+         * the specific highest matching filename.
+         * 
+         */
+        
+        
+        // setup some initial vals
         // set url for new font file
         // mimic Google URL path
         // ../fonts/fontfamily/ver/filename
@@ -263,17 +291,72 @@ function acft_save_local_font_stylesheet($font_family) {
         $new_line = "  src: url('".$v_url."') format('".$format_ext."');\n";
         
         
-        // replace line in stylesheet file to point to the local font file
-        file_put_contents($font_stylesheet, implode('', 
-            array_map(function($ss) use ($v_loc_fn, $new_line) {
-                // Google sucks at consistent filenames for font files.
-                // Only thing they have standard is the first 16 chars of the filename,
-                // so that's what we check for in each line, and replace the line that matches
-                return stristr($ss, substr($v_loc_fn, 0, 16)) ? $new_line : $ss;
+        /* Part 1 of updating local filenames in the local stylesheet */
+        
+        // open the stylehseet file and loop through the lines to build out match array
+        $lines = file($font_stylesheet);
+        $count = 0;
+        foreach($lines as $line) {
+            $count++;
+            // does the line start with a remote URL?
+            if (strpos(str_replace(' ', '', $line), 'src:url(http') === 0) {
+                $str_len = strlen($v_loc_fn); // str length of local filename taken from json file
+                $match = false; // flag
+                while (!$match) {
+                    // see if filename is in current line
+                    if ( stristr($line, substr($v_loc_fn, 0, $str_len)) ) {
+                        
+                        // we got a match
+                        $match = true; //set flag
+                        
+                        // no match for this line yet, add it
+                        if (!isset($matchArr[$count])) {
+                            $matchArr[$count] = array($str_len => $new_line);
+                        }
+                        
+                        // got a match for this line already, let's see what's the better match
+                        if (isset($matchArr[$count])) {
+                            foreach($matchArr[$count] as $k => $v) {
+                                // compare # of chars. higher char # wins
+                                if ($k < $str_len) {
+                                    $matchArr[$count] = array($str_len => $new_line);
+                                }
+                            }
+                        }
+                        
+                        break; // break out for good measure
+                        
+                    }
+                    
+                    // no match that loop
+                    $str_len--; // decrement str_length by 1 and try again
+     
+                } // end while loop   
+                
+            } // end if line starts with remote URL link
+
+        } // end foreach line
+        
+    } // end foreach font file
+    
+    
+    /* Part 2 of updating local filenames in the local stylesheet */
+    
+    $count = 0;
+    file_put_contents($font_stylesheet, implode('', 
+            array_map(function($line) use ($matchArr, $count) {
+                $count++;
+                
+                // we have a match for this line
+                if (isset($matchArr[$count])) {
+                    foreach($matchArr[$count] as $k => $v) {
+                        $line = $v;
+                    }
+                }
+                return $line;
+
             }, file($font_stylesheet))
         ));
-
-    }
 
     return;
      
