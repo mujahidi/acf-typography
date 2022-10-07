@@ -163,21 +163,19 @@ add_shortcode('acf_typography', 'acf_typography_shortcode');
 */
 
 function acf_typography_stylesheet_shortcode( $atts ) {
+    
+    require_once plugin_dir_path( __FILE__ ) . 'functions.php';
+    
+    $post_id = acft_get_valid_post_id( (isset($atts['post_id']) ? intval($atts['post_id']) : false ) );
 
     // extract attributes
     extract( shortcode_atts( array(
-            'link_type'     => '',
-            'post_id'       => false,
+            'link_type'     => 'link',
+            'post_id'       => $post_id,
     ), $atts ) );
-    
-    require_once plugin_dir_path( __FILE__ ) . 'functions.php';
 
     // get value and return it
     $value = acft_get_typography_stylesheet( $link_type, $post_id );
-    
-    // filter hook to alter the output
-    // example use-case: changing URLs to Dir Paths for use in a custom PDF export function
-    apply_filters( 'acf_alter_typography_stylesheet', $value );
     
     // return
     return $value;   
