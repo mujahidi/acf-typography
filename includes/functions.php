@@ -211,6 +211,10 @@ function acft_save_local_font_stylesheet($font_family) {
     // since we just had to save the stylesheet, we already know we need the font files too
     // let's go get them and get/save them
     
+    // open the stylehseet file and loop through the lines to build out match array
+    // opening now to prevent repeat file opens unnecessarily
+    $lines = file($font_stylesheet);
+    
     // loop through every file for this font family, save locally, and replace remote URL with local URL
     foreach ($ff_files as $k => $v) {     
         
@@ -291,8 +295,6 @@ function acft_save_local_font_stylesheet($font_family) {
         
         /* Part 1 of updating local filenames in the local stylesheet */
         
-        // open the stylehseet file and loop through the lines to build out match array
-        $lines = file($font_stylesheet);
         $count = 0;
         foreach($lines as $line) {
             $count++;
@@ -341,17 +343,19 @@ function acft_save_local_font_stylesheet($font_family) {
     /* Part 2 of updating local filenames in the local stylesheet */
     
     $count = 0;
+    // replace remote URL with best matching local file and save file
     file_put_contents($font_stylesheet, implode('', 
             array_map(function($line) use ($matchArr, $count) {
+                // increase count (line number) for each array item (line)
                 $count++;
                 
                 // we have a match for this line
                 if (isset($matchArr[$count])) {
                     foreach($matchArr[$count] as $k => $v) {
-                        $line = $v;
+                        $line = $v; // modify this particular line with best match
                     }
                 }
-                return $line;
+                return $line; // return line whether modified or unmodified
 
             }, file($font_stylesheet))
         ));
