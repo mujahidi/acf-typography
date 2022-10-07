@@ -38,7 +38,6 @@ If you want any kind of font/typography features within ACF, this is the plugin 
 * Color Picker for Text Color subfield.
 * Shortcode for getting typography field values.
 * Shortcode for displaying link/style HTML code in-line.
-* Translation-ready .pot file.
 
 ## Screenshots
 ![Typography Field Screenshot](https://raw.githubusercontent.com/mujahidi/typography/master/screenshot-1.png "Typography Sample Field Settings")
@@ -61,9 +60,7 @@ the_typography_sub_field( $selector, $property, [$format_value] );
 ```
 #### Shortcodes
 Retrieve typography field values for display or use anywhere you want. 
-```php
-[acf_typography field="field-name" property="font_size" post_id="123" format_value="1"]
-```
+`[acf_typography field="field-name" property="font_size" post_id="123" format_value="1"]`
 
 Retrieve either link or style HTML tag codes for font stylesheets to use in-line anywhere you want.
 ```php
@@ -80,15 +77,45 @@ Retrieve either link or style HTML tag codes for font stylesheets to use in-line
 // post_id = a specific post_id to get the stylsheets for (str) (optional) (default: current post_id)
 ```
 Want to alter the output for the link/style code returned?
-Use the Filter Hook (acf_alter_typography_stylesheet) like this:
 ```php
-function myprefix_change_stylesheet_output( $output ) {
-
-	// code to do something with the output string
+function myprefix_change_stylesheet_output( $output, $tag, $attr ) {
+	
+	//make sure it is the right shortcode
+	if('acf_typography_stylesheet' != $tag){ 
+		return $output;
+	}
+	
+	// general code to do something with the output string 
+	// some examples are shown below
+	
+	// check for specific link_type
+	if(isset($attr['link_type'])){
+		// only do something based on supplied link_type ("link" or "style")
+		if ($attr['link_type'] === "style") {
+			// example to partially "minify" in-line CSS stylesheet code 
+			$output = str_replace(array("\r", "\n"), "", $output);
+		}
+	}
+	
+	// check for specific post_id
+	if(isset($attr['post_id'])){
+		// only do something based on supplied post_id
+	}
+	
+	// get current object ID if you did not supply a post_id
+	if (!isset($attr['post_id'])) {
+		$object_id = get_queried_object_id();
+		// only do something based on current object_id
+		
+		// get post_type for current object_id
+		if (get_post_type($object_id) == "my_custom_post_type") {
+                        // only do something based on a specific post_type
+		}
+	}
 
 	return $output;
 }
-add_filter( 'acf_alter_typography_stylesheet', 'myprefix_change_stylesheet_output' );
+add_filter( 'do_shortcode_tag', 'myprefix_change_stylesheet_output', 10, 3);
 ```
 
 ## Compatibility
