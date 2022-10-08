@@ -175,7 +175,7 @@ function acf_typography_stylesheet_shortcode( $atts ) {
     ), $atts ) );
 
     // get value and return it
-    $value = acft_get_typography_stylesheet( $link_type, $post_id );
+    $value = acft_the_typography_stylesheet( $link_type, $post_id );
     
     // return
     return $value;   
