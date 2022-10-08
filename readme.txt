@@ -33,7 +33,6 @@ If you want any kind of font/typography features within ACF, this is the plugin 
 * Supports Google Fonts. The selected Google Fonts are automatically enqueued on front-end of posts/pages. Google Fonts also work with ACF Options.
 * Supports serving Google Fonts remotely, or locally.
 * Supports Gutenberg Blocks created with ACF.
-* Supports Option pages created with ACF.
 * Option to show/hide each subfield individually.
 * Option to make each subfield required individually.
 * Color Picker for Text Color subfield.
