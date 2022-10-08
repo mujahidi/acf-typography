@@ -123,6 +123,7 @@ add_filter( 'do_shortcode_tag', 'myprefix_change_stylesheet_output', 10, 3);
 ## Compatibility
 
 This ACF field type is compatible with:
+* ACF plugin v4, v5 & v6
 * Free and paid versions of the ACF plugin
 
 ## Installation
