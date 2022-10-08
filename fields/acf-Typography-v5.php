@@ -54,17 +54,17 @@ class acf_field_Typography extends acf_field {
 		$this->defaults = array(
 			'display_properties'	=> array(),
 			'required_properties'	=> array(),
-			'font_size'				=> 15,
-			'font_weight'			=> '400',
-			'font_family'			=> 'Arial, Helvetica, sans-serif',
-			'font_style'			=> 'normal',
-                        'font_variant'			=> 'normal',
-                        'font_stretch'			=> 'normal',
-			'text_align'			=> 'left',
-			'letter_spacing'		=> 0,
-			'text_decoration'		=> 'none',
-			'text_color'			=> '#000',
-			'text_transform'		=> 'none'
+			'font_size'             => 15,
+			'font_weight'		=> '400',
+			'font_family'		=> 'Arial, Helvetica, sans-serif',
+			'font_style'		=> 'normal',
+                        'font_variant'		=> 'normal',
+                        'font_stretch'		=> 'normal',
+			'text_align'		=> 'left',
+			'letter_spacing'	=> 0,
+			'text_decoration'	=> 'none',
+			'text_color'		=> '#000',
+			'text_transform'	=> 'none'
 		);
 		
 		$this->font_family = array(
