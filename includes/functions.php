@@ -708,47 +708,48 @@ function acft_the_typography_stylesheet( $link_type = 'link', $post_id = false )
                     }
 
                 }
+                
+                return $results;
             
             }// end if FONT_FILE_SOURCE is local check
-  
-            
-        // handle remote stylesheets 
-        } else {
-            
-            if( is_array($font_weight) && count($font_weight) > 0 ){
-                $font_weight = implode( ',', $font_weight );
-                $font_family = implode( ':'.$font_weight.'|', $font_family );
-            }else{
-                $font_family = implode( ':400,700|', $font_family );
-            }
-            
-            // url to query
-            $url = 'https://fonts.googleapis.com/css?family='.str_replace(' ', '+', $font_family);
-            
-            // suppress errors for now
-            $url_content = @file_get_contents( $url );
-            
-            // if we didn't get an error, use the url or url_content for in-line display
-            if ( $url_content != false ) {
-            
-                // style code link_type
-                if ( $link_type === 'style' ) {
-
-                        $results .= '<style>';
-                        $results .= $url_content;
-                        $results .= '</style>';
-                
-                // link code link_type
-                } else {
-
-                        $results .= '<link rel="stylesheet" href="'.$url.'" media="all" />';
-                
-                }
-                
-            } // end if url error check
             
         } // end if for local / remote check
+  
+            
         
+        // handle remote stylesheets  
+        if( is_array($font_weight) && count($font_weight) > 0 ){
+            $font_weight = implode( ',', $font_weight );
+            $font_family = implode( ':'.$font_weight.'|', $font_family );
+        }else{
+            $font_family = implode( ':400,700|', $font_family );
+        }
+
+        // url to query
+        $url = 'https://fonts.googleapis.com/css?family='.str_replace(' ', '+', $font_family);
+
+        // suppress errors for now
+        $url_content = @file_get_contents( $url );
+
+        // if we didn't get an error, use the url or url_content for in-line display
+        if ( $url_content != false ) {
+
+            // style code link_type
+            if ( $link_type === 'style' ) {
+
+                    $results .= '<style>';
+                    $results .= $url_content;
+                    $results .= '</style>';
+
+            // link code link_type
+            } else {
+
+                    $results .= '<link rel="stylesheet" href="'.$url.'" media="all" />';
+
+            }
+
+        } // end if url error check
+            
     } // end if for font_family array has values 
     
     return $results;
@@ -793,25 +794,27 @@ function acft_enqueue_google_fonts_file() {
                     wp_enqueue_style( 'acft-gf-local-'.$ff_slug, $font_stylesheet );
 
                 }
+                
+                return;
             
             }// end if FONT_FILE_SOURCE is local check
-  
-        // enqueue remote google fonts    
-        } else {
-            
-            if( is_array($font_weight) && count($font_weight) > 0 ){
-                $font_weight = implode( ',', $font_weight );
-                $font_family = implode( ':'.$font_weight.'|', $font_family );
-            }else{
-                $font_family = implode( ':400,700|', $font_family );
-            }
-            
-            // wp_enqueue_style automatically replaces ' ' with '+', but some themes like (twentytwentytwo) include these 
-            // enqueued files through another method that does properly encode the URL string. We just go ahead and do it
-            // to prevent 404 errors when a font family name has a space in the name
-            wp_enqueue_style( 'acft-gf', 'https://fonts.googleapis.com/css?family='.str_replace(' ', '+', $font_family) );
             
         } // end if for local / remote enqueueig check
+  
+        
+        // enqueue remote google fonts    
+        if( is_array($font_weight) && count($font_weight) > 0 ){
+            $font_weight = implode( ',', $font_weight );
+            $font_family = implode( ':'.$font_weight.'|', $font_family );
+        }else{
+            $font_family = implode( ':400,700|', $font_family );
+        }
+
+        // wp_enqueue_style automatically replaces ' ' with '+', but some themes like (twentytwentytwo) include these 
+        // enqueued files through another method that does properly encode the URL string. We just go ahead and do it
+        // to prevent 404 errors when a font family name has a space in the name
+        wp_enqueue_style( 'acft-gf', 'https://fonts.googleapis.com/css?family='.str_replace(' ', '+', $font_family) );
+
         
     } // end if for font_family array has values 
 
