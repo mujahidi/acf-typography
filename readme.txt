@@ -124,6 +124,7 @@ add_filter( 'do_shortcode_tag', 'myprefix_change_stylesheet_output', 10, 3 );
 = Compatibility =
 
 This ACF field type is compatible with:
+* ACF plugin v4, v5 & v6
 * Free and paid versions of the ACF plugin
 
 == Installation ==
@@ -136,7 +137,7 @@ This ACF field type is compatible with:
 
 == Frequently Asked Questions ==
 = Q. Is it compatible with ACF Pro? =
-A. Yes. This plugin is compatiable with both free and paid ACF plugins.
+A. Yes. This plugin is compatible with both free and paid ACF plugins. It's compatible with v4, v5 & v6 releases of ACF.
 
 = Q. Does it support Google Fonts? =
 A. Version 3.0.0 and greater supports Google Fonts
