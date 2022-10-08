@@ -183,6 +183,27 @@ function acft_options_page(){
 		<h2><?php _e("ACF Typography Settings", 'acf-typography'); ?></h2>
 
 		<?php
+                if (!class_exists('ACF')) { ?>
+                 
+                    <div id="setting-error-settings_updated" class="notice notice-error settings-error is-dismissible">
+                        <h3><strong>
+                            <?php _e("Advanced Custom Fields plugin is required!", 'acf-typography') ?>
+                        </strong></h3>
+                        <p><?php echo sprintf( 
+                            /* translators: 1: ACF WP plugin directory url, 2: target="_blank" to open in new tab */    
+                            __('This plugin does nothing by itself, and requires <a href="%1$s" %2$s title="Advanced Custom Fields">Advanced Custom Fields</a> (ACF) to be installed and activated. ACF Typography Field will work with both free or paid PRO versions of ACF, versions 4, 5 & 6!', 'acf-typography'),
+                            esc_url('https://wordpress.org/plugins/advanced-custom-fields/'),
+                            'target="_blank"'
+                        ); ?></p>
+                        <button type="button" class="notice-dismiss"><span class="screen-reader-text">
+                            <?php 
+                                /* translators: Used for screen-reader-text to dismiss admin panel error messages. */ 
+                                _e("Dismiss this notice.", 'acf-typography'); 
+                            ?>
+                        </span></button>
+                    </div>
+                    
+                <?php }
 		settings_fields( 'acf-typography-field' );
 		do_settings_sections( 'acf-typography-field' );
 		submit_button();
