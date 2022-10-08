@@ -338,17 +338,17 @@ function acft_save_local_font_stylesheet($font_family) {
         } // end foreach line
         
     } // end foreach font file
-    
+
     
     /* Part 2 of updating local filenames in the local stylesheet */
     
     $count = 0;
     // replace remote URL with best matching local file and save file
     file_put_contents($font_stylesheet, implode('', 
-            array_map(function($line) use ($matchArr, $count) {
+            array_map(function($line) use ($matchArr, &$count) {
                 // increase count (line number) for each array item (line)
                 $count++;
-                
+
                 // we have a match for this line
                 if (isset($matchArr[$count])) {
                     foreach($matchArr[$count] as $k => $v) {
