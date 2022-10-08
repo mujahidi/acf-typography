@@ -58,15 +58,20 @@ if( !class_exists('acf_plugin_Typography') ) :
 			);
 			
 			// include files
-			require plugin_dir_path( __FILE__ ) . 'includes/api-template.php';
 			require plugin_dir_path( __FILE__ ) . 'includes/admin_settings.php';
-			require plugin_dir_path( __FILE__ ) . 'includes/functions.php';
+
 
                         if (class_exists('ACF')) {
+                            
+                            // include ACF-dependant files
+                            require plugin_dir_path( __FILE__ ) . 'includes/api-template.php';
+                            require plugin_dir_path( __FILE__ ) . 'includes/functions.php';
+                            
                             // include field
                             add_action('acf/include_field_types', array($this, 'include_field_types')); // v5, v6
                             add_action('acf/register_fields', array($this, 'include_field_types')); // v4
                             add_action('acf/field_group/admin_enqueue_scripts', array($this, 'field_group_admin_enqueue_scripts'));
+                            
 			}
 		}
 		
