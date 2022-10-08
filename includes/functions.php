@@ -179,11 +179,13 @@ function acft_prepare_stylesheet_url_string( $font_family, $google_dataArr ) {
     if ( count($fwArr) > 1 ) {
         $gf_q_string .= ':'.(in_array('italic', $ff_variants) ? 'ital,' : '').'wght@';
         $gf_q_string .= implode('', $fwArr);
+        // strip last ';' to prevent 404 errors
+        $gf_q_string = substr($gf_q_string, 0, -1);
     }
     
     // create the URL string for the full font family and all variants
-    // strip last ';' to prevent 404 errors
-    $url = 'https://fonts.googleapis.com/css2?family='.str_replace(' ', '+', $font_family).substr($gf_q_string, 0, -1);
+    
+    $url = 'https://fonts.googleapis.com/css2?family='.str_replace(' ', '+', $font_family).$gf_q_string;
     
     return $url;
 }
