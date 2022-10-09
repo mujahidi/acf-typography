@@ -1,9 +1,9 @@
 === Advanced Custom Fields: Typography Field ===
-Contributors: mujahid158
+Contributors: mujahid158, codejp3
 Tags: typography, acf, advanced custom fields, addon, admin, field, custom, custom field, acf typography, acf google fonts, google fonts
 Requires at least: 3.5.0
 Tested up to: 6.0
-Stable tag: 3.2.3
+Stable tag: 3.2.4
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -12,6 +12,8 @@ A Typography Add-on for the Advanced Custom Fields Plugin.
 == Description ==
 
 Typography field type for "Advanced Custom Fields" plugin that lets you add different text properties e.g. Font Size, Font Family, Font Color etc.
+
+If you want any kind of font/typography features within ACF, this is the plugin for you! There's nothing else like it!
 
 = Supported Subfields =
 * Font Size
@@ -58,6 +60,7 @@ the_typography_sub_field( $selector, $property, [$format_value] );
 = Compatibility =
 
 This ACF field type is compatible with:
+* ACF plugin v4, v5 & v6
 * Free and paid versions of the ACF plugin
 
 == Installation ==
@@ -69,8 +72,11 @@ This ACF field type is compatible with:
 5. Please refer to the description for more info regarding the field type settings
 
 == Frequently Asked Questions ==
+= Q. Which versions of ACF is this plugin compatible with? =
+A. It is compatible with V4, V5, and the latest v6. There are 2 known UI bugs with v6 (number fields & color_picker fields) but functionality works, and we are currently working with the ACF plugin authors to resolve the visual issues present in v6.
+
 = Q. Is it compatible with ACF Pro? =
-A. Yes. This plugin is compatiable with both free and paid ACF plugins.
+A. Yes. This plugin is compatible with both free and paid ACF plugins.
 
 = Q. Does it support Google Fonts? =
 A. Version 3.0.0 and greater supports Google Fonts
@@ -99,6 +105,18 @@ A. Join in on Github repository [@mujahidi/acf-typography](https://github.com/mu
 
 
 == Changelog ==
+= 3.2.4 =
+* [NEW] Plugin now officially supports ACF v6!
+* [NEW] Tested up to PHP 8.2.
+* [BUG] Fixed 'Notice: Trying to get property ID of non-object' when enqueueing font files on non-objects. ( WP Support )
+* [BUG] Fixed 'Warning: failed to open stream: HTTP request failed' when bad API Key supplied, or other API connection issues. #27
+* [NEW] Admin Settings - checks and help messages for Google API Key/connection issues.
+* [NEW] Admin Settings - description and link provided for getting Google Fonts API key.
+* [NEW] Admin Settings - checks to make sure ACF is installed and activated.
+* [UPDATE] Translation string and textdomain updates to get plugin translation-ready (coming next release).
+* [UPDATE] Added a few minor additional checks for some variables to prevent possible errors in the future.
+* [UPDATE] Minor code cleanup for readability. 
+
 = 3.2.3 =
 * Added new font-weight values
 
