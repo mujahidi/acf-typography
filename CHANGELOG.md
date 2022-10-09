@@ -1,5 +1,17 @@
 # CHANGELOG
 
+##### 3.2.4
+* [NEW] Plugin now officially supports ACF v6!
+* [NEW] Tested up to PHP 8.2.
+* [BUG] Fixed 'Notice: Trying to get property ID of non-object' when enqueueing font files on non-objects. ( WP Support )
+* [BUG] Fixed 'Warning: failed to open stream: HTTP request failed' when bad API Key supplied, or other API connection issues. #27
+* [NEW] Admin Settings - checks and help messages for Google API Key/connection issues.
+* [NEW] Admin Settings - description and link provided for getting Google Fonts API key.
+* [NEW] Admin Settings - checks to make sure ACF is installed and activated.
+* [UPDATE] Translation string and textdomain updates to get plugin translation-ready (coming next release).
+* [UPDATE] Added a few minor additional checks for some variables to prevent possible errors in the future.
+* [UPDATE] Minor code cleanup for readability. 
+
 ##### 3.2.3
 * Added new font-weight values
 
