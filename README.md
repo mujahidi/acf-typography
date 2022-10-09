@@ -5,6 +5,7 @@ A Typography Add-on for the Advanced Custom Fields Plugin.
   - Requires at least: WP 3.5.0
   - Tested up to: WP 6.0
   - Tested up to: PHP 8.2
+  - Tested up to: ACF 6.0
   - Stable: 3.2.3
   - Latest: 3.3.0
 
