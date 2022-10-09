@@ -11,7 +11,7 @@ function get_typography_field( $selector, $property, $post_id = false, $format_v
 	$post_id = acf_get_valid_post_id( $post_id );
 	
 	// get field
-    $field = acf_maybe_get_field( $selector, $post_id );
+        $field = acf_maybe_get_field( $selector, $post_id );
 	
 	// create dummy field
 	if( !$field ) {	
@@ -26,19 +26,19 @@ function get_typography_field( $selector, $property, $post_id = false, $format_v
 	}
 	
 	// get value for field
-    $value = acf_get_value( $post_id, $field );
+        $value = acf_get_value( $post_id, $field );
 	
 	// format value
 	if( $format_value ) {	
 		// get value for field
 		$value = acf_format_value( $value, $post_id, $field );
-    }
+        }
     
-    // get property
-    if( is_array($value) && array_key_exists( $property, $value ) )
-        $property_value = esc_attr($value[ $property ]);
-    else
-        $property_value = '';
+        // get property
+        if( is_array( $value ) && array_key_exists( $property, $value ) )
+            $property_value = esc_attr( $value[ $property ] );
+        else
+            $property_value = '';
     
 	return $property_value;
  
@@ -51,9 +51,9 @@ function get_typography_field( $selector, $property, $post_id = false, $format_v
  */
 function the_typography_field( $selector, $property, $post_id = false, $format_value = true ) {
 	
-	$value = get_typography_field($selector, $property, $post_id, $format_value);
+	$value = get_typography_field( $selector, $property, $post_id, $format_value );
 	
-	if( is_array($value) ) {
+	if( is_array( $value ) ) {
 		$value = @implode( ', ', $value );
 	}
 	
@@ -75,9 +75,9 @@ function get_typography_sub_field( $selector, $property, $format_value = true, $
 	// bail early if no sub field
 	if( !$sub_field ) return false;
 	
-	if( is_array($sub_field['value']) && array_key_exists( $property, $sub_field['value'] ) )
-		$property_value = esc_attr($sub_field['value'][$property]);
-    else
+	if( is_array( $sub_field['value'] ) && array_key_exists( $property, $sub_field['value'] ) )
+		$property_value = esc_attr( $sub_field['value'][$property] );
+        else
 		$property_value = '';
 
 	// return 
@@ -94,7 +94,7 @@ function the_typography_sub_field( $field_name, $property, $format_value = true 
 	
 	$value = get_typography_sub_field( $field_name, $property, $format_value );
 	
-	if( is_array($value) ) {
+	if( is_array( $value ) ) {
 		
 		$value = implode(', ',$value);
 		
@@ -114,7 +114,7 @@ function the_typography_sub_field( $field_name, $property, $format_value = true 
 
 function acf_typography_shortcode( $atts ) {
 	
-	// extract attributs
+	// extract attributes
 	extract( shortcode_atts( array(
 		'field'			=> '',
 		'property'		=> '',
@@ -128,7 +128,7 @@ function acf_typography_shortcode( $atts ) {
 	
 	
 	// array
-	if( is_array($value) ) {
+	if( is_array( $value ) ) {
 		
 		$value = @implode( ', ', $value );
 		
@@ -140,4 +140,4 @@ function acf_typography_shortcode( $atts ) {
 	
 }
 
-add_shortcode('acf_typography', 'acf_typography_shortcode');
+add_shortcode( 'acf_typography', 'acf_typography_shortcode' );
