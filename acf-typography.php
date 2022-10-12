@@ -24,6 +24,8 @@ if( $acft_options && $acft_options['google_key'] )
 if( !class_exists('acf_plugin_Typography') ) :
 
 	class acf_plugin_Typography {
+
+			var array $settings; // php8.2 compatibility (deprecated dynamic properties)
 		
 			/*
 			*  __construct
