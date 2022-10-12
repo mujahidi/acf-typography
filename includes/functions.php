@@ -15,14 +15,14 @@
  *  @since      3.2.4
  */
 function acft_get_valid_post_id( $post_id = false ) {
-    
+
     // supplied a post_id, use it
     if ( $post_id ) {
         $post_obj = get_post( intval( $post_id ) );
         if ( is_object( $post_obj ) && !is_wp_error( $post_obj ) ) {
             $post_id = $post_obj->ID;
     }}
-    
+
     // if no post_id, try getting post_id if called inside the loop
     if ( $post_id === false ) {
         global $post;
@@ -36,7 +36,7 @@ function acft_get_valid_post_id( $post_id = false ) {
         if ( is_object( $wp_query->post ) ) {
             $post_id = $wp_query->post->ID;
     }}
-    
+
     return $post_id;
 }
 
@@ -233,9 +233,11 @@ function acft_enqueue_google_fonts_file() {
             $font_family = implode( ':400,700|', $font_family );
         }
         
-        // wp_enqueue_style automatically replaces ' ' with '+', but some themes like (twentytwentytwo) include these 
-        // enqueued files through another method that does properly encode the URL string. We just go ahead and do it
-        // now to prevent 404 errors when a font_family name has a space in the name
+        /**
+         * wp_enqueue_style automatically replaces ' ' with '+', but some themes like (twentytwentytwo) include these 
+         * enqueued files through another method that does properly encode the URL string. We just go ahead and do it
+         * now to prevent 404 errors when a font_family name has a space in the name
+         */ 
         wp_enqueue_style( 'acft-gf', 'https://fonts.googleapis.com/css?family='.str_replace(' ', '+', $font_family) );
 
 
