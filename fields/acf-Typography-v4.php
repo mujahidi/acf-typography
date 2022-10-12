@@ -12,7 +12,7 @@ class acf_field_Typography extends acf_field {
 	
 	// vars
 	var $settings, // will hold info such as dir / path
-            $defaults; // will hold default field options
+		$defaults; // will hold default field options
 		
 		
 	/*
