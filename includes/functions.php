@@ -151,10 +151,13 @@ function acft_get_all_fields( $post_id = false ) {
     $blocks = parse_blocks( $post_obj->post_content );
     foreach ( $blocks as $block ) {
         
-        if ( strpos( $block['blockName'], 'acf/' ) === 0 ) { // a custom block made with ACF
-            
-            $all_post_fields[] = $block['attrs']['data'];
-            
+        // make sure we have a block to check (php8.2 compatibility for passing empty haystack deprecated)  
+        if ( isset( $block['blockName'] ) ) {
+            if ( strpos( $block['blockName'], 'acf/' ) === 0 ) { // a custom block made with ACF
+
+                $all_post_fields[] = $block['attrs']['data'];
+
+            }
         }
         
     }
