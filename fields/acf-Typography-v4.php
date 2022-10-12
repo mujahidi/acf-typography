@@ -35,17 +35,17 @@ class acf_field_Typography extends acf_field {
 			// This makes life easy when creating the field options as you don't need to use any if( isset('') ) logic. eg:
 			'display_properties'	=> array(),
 			'required_properties'	=> array(),
-			'font_size'		=> 15,
-			'font_weight'		=> '400',
-			'font_family'		=> 'Arial, Helvetica, sans-serif',
-			'font_style'		=> 'normal',
-                        'font_variant'		=> 'normal',
-                        'font_stretch'		=> 'normal',
-			'text_align'		=> 'left',
-			'letter_spacing'	=> 0,
-			'text_decoration'	=> 'none',
-			'text_color'		=> '#000',
-			'text_transform'	=> 'none'
+			'font_size'				=> 15,
+			'font_weight'			=> '400',
+			'font_family'			=> 'Arial, Helvetica, sans-serif',
+			'font_style'			=> 'normal',
+			'font_variant'			=> 'normal',
+			'font_stretch'			=> 'normal',
+			'text_align'			=> 'left',
+			'letter_spacing'		=> 0,
+			'text_decoration'		=> 'none',
+			'text_color'			=> '#000',
+			'text_transform'		=> 'none'
 		);
 		
 		$this->font_family = array(
@@ -96,11 +96,11 @@ class acf_field_Typography extends acf_field {
 			'italic'	=> 'italic',
 			'oblique'	=> 'oblique',
 		);
-                $this->font_variant = array(
+        $this->font_variant = array(
 			'normal'     => 'normal',
-                        'small-caps' => 'small-caps',
-                        'initial'    => 'initial',
-                        'inherit'    => 'inherit'
+            'small-caps' => 'small-caps',
+            'initial'    => 'initial',
+            'inherit'    => 'inherit'
 		);
 		$this->font_stretch = array(
 			'ultra-condensed'   => 'ultra-condensed',
@@ -124,20 +124,20 @@ class acf_field_Typography extends acf_field {
 			'initial'	=> 'initial'
 		);
 		$this->text_decoration = array(
-			'none' 		=> 'none',
-			'underline' 	=> 'underline',
-			'overline' 	=> 'overline',
+			'none'			=> 'none',
+			'underline'		=> 'underline',
+			'overline'		=> 'overline',
 			'line-through' 	=> 'line-through',
-			'initial' 	=> 'initial',
-			'inherit' 	=> 'inherit'
+			'initial'		=> 'initial',
+			'inherit'		=> 'inherit'
 		);
 		$this->text_transform = array(
-			'none' 		=> 'none',
+			'none' 			=> 'none',
 			'capitalize' 	=> 'capitalize',
 			'uppercase' 	=> 'uppercase',
 			'lowercase' 	=> 'lowercase',
-			'initial' 	=> 'initial',
-			'inherit' 	=> 'inherit'
+			'initial'		=> 'initial',
+			'inherit'		=> 'inherit'
 		);
 		
 		
@@ -188,8 +188,8 @@ class acf_field_Typography extends acf_field {
 						'font_family'       =>  __("Font Family",'acf-typography'),
 						'font_weight'       =>  __("Font Weight",'acf-typography'),
 						'font_style'        =>  __("Font Style",'acf-typography'),
-                                                'font_variant'      =>  __("Font Variant",'acf-typography'),
-                                                'font_stretch'      =>  __("Font Stretch",'acf-typography'),
+						'font_variant'      =>  __("Font Variant",'acf-typography'),
+						'font_stretch'      =>  __("Font Stretch",'acf-typography'),
 						'line_height'       =>  __("Line Height",'acf-typography'),
 						'letter_spacing'    =>  __("Letter Spacing",'acf-typography'),
 						'text_align'        =>  __("Text Align",'acf-typography'),
@@ -218,8 +218,8 @@ class acf_field_Typography extends acf_field {
 						'font_family'       =>  __("Font Family",'acf-typography'),
 						'font_weight'       =>  __("Font Weight",'acf-typography'),
 						'font_style'        =>  __("Font Style",'acf-typography'),
-                                                'font_variant'      =>  __("Font Variant",'acf-typography'),
-                                                'font_stretch'      =>  __("Font Stretch",'acf-typography'),
+						'font_variant'      =>  __("Font Variant",'acf-typography'),
+						'font_stretch'      =>  __("Font Stretch",'acf-typography'),
 						'line_height'       =>  __("Line Height",'acf-typography'),
 						'letter_spacing'    =>  __("Letter Spacing",'acf-typography'),
 						'text_align'        =>  __("Text Align",'acf-typography'),
