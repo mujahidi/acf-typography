@@ -10,6 +10,8 @@ if( !class_exists('acf_field_Typography') ) :
 
 class acf_field_Typography extends acf_field {
 	
+	// declare vars instead of assigning dynamically for php8.2 compatibility (deprecated dynamic properties)
+    var array $settings, $font_family, $font_weight, $font_style, $font_variant, $font_stretch, $text_align, $text_decoration, $text_transform;
 	
 	/*
 	*  __construct
