@@ -70,7 +70,7 @@ function acft_acf_active_check() {
                                 __('This plugin does nothing by itself, and requires <a href="%1$s" %2$s %3$s"Advanced Custom Fields">Advanced Custom Fields</a> (ACF) to be installed and activated. This ACF Typography Field plugin will work with both free or paid PRO versions of ACF, versions 4, 5 & 6!', 'acf-typography'),
                                 esc_url('https://wordpress.org/plugins/advanced-custom-fields/'),
                                 'target="_blank"',
-                                'title=',
+                                'title='
                         ); ?></p>
                         <button type="button" class="notice-dismiss"><span class="screen-reader-text">
                                 <?php 
