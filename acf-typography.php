@@ -25,7 +25,7 @@ if( !class_exists('acf_plugin_Typography') ) :
 
 	class acf_plugin_Typography {
 
-			var array $settings; // php8.2 compatibility (deprecated dynamic properties)
+			var $settings; // php8.2 compatibility (deprecated dynamic properties)
 		
 			/*
 			*  __construct
