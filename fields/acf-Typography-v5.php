@@ -10,6 +10,8 @@ if( !class_exists('acf_field_Typography') ) :
 
 class acf_field_Typography extends acf_field {
 	
+	// declare vars instead of assigning dynamically for php8.2 compatibility (deprecated dynamic properties)
+    var $settings, $font_family, $font_weight, $font_style, $font_variant, $font_stretch, $text_align, $text_decoration, $text_transform;
 	
 	/*
 	*  __construct
@@ -58,8 +60,8 @@ class acf_field_Typography extends acf_field {
 			'font_weight'			=> '400',
 			'font_family'			=> 'Arial, Helvetica, sans-serif',
 			'font_style'			=> 'normal',
-            'font_variant'			=> 'normal',
-            'font_stretch'			=> 'normal',
+			'font_variant'			=> 'normal',
+			'font_stretch'			=> 'normal',
 			'text_align'			=> 'left',
 			'letter_spacing'		=> 0,
 			'text_decoration'		=> 'none',
@@ -68,23 +70,23 @@ class acf_field_Typography extends acf_field {
 		);
 		
 		$this->font_family = array(
-			'Arial, Helvetica, sans-serif'                          => 'Arial, Helvetica, sans-serif',
-			'"Arial Black", Gadget, sans-serif'                     => '"Arial Black", Gadget, sans-serif',
-			'"Bookman Old Style", serif'                            => '"Bookman Old Style", serif',
-			'"Comic Sans MS", cursive'                              => '"Comic Sans MS", cursive',
-			'Courier, monospace'                                    => 'Courier, monospace',
-			'Garamond, serif'                                       => 'Garamond, serif',
-			'Georgia, serif'                                        => 'Georgia, serif',
-			'Impact, Charcoal, sans-serif'                          => 'Impact, Charcoal, sans-serif',
-			'"Lucida Console", Monaco, monospace'                   => '"Lucida Console", Monaco, monospace',
-			'"Lucida Sans Unicode", "Lucida Grande", sans-serif'    => '"Lucida Sans Unicode", "Lucida Grande", sans-serif',
-			'"MS Sans Serif", Geneva, sans-serif'                   => '"MS Sans Serif", Geneva, sans-serif',
-			'"MS Serif", "New York", sans-serif'                    => '"MS Serif", "New York", sans-serif',
-			'"Palatino Linotype", "Book Antiqua", Palatino, serif'  => '"Palatino Linotype", "Book Antiqua", Palatino, serif',
-			'Tahoma,Geneva, sans-serif'                             => 'Tahoma, Geneva, sans-serif',
-			'"Times New Roman", Times,serif'                        => '"Times New Roman", Times, serif',
-			'"Trebuchet MS", Helvetica, sans-serif'                 => '"Trebuchet MS", Helvetica, sans-serif',
-			'Verdana, Geneva, sans-serif'                           => 'Verdana, Geneva, sans-serif',
+			'Arial, Helvetica, sans-serif'							=> 'Arial, Helvetica, sans-serif',
+			'"Arial Black", Gadget, sans-serif'						=> '"Arial Black", Gadget, sans-serif',
+			'"Bookman Old Style", serif'							=> '"Bookman Old Style", serif',
+			'"Comic Sans MS", cursive'								=> '"Comic Sans MS", cursive',
+			'Courier, monospace'									=> 'Courier, monospace',
+			'Garamond, serif'										=> 'Garamond, serif',
+			'Georgia, serif'										=> 'Georgia, serif',
+			'Impact, Charcoal, sans-serif'							=> 'Impact, Charcoal, sans-serif',
+			'"Lucida Console", Monaco, monospace'					=> '"Lucida Console", Monaco, monospace',
+			'"Lucida Sans Unicode", "Lucida Grande", sans-serif'	=> '"Lucida Sans Unicode", "Lucida Grande", sans-serif',
+			'"MS Sans Serif", Geneva, sans-serif'					=> '"MS Sans Serif", Geneva, sans-serif',
+			'"MS Serif", "New York", sans-serif'					=> '"MS Serif", "New York", sans-serif',
+			'"Palatino Linotype", "Book Antiqua", Palatino, serif'	=> '"Palatino Linotype", "Book Antiqua", Palatino, serif',
+			'Tahoma,Geneva, sans-serif'								=> 'Tahoma, Geneva, sans-serif',
+			'"Times New Roman", Times,serif'						=> '"Times New Roman", Times, serif',
+			'"Trebuchet MS", Helvetica, sans-serif'					=> '"Trebuchet MS", Helvetica, sans-serif',
+			'Verdana, Geneva, sans-serif'							=> 'Verdana, Geneva, sans-serif',
 		);
 
 		$google_font_family = acft_get_google_font_family(); // get google fonts from json file
@@ -95,9 +97,9 @@ class acf_field_Typography extends acf_field {
 
 		// sort array by array key
 		ksort( $this->font_family );
-        
-        // add 'initial' and 'inherit' property values to top of the array
-        $this->font_family = array_merge( array( 'initial' => 'initial', 'inherit' => 'inherit' ), $this->font_family );
+
+		// add 'initial' and 'inherit' property values to top of the array
+		$this->font_family = array_merge( array( 'initial' => 'initial', 'inherit' => 'inherit' ), $this->font_family );
 		
 		$this->font_weight = array(
 			'100'		=> '100',
@@ -115,24 +117,24 @@ class acf_field_Typography extends acf_field {
 			'italic'	=> 'italic',
 			'oblique'	=> 'oblique',
 		);
-        $this->font_variant = array(
-			'normal'     => 'normal',
-            'small-caps' => 'small-caps',
-            'initial'    => 'initial',
-            'inherit'    => 'inherit'
+		$this->font_variant = array(
+			'normal'		=> 'normal',
+			'small-caps'	=> 'small-caps',
+			'initial'		=> 'initial',
+			'inherit'		=> 'inherit'
 		);
 		$this->font_stretch = array(
-			'ultra-condensed'   => 'ultra-condensed',
-			'extra-condensed'   => 'extra-condensed',
-			'condensed'         => 'condensed',
-			'semi-condensed'    => 'semi-condensed',
-			'normal'            => 'normal',
-			'semi-expanded'     => 'semi-expanded',
-			'expanded'          => 'expanded',
-			'extra-expanded'    => 'extra-expanded',
-			'ultra-expanded'    => 'ultra-expanded',
-			'initial'           => 'initial',
-			'inherit'           => 'inherit'
+			'ultra-condensed'	=> 'ultra-condensed',
+			'extra-condensed'	=> 'extra-condensed',
+			'condensed'			=> 'condensed',
+			'semi-condensed'	=> 'semi-condensed',
+			'normal'			=> 'normal',
+			'semi-expanded'		=> 'semi-expanded',
+			'expanded'			=> 'expanded',
+			'extra-expanded'	=> 'extra-expanded',
+			'ultra-expanded'	=> 'ultra-expanded',
+			'initial'			=> 'initial',
+			'inherit'			=> 'inherit'
 		);
 		$this->text_align = array(
 			'inherit'	=> 'inherit',
@@ -143,20 +145,20 @@ class acf_field_Typography extends acf_field {
 			'initial'	=> 'initial'
 		);
 		$this->text_decoration = array(
-			'none' 			=> 'none',
-			'underline' 	=> 'underline',
-			'overline' 		=> 'overline',
-			'line-through' 	=> 'line-through',
-			'initial' 		=> 'initial',
-			'inherit' 		=> 'inherit'
+			'none'			=> 'none',
+			'underline'		=> 'underline',
+			'overline'		=> 'overline',
+			'line-through'	=> 'line-through',
+			'initial'		=> 'initial',
+			'inherit'		=> 'inherit'
 		);
 		$this->text_transform = array(
-			'none' 			=> 'none',
-			'capitalize' 	=> 'capitalize',
-			'uppercase' 	=> 'uppercase',
-			'lowercase' 	=> 'lowercase',
-			'initial' 		=> 'initial',
-			'inherit' 		=> 'inherit'
+			'none'			=> 'none',
+			'capitalize'	=> 'capitalize',
+			'uppercase'		=> 'uppercase',
+			'lowercase'		=> 'lowercase',
+			'initial'		=> 'initial',
+			'inherit'		=> 'inherit'
 		);
 		
 		
@@ -178,8 +180,8 @@ class acf_field_Typography extends acf_field {
 		
 		
 		// do not delete!
-    	parent::__construct();
-    	
+		parent::__construct();
+		
 	}
 	
 	
@@ -213,21 +215,21 @@ class acf_field_Typography extends acf_field {
 			'instructions'	=> __('Select fields to display on edit page','acf-typography'),
 			'type'			=> 'checkbox',
 			'name'			=> 'display_properties',
-			'choices' =>  array(
-				'font_size' =>  __("Font Size",'acf-typography'),
-				'font_family' =>  __("Font Family",'acf-typography'),
-				'font_weight' =>  __("Font Weight",'acf-typography'),
-				'font_style' =>  __("Font Style",'acf-typography'),
-                'font_variant' =>  __("Font Variant",'acf-typography'),
-                'font_stretch' =>  __("Font Stretch",'acf-typography'),
-				'line_height' =>  __("Line Height",'acf-typography'),
-				'letter_spacing' =>  __("Letter Spacing",'acf-typography'),
-				'text_align' =>  __("Text Align",'acf-typography'),
-				'text_color' =>  __("Text Color",'acf-typography'),
-				'text_decoration' =>  __("Text Decoration",'acf-typography'),
-				'text_transform' =>  __("Text Transform",'acf-typography'),
+			'choices'		=>  array(
+				'font_size'			=>  __("Font Size",'acf-typography'),
+				'font_family'		=>  __("Font Family",'acf-typography'),
+				'font_weight'		=>  __("Font Weight",'acf-typography'),
+				'font_style'		=>  __("Font Style",'acf-typography'),
+				'font_variant'		=>  __("Font Variant",'acf-typography'),
+				'font_stretch'		=>  __("Font Stretch",'acf-typography'),
+				'line_height'		=>  __("Line Height",'acf-typography'),
+				'letter_spacing'	=>  __("Letter Spacing",'acf-typography'),
+				'text_align'		=>  __("Text Align",'acf-typography'),
+				'text_color'		=>  __("Text Color",'acf-typography'),
+				'text_decoration'	=>  __("Text Decoration",'acf-typography'),
+				'text_transform'	=>  __("Text Transform",'acf-typography'),
 			),
-			'layout'  =>  'horizontal',
+			'layout'		=>  'horizontal',
 		));
 		
 		acf_render_field_setting( $field, array(
@@ -235,21 +237,21 @@ class acf_field_Typography extends acf_field {
 			'instructions'	=> __('Select fields which are required on edit page','acf-typography'),
 			'type'			=> 'checkbox',
 			'name'			=> 'required_properties',
-			'choices' =>  array(
-				'font_size' =>  __("Font Size",'acf-typography'),
-				'font_family' =>  __("Font Family",'acf-typography'),
-				'font_weight' =>  __("Font Weight",'acf-typography'),
-				'font_style' =>  __("Font Style",'acf-typography'),
-                'font_variant' =>  __("Font Variant",'acf-typography'),
-                'font_stretch' =>  __("Font Stretch",'acf-typography'),
-				'line_height' =>  __("Line Height",'acf-typography'),
-				'letter_spacing' =>  __("Letter Spacing",'acf-typography'),
-				'text_align' =>  __("Text Align",'acf-typography'),
-				'text_color' =>  __("Text Color",'acf-typography'),
-				'text_decoration' =>  __("Text Decoration",'acf-typography'),
-				'text_transform' =>  __("Text Transform",'acf-typography'),
+			'choices'		=> array(
+				'font_size'			=>  __("Font Size",'acf-typography'),
+				'font_family'		=>  __("Font Family",'acf-typography'),
+				'font_weight'		=>  __("Font Weight",'acf-typography'),
+				'font_style'		=>  __("Font Style",'acf-typography'),
+				'font_variant'		=>  __("Font Variant",'acf-typography'),
+				'font_stretch'		=>  __("Font Stretch",'acf-typography'),
+				'line_height'		=>  __("Line Height",'acf-typography'),
+				'letter_spacing'	=>  __("Letter Spacing",'acf-typography'),
+				'text_align'		=>  __("Text Align",'acf-typography'),
+				'text_color'		=>  __("Text Color",'acf-typography'),
+				'text_decoration'	=>  __("Text Decoration",'acf-typography'),
+				'text_transform'	=>  __("Text Transform",'acf-typography'),
 			),
-			'layout'  =>  'horizontal',
+			'layout'		=> 'horizontal',
 		));
 		
 		acf_render_field_setting( $field, array(
@@ -257,7 +259,7 @@ class acf_field_Typography extends acf_field {
 			'instructions'	=> __('Default','acf-typography'),
 			'type'			=> 'number',
 			'name'			=> 'font_size',
-			'append'        => 'px'
+			'append'		=> 'px'
 		));
 		
 		acf_render_field_setting( $field, array(
@@ -265,8 +267,8 @@ class acf_field_Typography extends acf_field {
 			'instructions'	=> __('Default','acf-typography'),
 			'type'			=> 'select',
 			'name'			=> 'font_family',
-			'choices'       => $this->font_family,
-			'layout'        => 'horizontal'
+			'choices'		=> $this->font_family,
+			'layout'		=> 'horizontal'
 		));
 		
 		acf_render_field_setting( $field, array(
@@ -274,8 +276,8 @@ class acf_field_Typography extends acf_field {
 			'instructions'	=> __('Default','acf-typography'),
 			'type'			=> 'select',
 			'name'			=> 'font_weight',
-			'choices'       => $this->font_weight,
-			'layout'        => 'horizontal'
+			'choices'		=> $this->font_weight,
+			'layout'		=> 'horizontal'
 		));
 		
 		acf_render_field_setting( $field, array(
@@ -283,17 +285,17 @@ class acf_field_Typography extends acf_field {
 			'instructions'	=> __('Default','acf-typography'),
 			'type'			=> 'select',
 			'name'			=> 'font_style',
-			'choices'       => $this->font_style,
-			'layout'        => 'horizontal'
+			'choices'		=> $this->font_style,
+			'layout'		=> 'horizontal'
 		));
-        
-        acf_render_field_setting( $field, array(
+
+		acf_render_field_setting( $field, array(
 			'label'			=> __('Font Variant','acf-typography'),
 			'instructions'	=> __('Default','acf-typography'),
 			'type'			=> 'select',
 			'name'			=> 'font_variant',
-			'choices'       => $this->font_variant,
-			'layout'        => 'horizontal'
+			'choices'		=> $this->font_variant,
+			'layout'		=> 'horizontal'
 		));
 		
 		acf_render_field_setting( $field, array(
@@ -301,8 +303,8 @@ class acf_field_Typography extends acf_field {
 			'instructions'	=> __('Default','acf-typography'),
 			'type'			=> 'select',
 			'name'			=> 'font_stretch',
-			'choices'       => $this->font_stretch,
-			'layout'        => 'horizontal'
+			'choices'		=> $this->font_stretch,
+			'layout'		=> 'horizontal'
 		));
 		
 		acf_render_field_setting( $field, array(
@@ -310,7 +312,7 @@ class acf_field_Typography extends acf_field {
 			'instructions'	=> __('Default','acf-typography'),
 			'type'			=> 'number',
 			'name'			=> 'line_height',
-			'append'        => 'px'
+			'append'		=> 'px'
 		));
 		
 		acf_render_field_setting( $field, array(
@@ -318,7 +320,7 @@ class acf_field_Typography extends acf_field {
 			'instructions'	=> __('Default','acf-typography'),
 			'type'			=> 'number',
 			'name'			=> 'letter_spacing',
-			'append'        => 'px'
+			'append'		=> 'px'
 		));
 		
 		acf_render_field_setting( $field, array(
@@ -326,14 +328,14 @@ class acf_field_Typography extends acf_field {
 			'instructions'	=> __('Default','acf-typography'),
 			'type'			=> 'select',
 			'name'			=> 'text_align',
-			'choices'       => $this->text_align,
-			'layout'        => 'horizontal'
+			'choices'		=> $this->text_align,
+			'layout'		=> 'horizontal'
 		));
 		
 		acf_render_field_setting( $field, array(
 			'label'			=> __('Text Color','acf-typography'),
 			'instructions'	=> __('Default','acf-typography'),
-			'type'			=> 'text',
+			'type'			=> 'color_picker', // changed from 'text' to 'color_picker' for v5 & v6 compatibility 
 			'name'			=> 'text_color',
 		));
 		
@@ -342,8 +344,8 @@ class acf_field_Typography extends acf_field {
 			'instructions'	=> __('Default','acf-typography'),
 			'type'			=> 'select',
 			'name'			=> 'text_decoration',
-			'choices'       => $this->text_decoration,
-			'layout'        => 'horizontal'
+			'choices'		=> $this->text_decoration,
+			'layout'		=> 'horizontal'
 		));
 		
 		acf_render_field_setting( $field, array(
@@ -351,8 +353,8 @@ class acf_field_Typography extends acf_field {
 			'instructions'	=> __('Default','acf-typography'),
 			'type'			=> 'select',
 			'name'			=> 'text_transform',
-			'choices'       => $this->text_transform,
-			'layout'        => 'horizontal'
+			'choices'		=> $this->text_transform,
+			'layout'		=> 'horizontal'
 		));
 
 	}
@@ -384,92 +386,90 @@ class acf_field_Typography extends acf_field {
 		// create Field HTML
 		
 		if( !empty( $field['display_properties'] ) && sizeof($field['display_properties']) > 0){
-		    
-		    foreach( $field['display_properties'] as $f ){
-		        
-		        $numbers = $selects = array();
-		        
-		        $data_required = '';
-		        
-		        $required = '';
-		        if( is_array($field['required_properties']) && in_array($f, $field['required_properties']) ){
-					$required = 'required';
-					$data_required = 'data-required="1"';
-				}
+
+			foreach( $field['display_properties'] as $f ){
 				
-				if( $f == 'font_size' || $f == 'line_height' || $f == 'letter_spacing' ){
-					$numbers[] = $f;
-				}else if( $f == 'font_family' || $f == 'font_weight' || $f == 'font_style' || $f == 'font_variant' || $f == 'font_stretch' || $f == 'text_align' || $f == 'text_decoration' || $f == 'text_transform' ){
-					$selects[] = $f;
-				}
+				$numbers = $selects = array();
 				
-				if( in_array($f, $numbers) ){
-				?>
-				    <div class="acf-field acf-field-number acf-field-<?php echo $f; ?>" data-name="<?php echo $f; ?>" data-type="number" data-key="<?php echo $key; ?>" <?php echo $data_required; ?>>
-                    	<div class="acf-label">
-                    		<label for="acf-field-<?php echo $f; ?>">
-                    		    <?php echo __(ucwords(str_replace('_', ' ', $f)), 'acf-typography'); ?>
-                    		    <?php if(!empty($required)){ ?>
-									<span class="acf-required">*</span></label>
-								<?php } ?>
-                    	</div>
-                    	<div class="acf-input">
-                    		<div class="acf-input-append">px</div>
-                    		<div class="acf-input-wrap">
-                    		    <input type="number" id="<?php echo 'acf-field-'.$f; ?>" class="acf-is-appended" min="" max="" step="any" name="<?php echo esc_attr($field['name'].'['.$f.']') ?>" value="<?php echo esc_attr(( !empty($field['value'][$f]) ? $field['value'][$f] : $field[$f] )) ?>">
-                    		</div>
-                    	</div>
-                    </div>
-				<?php
-				}else  if( in_array($f, $selects) ){
-			    ?>
-			        <div class="acf-field acf-field-select acf-field-<?php echo $f; ?>" data-name="<?php echo $f; ?>" data-type="select" data-key="<?php echo $key; ?>" <?php echo $data_required; ?>>
-                    	<div class="acf-label">
-                    		<label for="acf-field-<?php echo $f; ?>">
-                    		    <?php echo __(ucwords(str_replace('_', ' ', $f)), 'acf-typography'); ?>
-                    		    <?php if(!empty($required)){ ?>
-									<span class="acf-required">*</span></label>
-								<?php } ?>
-                    	</div>
-                    	<div class="acf-input">
-                    		<select id="acf-<?php echo $f; ?>" class="" name="<?php echo $field['name'].'['.$f.']'; ?>" data-ui="0" data-ajax="0" data-multiple="0" data-placeholder="Select" data-allow_null="0">
-                    		    <?php 
-    								$options = '';
-    								foreach($this->$f as $opt){
-    									if( !empty($field['value'][$f]) )
-    										$options .= '<option val="'.$opt.'" '. ($field['value'][$f] == $opt? 'selected': '') .'>'.$opt.'</option>';
-    									else
-    										$options .= '<option val="'.$opt.'" '. ($field[$f] == $opt? 'selected': '') .'>'.$opt.'</option>';
-    								}
-    								echo $options;
-    							?>
-                    		</select>
-                    	</div>
-                    </div>
-			    <?php
-				}else{
-			    ?>
-			    	<div class="acf-field acf-field-color-picker acf-field-<?php echo $f; ?>" data-name="<?php echo $f; ?>" data-type="color_picker" data-key="<?php echo $key; ?>" <?php echo $data_required; ?>>
-                    	<div class="acf-label">
-                    		<label for="acf-field-<?php echo $f; ?>">
-                    		    <?php echo __(ucwords(str_replace('_', ' ', $f)), 'acf-typography'); ?>
-                    		    <?php if(!empty($required)){ ?>
-									<span class="acf-required">*</span></label>
-								<?php } ?>
-                    	</div>
-                    	<div class="acf-input">
-                    		<div class="acf-color_picker">
-								<input type="hidden" name="<?php echo esc_attr($field['name'].'['.$f.']') ?>" value="<?php echo esc_attr(( !empty($field['value'][$f]) ? $field['value'][$f] : $field[$f] )) ?>">
-								<input type="text" id="<?php echo 'acf-field-'.$f; ?>" name="<?php echo esc_attr($field['name'].'['.$f.']') ?>" value="<?php echo esc_attr(( !empty($field['value'][$f]) ? $field['value'][$f] : $field[$f] )) ?>">
+				$data_required = '';
+				
+				$required = '';
+				if( is_array($field['required_properties']) && in_array($f, $field['required_properties']) ){
+								$required = 'required';
+								$data_required = 'data-required="1"';
+						}
+				
+						if( $f == 'font_size' || $f == 'line_height' || $f == 'letter_spacing' ){
+								$numbers[] = $f;
+						}else if( $f == 'font_family' || $f == 'font_weight' || $f == 'font_style' || $f == 'font_variant' || $f == 'font_stretch' || $f == 'text_align' || $f == 'text_decoration' || $f == 'text_transform' ){
+								$selects[] = $f;
+						}
+
+						if( in_array($f, $numbers) ){
+					?>
+					<div class="acf-field acf-field-number acf-field-<?php echo $f; ?>" data-name="<?php echo $f; ?>" data-type="number" data-key="<?php echo $key; ?>" <?php echo $data_required; ?>>
+						<div class="acf-label">
+							<label for="acf-field-<?php echo $f; ?>">
+								<?php echo __(ucwords(str_replace('_', ' ', $f)), 'acf-typography'); ?>
+								<?php if(!empty($required)){ ?>
+											<span class="acf-required">*</span></label>
+									<?php } ?>
+						</div>
+						<div class="acf-input">
+							<div class="acf-input-append">px</div>
+							<div class="acf-input-wrap">
+								<input type="number" id="<?php echo 'acf-field-'.$f; ?>" class="acf-is-appended" min="" max="" step="any" name="<?php echo esc_attr($field['name'].'['.$f.']') ?>" value="<?php echo esc_attr(( !empty($field['value'][$f]) ? $field['value'][$f] : $field[$f] )) ?>">
 							</div>
-                    	</div>
-                    </div>
-			    <?php
-				}
-		    }
-		    
+						</div>
+					</div>
+					<?php
+						}else  if( in_array($f, $selects) ){
+					?>
+					<div class="acf-field acf-field-select acf-field-<?php echo $f; ?>" data-name="<?php echo $f; ?>" data-type="select" data-key="<?php echo $key; ?>" <?php echo $data_required; ?>>
+						<div class="acf-label">
+							<label for="acf-field-<?php echo $f; ?>">
+								<?php echo __(ucwords(str_replace('_', ' ', $f)), 'acf-typography'); ?>
+								<?php if(!empty($required)){ ?>
+											<span class="acf-required">*</span></label>
+									<?php } ?>
+						</div>
+						<div class="acf-input">
+							<select id="acf-<?php echo $f; ?>" class="" name="<?php echo $field['name'].'['.$f.']'; ?>" data-ui="0" data-ajax="0" data-multiple="0" data-placeholder="Select" data-allow_null="0">
+								<?php 
+										$options = '';
+										foreach($this->$f as $opt){
+												if( !empty($field['value'][$f]) )
+														$options .= '<option val="'.$opt.'" '. ($field['value'][$f] == $opt? 'selected': '') .'>'.$opt.'</option>';
+												else
+														$options .= '<option val="'.$opt.'" '. ($field[$f] == $opt? 'selected': '') .'>'.$opt.'</option>';
+										}
+										echo $options;
+									?>
+							</select>
+						</div>
+					</div>
+					<?php
+						}else{
+					?>
+					<div class="acf-field acf-field-color-picker acf-field-<?php echo $f; ?>" data-name="<?php echo $f; ?>" data-type="color_picker" data-key="<?php echo $key; ?>" <?php echo $data_required; ?>>
+						<div class="acf-label">
+							<label for="acf-field-<?php echo $f; ?>">
+								<?php echo __(ucwords(str_replace('_', ' ', $f)), 'acf-typography'); ?>
+								<?php if(!empty($required)){ ?>
+											<span class="acf-required">*</span></label>
+									<?php } ?>
+						</div>
+						<div class="acf-input">
+							<div class="acf-color_picker">
+										<input type="hidden" name="<?php echo esc_attr($field['name'].'['.$f.']') ?>" value="<?php echo esc_attr(( !empty($field['value'][$f]) ? $field['value'][$f] : $field[$f] )) ?>">
+										<input type="text" id="<?php echo 'acf-field-'.$f; ?>" name="<?php echo esc_attr($field['name'].'['.$f.']') ?>" value="<?php echo esc_attr(( !empty($field['value'][$f]) ? $field['value'][$f] : $field[$f] )) ?>">
+								</div>
+						</div>
+					</div>
+					<?php
+						}
+			}
 		}
-		
 	}
 	
 		
@@ -536,33 +536,33 @@ class acf_field_Typography extends acf_field {
 	
 	
 	/*
-   	*  input_form_data()
-   	*
-   	*  This function is called once on the 'input' page between the head and footer
-   	*  There are 2 situations where ACF did not load during the 'acf/input_admin_enqueue_scripts' and 
-   	*  'acf/input_admin_head' actions because ACF did not know it was going to be used. These situations are
-   	*  seen on comments / user edit forms on the front end. This function will always be called, and includes
-   	*  $args that related to the current screen such as $args['post_id']
-   	*
-   	*  @type	function
-   	*  @date	6/03/2014
-   	*  @since	5.0.0
-   	*
-   	*  @param	$args (array)
-   	*  @return	n/a
-   	*/
-   	
-   	/*
-   	
-   	function input_form_data( $args ) {
-	   	
+	*  input_form_data()
+	*
+	*  This function is called once on the 'input' page between the head and footer
+	*  There are 2 situations where ACF did not load during the 'acf/input_admin_enqueue_scripts' and 
+	*  'acf/input_admin_head' actions because ACF did not know it was going to be used. These situations are
+	*  seen on comments / user edit forms on the front end. This function will always be called, and includes
+	*  $args that related to the current screen such as $args['post_id']
+	*
+	*  @type	function
+	*  @date	6/03/2014
+	*  @since	5.0.0
+	*
+	*  @param	$args (array)
+	*  @return	n/a
+	*/
+
+	/*
+
+	function input_form_data( $args ) {
 		
-	
-   	}
-   	
-   	*/
-	
-	
+		
+
+	}
+
+	*/
+
+
 	/*
 	*  input_admin_footer()
 	*
@@ -731,13 +731,13 @@ class acf_field_Typography extends acf_field {
 		
 		if ($field['required_properties']) {
 			
-		    foreach( $field['required_properties'] as $rf){
-		    	
-		    	if( in_array($rf, $field['display_properties']) && empty($value[$rf] ) ){
-		    		acf_validate_value( $value[ $rf ], ' ', $field['prefix'].'['.$field['key'].']['.$rf.']' );
-		    	}
-		    	
-		    }
+			foreach( $field['required_properties'] as $rf){
+				
+				if( in_array($rf, $field['display_properties']) && empty($value[$rf] ) ){
+					acf_validate_value( $value[ $rf ], ' ', $field['prefix'].'['.$field['key'].']['.$rf.']' );
+				}
+				
+			}
 			
 		}
 		

@@ -3,12 +3,17 @@
 A Typography Add-on for the Advanced Custom Fields Plugin.
 
   - Requires at least: WP 3.5.0
-  - Tested up to: WP 6.0
-  - Stable: 3.2.3
-  - Latest: 3.2.3
+  - Tested up to: WP 6.0.3
+  - Tested up to: PHP 8.2
+  - Tested up to: ACF 6.0
+  - Stable: 3.2.4
+  - Latest: 3.2.4
 
 ## Description
 Typography field type for "Advanced Custom Fields" plugin that lets you add different text properties e.g. Font Size, Font Family, Font Color etc.
+
+If you want any kind of font/typography features within ACF, this is the plugin for you! There's nothing else like it!
+
 ### Supported Subfields
 * Font Size
 * Font Family
@@ -55,6 +60,7 @@ the_typography_sub_field( $selector, $property, [$format_value] );
 ## Compatibility
 
 This ACF field type is compatible with:
+* ACF plugin v4, v5 & v6
 * Free and paid versions of the ACF plugin
 
 ## Installation

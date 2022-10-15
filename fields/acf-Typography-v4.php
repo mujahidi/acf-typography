@@ -39,8 +39,8 @@ class acf_field_Typography extends acf_field {
 			'font_weight'			=> '400',
 			'font_family'			=> 'Arial, Helvetica, sans-serif',
 			'font_style'			=> 'normal',
-            'font_variant'			=> 'normal',
-            'font_stretch'			=> 'normal',
+			'font_variant'			=> 'normal',
+			'font_stretch'			=> 'normal',
 			'text_align'			=> 'left',
 			'letter_spacing'		=> 0,
 			'text_decoration'		=> 'none',
@@ -77,8 +77,8 @@ class acf_field_Typography extends acf_field {
 		// sort array by array key
 		ksort( $this->font_family );
         
-        // add 'initial' and 'inherit' property values to top of the array
-        $this->font_family = array_merge( array( 'initial' => 'initial', 'inherit' => 'inherit' ), $this->font_family );
+                // add 'initial' and 'inherit' property values to top of the array
+                $this->font_family = array_merge( array( 'initial' => 'initial', 'inherit' => 'inherit' ), $this->font_family );
 		
 		$this->font_weight = array(
 			'100'		=> '100',
@@ -124,20 +124,20 @@ class acf_field_Typography extends acf_field {
 			'initial'	=> 'initial'
 		);
 		$this->text_decoration = array(
-			'none' 			=> 'none',
-			'underline' 	=> 'underline',
-			'overline' 		=> 'overline',
+			'none'			=> 'none',
+			'underline'		=> 'underline',
+			'overline'		=> 'overline',
 			'line-through' 	=> 'line-through',
-			'initial' 		=> 'initial',
-			'inherit' 		=> 'inherit'
+			'initial'		=> 'initial',
+			'inherit'		=> 'inherit'
 		);
 		$this->text_transform = array(
 			'none' 			=> 'none',
 			'capitalize' 	=> 'capitalize',
 			'uppercase' 	=> 'uppercase',
 			'lowercase' 	=> 'lowercase',
-			'initial' 		=> 'initial',
-			'inherit' 		=> 'inherit'
+			'initial'		=> 'initial',
+			'inherit'		=> 'inherit'
 		);
 		
 		
@@ -180,24 +180,24 @@ class acf_field_Typography extends acf_field {
 			<td>
 				<?php
 				do_action('acf/create_field', array(
-					'type'  =>  'checkbox',
-					'name'  =>  'fields['.$key.'][display_properties]',
-					'value' =>  $field['display_properties'],
-					'choices' =>  array(
-						'font_size' =>  __("Font Size",'acf-typography'),
-						'font_family' =>  __("Font Family",'acf-typography'),
-						'font_weight' =>  __("Font Weight",'acf-typography'),
-						'font_style' =>  __("Font Style",'acf-typography'),
-                        'font_variant' =>  __("Font Variant",'acf-typography'),
-                        'font_stretch' =>  __("Font Stretch",'acf-typography'),
-						'line_height' =>  __("Line Height",'acf-typography'),
-						'letter_spacing' =>  __("Letter Spacing",'acf-typography'),
-						'text_align' =>  __("Text Align",'acf-typography'),
-						'text_color' =>  __("Text Color",'acf-typography'),
-						'text_decoration' =>  __("Text Decoration",'acf-typography'),
-						'text_transform' =>  __("Text Transform",'acf-typography'),
+					'type'		=>  'checkbox',
+					'name'		=>  'fields['.$key.'][display_properties]',
+					'value'		=>  $field['display_properties'],
+					'choices'	=>  array(
+						'font_size'			=>  __("Font Size",'acf-typography'),
+						'font_family'		=>  __("Font Family",'acf-typography'),
+						'font_weight'		=>  __("Font Weight",'acf-typography'),
+						'font_style'		=>  __("Font Style",'acf-typography'),
+						'font_variant'		=>  __("Font Variant",'acf-typography'),
+						'font_stretch'		=>  __("Font Stretch",'acf-typography'),
+						'line_height'		=>  __("Line Height",'acf-typography'),
+						'letter_spacing'	=>  __("Letter Spacing",'acf-typography'),
+						'text_align'		=>  __("Text Align",'acf-typography'),
+						'text_color'		=>  __("Text Color",'acf-typography'),
+						'text_decoration'	=>  __("Text Decoration",'acf-typography'),
+						'text_transform'	=>  __("Text Transform",'acf-typography'),
 					),
-					'layout'  =>  'horizontal',
+					'layout'    =>  'horizontal',
 				));
 				?>
 			</td>
@@ -210,24 +210,24 @@ class acf_field_Typography extends acf_field {
 			<td>
 				<?php
 				do_action('acf/create_field', array(
-					'type'  =>  'checkbox',
-					'name'  =>  'fields['.$key.'][required_properties]',
-					'value' =>  $field['required_properties'],
-					'choices' =>  array(
-						'font_size' =>  __("Font Size",'acf-typography'),
-						'font_family' =>  __("Font Family",'acf-typography'),
-						'font_weight' =>  __("Font Weight",'acf-typography'),
-						'font_style' =>  __("Font Style",'acf-typography'),
-                        'font_variant' =>  __("Font Variant",'acf-typography'),
-                        'font_stretch' =>  __("Font Stretch",'acf-typography'),
-						'line_height' =>  __("Line Height",'acf-typography'),
-						'letter_spacing' =>  __("Letter Spacing",'acf-typography'),
-						'text_align' =>  __("Text Align",'acf-typography'),
-						'text_color' =>  __("Text Color",'acf-typography'),
-						'text_decoration' =>  __("Text Decoration",'acf-typography'),
-						'text_transform' =>  __("Text Transform",'acf-typography'),
+					'type'		=>  'checkbox',
+					'name'		=>  'fields['.$key.'][required_properties]',
+					'value'		=>  $field['required_properties'],
+					'choices'	=>  array(
+						'font_size'			=>  __("Font Size",'acf-typography'),
+						'font_family'		=>  __("Font Family",'acf-typography'),
+						'font_weight'		=>  __("Font Weight",'acf-typography'),
+						'font_style'		=>  __("Font Style",'acf-typography'),
+						'font_variant'		=>  __("Font Variant",'acf-typography'),
+						'font_stretch'		=>  __("Font Stretch",'acf-typography'),
+						'line_height'		=>  __("Line Height",'acf-typography'),
+						'letter_spacing'	=>  __("Letter Spacing",'acf-typography'),
+						'text_align'		=>  __("Text Align",'acf-typography'),
+						'text_color'		=>  __("Text Color",'acf-typography'),
+						'text_decoration'	=>  __("Text Decoration",'acf-typography'),
+						'text_transform'	=>  __("Text Transform",'acf-typography'),
 					),
-					'layout'  =>  'horizontal',
+					'layout'    =>  'horizontal',
 				));
 				?>
 			</td>
@@ -240,10 +240,10 @@ class acf_field_Typography extends acf_field {
 			<td>
 				<?php
 				do_action('acf/create_field', array(
-					'type'  =>  'number',
-					'name'  =>  'fields['.$key.'][font_size]',
-					'value' =>  $field['font_size'],
-					'append' => 'px'
+					'type'		=>  'number',
+					'name'		=>  'fields['.$key.'][font_size]',
+					'value'		=>  $field['font_size'],
+					'append'	=>  'px'
 				));
 				?>
 			</td>
@@ -256,11 +256,11 @@ class acf_field_Typography extends acf_field {
 			<td>
 				<?php
 				do_action('acf/create_field', array(
-					'type'  =>  'select',
-					'name'  =>  'fields['.$key.'][font_family]',
-					'value' =>  $field['font_family'],
-					'choices' =>  $this->font_family,
-					'layout'  =>  'horizontal',
+					'type'		=>  'select',
+					'name'		=>  'fields['.$key.'][font_family]',
+					'value'		=>  $field['font_family'],
+					'choices'	=>  $this->font_family,
+					'layout'	=>  'horizontal',
 				));
 				?>
 			</td>
@@ -273,11 +273,11 @@ class acf_field_Typography extends acf_field {
 			<td>
 				<?php
 				do_action('acf/create_field', array(
-					'type'  =>  'select',
-					'name'  =>  'fields['.$key.'][font_weight]',
-					'value' =>  $field['font_weight'],
-					'choices' =>  $this->font_weight,
-					'layout'  =>  'horizontal',
+					'type'		=>  'select',
+					'name'		=>  'fields['.$key.'][font_weight]',
+					'value'		=>  $field['font_weight'],
+					'choices'	=>  $this->font_weight,
+					'layout'	=>  'horizontal',
 				));
 				?>
 			</td>
@@ -290,17 +290,17 @@ class acf_field_Typography extends acf_field {
 			<td>
 				<?php
 				do_action('acf/create_field', array(
-					'type'  =>  'select',
-					'name'  =>  'fields['.$key.'][font_style]',
-					'value' =>  $field['font_style'],
-					'ui'	=> 1,
-					'choices' =>  $this->font_style,
-					'layout'  =>  'horizontal',
+					'type'		=>  'select',
+					'name'		=>  'fields['.$key.'][font_style]',
+					'value'		=>  $field['font_style'],
+					'ui'		=>  1,
+					'choices'	=>  $this->font_style,
+					'layout'	=>  'horizontal',
 				));
 				?>
 			</td>
 		</tr>
-        <tr class="field_option field_option_<?php echo $this->name; ?>">
+                <tr class="field_option field_option_<?php echo $this->name; ?>">
 			<td class="label">
 				<label><?php _e("Font Variant",'acf-typography'); ?></label>
 				<p class="description"><?php _e('(Default)', 'acf-typography'); ?></p>
@@ -308,12 +308,12 @@ class acf_field_Typography extends acf_field {
 			<td>
 				<?php
 				do_action('acf/create_field', array(
-					'type'  =>  'select',
-					'name'  =>  'fields['.$key.'][font_variant]',
-					'value' =>  $field['font_variant'],
-					'ui'	=> 1,
-					'choices' =>  $this->font_variant,
-					'layout'  =>  'horizontal',
+					'type'		=>  'select',
+					'name'		=>  'fields['.$key.'][font_variant]',
+					'value'		=>  $field['font_variant'],
+					'ui'		=>  1,
+					'choices'	=>  $this->font_variant,
+					'layout'	=>  'horizontal',
 				));
 				?>
 			</td>
@@ -326,12 +326,12 @@ class acf_field_Typography extends acf_field {
 			<td>
 				<?php
 				do_action('acf/create_field', array(
-					'type'  =>  'select',
-					'name'  =>  'fields['.$key.'][font_stretch]',
-					'value' =>  $field['font_stretch'],
-					'ui'	=> 1,
-					'choices' =>  $this->font_stretch,
-					'layout'  =>  'horizontal',
+					'type'		=>  'select',
+					'name'		=>  'fields['.$key.'][font_stretch]',
+					'value'		=>  $field['font_stretch'],
+					'ui'		=>  1,
+					'choices'	=>  $this->font_stretch,
+					'layout'	=>  'horizontal',
 				));
 				?>
 			</td>
@@ -344,10 +344,10 @@ class acf_field_Typography extends acf_field {
 			<td>
 				<?php
 				do_action('acf/create_field', array(
-					'type'  =>  'number',
-					'name'  =>  'fields['.$key.'][line_height]',
-					'value' =>  $field['line_height'],
-					'append' => 'px'
+					'type'		=>  'number',
+					'name'		=>  'fields['.$key.'][line_height]',
+					'value'		=>  $field['line_height'],
+					'append'	=>  'px'
 				));
 				?>
 			</td>
@@ -360,10 +360,10 @@ class acf_field_Typography extends acf_field {
 			<td>
 				<?php
 				do_action('acf/create_field', array(
-					'type'  =>  'number',
-					'name'  =>  'fields['.$key.'][letter_spacing]',
-					'value' =>  $field['letter_spacing'],
-					'append' => 'px'
+					'type'		=>  'number',
+					'name'		=>  'fields['.$key.'][letter_spacing]',
+					'value'		=>  $field['letter_spacing'],
+					'append'	=>  'px'
 				));
 				?>
 			</td>
@@ -376,12 +376,12 @@ class acf_field_Typography extends acf_field {
 			<td>
 				<?php
 				do_action('acf/create_field', array(
-					'type'  =>  'select',
-					'name'  =>  'fields['.$key.'][text_align]',
-					'value' =>  $field['text_align'],
-					'ui'	=> 1,
-					'choices' =>  $this->text_align,
-					'layout'  =>  'horizontal',
+					'type'		=>  'select',
+					'name'		=>  'fields['.$key.'][text_align]',
+					'value'		=>  $field['text_align'],
+					'ui'		=>  1,
+					'choices'	=>  $this->text_align,
+					'layout'	=>  'horizontal',
 				));
 				?>
 			</td>
@@ -394,9 +394,9 @@ class acf_field_Typography extends acf_field {
 			<td>
 				<?php
 				do_action('acf/create_field', array(
-					'type'  =>  'text',
-					'name'  =>  'fields['.$key.'][text_color]',
-					'value' =>  $field['text_color'],
+					'type'	=>  'text',
+					'name'	=>  'fields['.$key.'][text_color]',
+					'value'	=>  $field['text_color'],
 				));
 				?>
 			</td>
@@ -409,12 +409,12 @@ class acf_field_Typography extends acf_field {
 			<td>
 				<?php
 				do_action('acf/create_field', array(
-					'type'  =>  'select',
-					'name'  =>  'fields['.$key.'][text_decoration]',
-					'value' =>  $field['text_decoration'],
-					'ui'	=> 1,
-					'choices' => $this->text_decoration,
-					'layout'  =>  'horizontal',
+					'type'		=>  'select',
+					'name'		=>  'fields['.$key.'][text_decoration]',
+					'value'		=>  $field['text_decoration'],
+					'ui'		=>  1,
+					'choices'	=>  $this->text_decoration,
+					'layout'	=>  'horizontal',
 				));
 				?>
 			</td>
@@ -427,12 +427,12 @@ class acf_field_Typography extends acf_field {
 			<td>
 				<?php
 				do_action('acf/create_field', array(
-					'type'  =>  'select',
-					'name'  =>  'fields['.$key.'][text_transform]',
-					'value' =>  $field['text_transform'],
-					'ui'	=> 1,
-					'choices' => $this->text_transform,
-					'layout'  =>  'horizontal',
+					'type'		=>  'select',
+					'name'		=>  'fields['.$key.'][text_transform]',
+					'value'		=>  $field['text_transform'],
+					'ui'		=>  1,
+					'choices'	=>  $this->text_transform,
+					'layout'	=>  'horizontal',
 				));
 				?>
 			</td>
@@ -494,14 +494,13 @@ class acf_field_Typography extends acf_field {
 							
 							</label>
 						</p>
-
 						<?php
 							do_action('acf/create_field', array(
-								'type'  =>  'number',
-								'name'  =>  $field['name'].'['.$f.']',
-								'value' =>  ( !empty($field['value'][$f]) ? $field['value'][$f] : $field[$f] ),
-								'id' => 'acf-field-'.$f,
-								'append' => 'px'
+								'type'		=>  'number',
+								'name'		=>  $field['name'].'['.$f.']',
+								'value'		=>  ( !empty($field['value'][$f]) ? $field['value'][$f] : $field[$f] ),
+								'id'		=>  'acf-field-'.$f,
+								'append'	=>  'px'
 							));
 						?>
 					</div>
@@ -515,7 +514,6 @@ class acf_field_Typography extends acf_field {
 								<?php } ?>
 							</label>
 						</p>
-
 						<select id="acf-field-<?php echo $f; ?>" class="select" name="<?php echo $field['name'].'['.$f.']'; ?>">
 							<?php 
 								$options = '';
@@ -527,7 +525,6 @@ class acf_field_Typography extends acf_field {
 								}
 								echo $options;
 							?>
-
 						</select>
 					</div>
 				<?php }else{ ?>
@@ -540,13 +537,12 @@ class acf_field_Typography extends acf_field {
 								<?php } ?>
 							</label>
 						</p>
-
 						<?php
 							do_action('acf/create_field', array(
-								'type'  =>  'text',
-								'name'  =>  $field['name'].'['.$f.']',
-								'value' =>  ( !empty($field['value'][$f]) ? $field['value'][$f] : $field[$f] ),
-								'id' => 'acf-field-'.$f,
+								'type'	=>  'text',
+								'name'	=>  $field['name'].'['.$f.']',
+								'value'	=>  ( !empty($field['value'][$f]) ? $field['value'][$f] : $field[$f] ),
+								'id'	=>  'acf-field-'.$f,
 							));
 						?>
 					</div>
@@ -554,7 +550,6 @@ class acf_field_Typography extends acf_field {
 					}
 			}
 		}
-	
 	}
 	
 	
