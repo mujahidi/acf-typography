@@ -88,10 +88,12 @@ function acft_enqueue_google_fonts_file() {
     $blocks = parse_blocks( $post->post_content );
     foreach ( $blocks as $block ) {
         
-        if ( strpos( $block['blockName'], 'acf/' ) === 0 ) { // a custom block made with ACF
-            
-            $all_post_fields[] = $block['attrs']['data'];
-            
+        if ( isset( $block['blockName'] ) ) {
+            if ( strpos( $block['blockName'], 'acf/' ) === 0 ) { // a custom block made with ACF
+
+                $all_post_fields[] = $block['attrs']['data'];
+
+            }
         }
         
     }
