@@ -1,5 +1,20 @@
 # CHANGELOG
 
+##### 3.2.4 (Unreleased)
+* [SECURITY] Fixed XSS vulnerabilities in field rendering (proper output escaping)
+* [SECURITY] Added input sanitization for Google Fonts API key
+* [SECURITY] Added nonce verification and capability checks in admin settings
+* [IMPROVEMENT] Updated to use wp_remote_get() instead of file_get_contents() for external requests
+* [IMPROVEMENT] Added proper PHPDoc blocks for all functions and classes
+* [IMPROVEMENT] Improved error handling for file operations
+* [IMPROVEMENT] Updated code to follow WordPress Coding Standards
+* [IMPROVEMENT] Optimized Google Fonts enqueuing to prevent errors
+* [IMPROVEMENT] Replaced deprecated extract() function in shortcode
+* [FIX] Fixed missing semicolon syntax error in admin settings
+* [COMPATIBILITY] Updated WordPress compatibility to 6.7
+* [COMPATIBILITY] Updated minimum WordPress version to 5.0
+* [COMPATIBILITY] Added PHP 7.0 minimum requirement
+
 ##### 3.2.3
 * Added new font-weight values
 

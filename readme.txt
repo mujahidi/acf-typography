@@ -98,8 +98,22 @@ A. Join in on Github repository [@mujahidi/acf-typography](https://github.com/mu
 
 == Upgrade Notice ==
 
+= 3.2.4 =
+Important security update with XSS vulnerability fixes and improved code quality. Recommended for all users.
 
 == Changelog ==
+= 3.2.4 =
+* [SECURITY] Fixed XSS vulnerabilities in field rendering
+* [SECURITY] Added input sanitization for Google Fonts API key
+* [SECURITY] Added proper capability checks and nonce verification
+* [IMPROVEMENT] Updated to use wp_remote_get() for external requests
+* [IMPROVEMENT] Added comprehensive PHPDoc blocks
+* [IMPROVEMENT] Improved error handling and validation
+* [IMPROVEMENT] Updated code to follow WordPress Coding Standards
+* [COMPATIBILITY] Tested up to WordPress 6.7
+* [COMPATIBILITY] Minimum WordPress version now 5.0
+* [COMPATIBILITY] Minimum PHP version now 7.0
+
 = 3.2.3 =
 * Added new font-weight values
 
