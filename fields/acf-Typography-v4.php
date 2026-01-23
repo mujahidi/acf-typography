@@ -213,10 +213,11 @@ if ( ! class_exists( 'acf_field_Typography' ) ) :
 			'inherit'    => 'inherit',
 		);
 
+		// Store plugin settings.
+		$this->settings = $settings;
+
 		// Do not delete!
 		parent::__construct();
-
-		$this->settings = $settings;
 	}
 	
 	
