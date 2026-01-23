@@ -1,9 +1,9 @@
 === Advanced Custom Fields: Typography Field ===
 Contributors: mujahid158
 Tags: typography, acf, advanced custom fields, addon, admin, field, custom, custom field, acf typography, acf google fonts, google fonts
-Requires at least: 5.0
-Tested up to: 6.7
-Requires PHP: 7.0
+Requires at least: 6.0
+Tested up to: 6.9
+Requires PHP: 7.4
 Stable tag: 3.2.3
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
@@ -110,9 +110,9 @@ Important security update with XSS vulnerability fixes and improved code quality
 * [IMPROVEMENT] Added comprehensive PHPDoc blocks
 * [IMPROVEMENT] Improved error handling and validation
 * [IMPROVEMENT] Updated code to follow WordPress Coding Standards
-* [COMPATIBILITY] Tested up to WordPress 6.7
-* [COMPATIBILITY] Minimum WordPress version now 5.0
-* [COMPATIBILITY] Minimum PHP version now 7.0
+* [COMPATIBILITY] Tested up to WordPress 6.9
+* [COMPATIBILITY] Minimum WordPress version now 6.0
+* [COMPATIBILITY] Minimum PHP version now 7.4
 
 = 3.2.3 =
 * Added new font-weight values

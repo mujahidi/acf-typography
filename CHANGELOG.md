@@ -11,9 +11,9 @@
 * [IMPROVEMENT] Optimized Google Fonts enqueuing to prevent errors
 * [IMPROVEMENT] Replaced deprecated extract() function in shortcode
 * [FIX] Fixed missing semicolon syntax error in admin settings
-* [COMPATIBILITY] Updated WordPress compatibility to 6.7
-* [COMPATIBILITY] Updated minimum WordPress version to 5.0
-* [COMPATIBILITY] Added PHP 7.0 minimum requirement
+* [COMPATIBILITY] Updated WordPress compatibility to 6.9
+* [COMPATIBILITY] Updated minimum WordPress version to 6.0
+* [COMPATIBILITY] Updated minimum PHP requirement to 7.4
 
 ##### 3.2.3
 * Added new font-weight values
