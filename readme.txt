@@ -1,8 +1,9 @@
 === Advanced Custom Fields: Typography Field ===
 Contributors: mujahid158
 Tags: typography, acf, advanced custom fields, addon, admin, field, custom, custom field, acf typography, acf google fonts, google fonts
-Requires at least: 3.5.0
-Tested up to: 6.0
+Requires at least: 5.0
+Tested up to: 6.7
+Requires PHP: 7.0
 Stable tag: 3.2.3
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
