@@ -208,11 +208,18 @@ function acft_enqueue_google_fonts_file() {
 
 	global $post;
 
-	$all_post_fields   = get_fields( $post->ID, false ) ?: array();
+	$all_post_fields   = array();
 	$all_option_fields = get_fields( 'option', false ) ?: array();
+	$blocks            = array();
 
-	// for Gutenberg Blocks
-	$blocks = parse_blocks( $post->post_content );
+	// 404 and other views can have no post; option fields still apply there
+	if ( $post instanceof WP_Post ) {
+		$all_post_fields = get_fields( $post->ID, false ) ?: array();
+
+		// for Gutenberg Blocks
+		$blocks = parse_blocks( $post->post_content );
+	}
+
 	foreach ( $blocks as $block ) {
 
 		if ( strpos( $block['blockName'], 'acf/' ) === 0 ) { // a custom block made with ACF
