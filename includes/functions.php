@@ -197,6 +197,34 @@ function acft_get_google_font_family() {
 }
 
 /**
+ *  Collect the field data of ACF blocks, including blocks nested in other blocks
+ *
+ *  acft_get_acf_blocks_data()
+ *
+ *  @since      3.3.0
+ *  @param      array $blocks  Blocks from parse_blocks().
+ *  @return     array  One entry per ACF block that has field data.
+ */
+function acft_get_acf_blocks_data( $blocks ) {
+
+	$blocks_data = array();
+
+	foreach ( $blocks as $block ) {
+
+		// freeform content between blocks has no block name; ACF blocks without fields have no data (GH #29)
+		if ( is_string( $block['blockName'] ) && 0 === strpos( $block['blockName'], 'acf/' ) && ! empty( $block['attrs']['data'] ) && is_array( $block['attrs']['data'] ) ) {
+			$blocks_data[] = $block['attrs']['data'];
+		}
+
+		if ( ! empty( $block['innerBlocks'] ) ) {
+			$blocks_data = array_merge( $blocks_data, acft_get_acf_blocks_data( $block['innerBlocks'] ) );
+		}
+	}
+
+	return $blocks_data;
+}
+
+/**
  *  Enqueue Google Fonts file
  *
  *  acft_enqueue_google_fonts_file()
@@ -210,23 +238,13 @@ function acft_enqueue_google_fonts_file() {
 
 	$all_post_fields   = array();
 	$all_option_fields = get_fields( 'option', false ) ?: array();
-	$blocks            = array();
 
 	// 404 and other views can have no post; option fields still apply there
 	if ( $post instanceof WP_Post ) {
 		$all_post_fields = get_fields( $post->ID, false ) ?: array();
 
 		// for Gutenberg Blocks
-		$blocks = parse_blocks( $post->post_content );
-	}
-
-	foreach ( $blocks as $block ) {
-
-		if ( strpos( $block['blockName'], 'acf/' ) === 0 ) { // a custom block made with ACF
-
-			$all_post_fields[] = $block['attrs']['data'];
-
-		}
+		$all_post_fields = array_merge( $all_post_fields, acft_get_acf_blocks_data( parse_blocks( $post->post_content ) ) );
 	}
 
 	$font_family = $font_weight = array();

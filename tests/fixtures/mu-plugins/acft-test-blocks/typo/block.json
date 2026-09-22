@@ -1,0 +1,12 @@
+{
+	"$schema": "https://schemas.wp.org/trunk/block.json",
+	"apiVersion": 3,
+	"name": "acf/acft-typo",
+	"title": "ACFT Test: typo",
+	"category": "text",
+	"icon": "editor-textcolor",
+	"acf": {
+		"mode": "preview",
+		"renderTemplate": "render.php"
+	}
+}
