@@ -18,7 +18,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 $acft_options = get_option( 'acft_settings' );
 
-if ( $acft_options && $acft_options['google_key'] ) {
+if ( is_array( $acft_options ) && ! empty( $acft_options['google_key'] ) && ! defined( 'YOUR_API_KEY' ) ) {
 	define( 'YOUR_API_KEY', $acft_options['google_key'] );
 }
 

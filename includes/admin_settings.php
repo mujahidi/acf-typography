@@ -40,7 +40,7 @@ function acft_google_key_field() {
 
 	$acft_options = get_option( 'acft_settings' );
 	$google_key   = '';
-	if ( $acft_options && $acft_options['google_key'] ) {
+	if ( is_array( $acft_options ) && ! empty( $acft_options['google_key'] ) ) {
 		$google_key = $acft_options['google_key'];
 	}
 	?>
