@@ -577,12 +577,13 @@ if ( ! class_exists( 'acf_field_Typography' ) ) :
 						<select id="acf-field-<?php echo $f; ?>" class="select" name="<?php echo $field['name'] . '[' . $f . ']'; ?>">
 							<?php
 								$options = '';
+								$current = ! empty( $field['value'][ $f ] ) ? $field['value'][ $f ] : $field[ $f ];
 							foreach ( $this->$f as $opt ) {
-								if ( ! empty( $field['value'][ $f ] ) ) {
-									$options .= '<option val="' . $opt . '" ' . ( $field['value'][ $f ] == $opt ? 'selected' : '' ) . '>' . $opt . '</option>';
-								} else {
-									$options .= '<option val="' . $opt . '" ' . ( $field[ $f ] == $opt ? 'selected' : '' ) . '>' . $opt . '</option>';
-								}
+								$options .= '<option val="' . $opt . '" ' . ( $current == $opt ? 'selected' : '' ) . '>' . $opt . '</option>';
+							}
+								// keep a saved value that is missing from the list (e.g. a Google font while the list is unavailable), so saving again does not overwrite it
+							if ( ! empty( $current ) && ! in_array( $current, (array) $this->$f ) ) {
+								$options = '<option val="' . $current . '" selected>' . $current . '</option>' . $options;
 							}
 								echo $options;
 							?>
