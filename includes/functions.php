@@ -391,6 +391,109 @@ function acft_get_acf_blocks_data( $blocks ) {
 }
 
 /**
+ *  Collect the font weights used per font family from saved Typography values
+ *
+ *  Walks nested arrays (repeaters, groups, block data), so each family keeps
+ *  the weights chosen next to it rather than every weight on the page.
+ *
+ *  acft_collect_font_weights()
+ *
+ *  @since      3.3.0
+ *  @param      mixed $value    Field values, as returned by get_fields( ..., false ).
+ *  @param      array $weights  Family => weight => true, filled in place.
+ */
+function acft_collect_font_weights( $value, &$weights ) {
+
+	if ( ! is_array( $value ) ) {
+		return;
+	}
+
+	if ( isset( $value['font_family'] ) && is_string( $value['font_family'] ) && '' !== $value['font_family'] ) {
+
+		$family = $value['font_family'];
+		$weight = isset( $value['font_weight'] ) ? (string) $value['font_weight'] : '';
+
+		if ( ! isset( $weights[ $family ] ) ) {
+			$weights[ $family ] = array();
+		}
+
+		if ( preg_match( '/^[1-9]00$/', $weight ) ) {
+			$weights[ $family ][ $weight ] = true;
+		} else {
+			// no weight chosen: the theme decides, so load regular and bold as before
+			$weights[ $family ]['400'] = true;
+			$weights[ $family ]['700'] = true;
+		}
+	}
+
+	foreach ( $value as $child ) {
+		acft_collect_font_weights( $child, $weights );
+	}
+}
+
+/**
+ *  Whether a font family value should be loaded from Google Fonts
+ *
+ *  Web-safe values such as "Georgia, serif" and "initial" are not Google fonts.
+ *  When the Google list has not been fetched yet (e.g. right after an update),
+ *  fall back to a name check: web-safe values all contain a comma.
+ *
+ *  acft_is_google_font_family()
+ *
+ *  @since      3.3.0
+ *  @param      string $family  Saved font family value.
+ *  @return     bool
+ */
+function acft_is_google_font_family( $family ) {
+
+	static $google = null;
+
+	if ( null === $google ) {
+		$google = array_flip( acft_get_google_fonts_cache()['families'] );
+	}
+
+	if ( $google ) {
+		return isset( $google[ $family ] );
+	}
+
+	return false === strpos( $family, ',' ) && ! in_array( $family, array( 'initial', 'inherit' ), true );
+}
+
+/**
+ *  Build the Google Fonts stylesheet URL
+ *
+ *  acft_google_fonts_url()
+ *
+ *  @since      3.3.0
+ *  @param      array $weights  Family => weight => true, from acft_collect_font_weights().
+ *  @return     string  Empty string when no Google font is used.
+ */
+function acft_google_fonts_url( $weights ) {
+
+	$families = array();
+
+	foreach ( $weights as $family => $family_weights ) {
+
+		$family = (string) $family; // numeric-looking array keys come back as ints
+
+		if ( ! acft_is_google_font_family( $family ) ) {
+			continue;
+		}
+
+		$family_weights = array_map( 'strval', array_keys( $family_weights ) );
+		sort( $family_weights, SORT_NUMERIC );
+
+		$families[] = str_replace( ' ', '+', $family ) . ':' . implode( ',', $family_weights );
+	}
+
+	if ( ! $families ) {
+		return '';
+	}
+
+	return 'https://fonts.googleapis.com/css?family=' . implode( '|', $families );
+}
+
+/**
  *  Enqueue Google Fonts file
  *
  *  acft_enqueue_google_fonts_file()
@@ -418,39 +521,13 @@ function acft_enqueue_google_fonts_file() {
 		$all_post_fields = array_merge( $all_post_fields, acft_get_acf_blocks_data( parse_blocks( $post->post_content ) ) );
 	}
 
-	$font_family = $font_weight = array();
+	$weights = array();
+	acft_collect_font_weights( array( $all_post_fields, $all_option_fields ), $weights );
 
-	$all_fields = array_merge_recursive( $all_post_fields, $all_option_fields );
+	$url = acft_google_fonts_url( $weights );
 
-	if ( is_array( $all_fields ) ) {
-
-		array_walk_recursive(
-			$all_fields,
-			function ( $item, $key ) use ( &$font_family, &$font_weight ) {
-				if ( $key === 'font_family' ) {
-					if ( ! in_array( $item, $font_family ) ) {
-						$font_family[] = $item;
-					} elseif ( $key === 'font_weight' ) {
-						if ( ! in_array( $item, $font_weight ) ) {
-							$font_weight[] = $item;
-						}
-					}
-				}
-			}
-		);
-
-	}
-
-	if ( is_array( $font_family ) && count( $font_family ) > 0 ) {
-
-		if ( is_array( $font_weight ) && count( $font_weight ) > 0 ) {
-			$font_weight = implode( ',', $font_weight );
-			$font_family = implode( ':' . $font_weight . '|', $font_family );
-		} else {
-			$font_family = implode( ':400,700|', $font_family );
-		}
-
-		wp_enqueue_style( 'acft-gf', 'https://fonts.googleapis.com/css?family=' . $font_family );
-
+	if ( '' !== $url ) {
+		// null: no ?ver= on a third-party URL
+		wp_enqueue_style( 'acft-gf', $url, array(), null ); // phpcs:ignore WordPress.WP.EnqueuedResourceParameters.MissingVersion
 	}
 }
