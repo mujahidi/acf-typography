@@ -72,6 +72,65 @@ function acft_google_key_field() {
 function acft_settings_section_callback() {}
 
 
+/**
+ *  Is the current admin screen one of ACF's own screens?
+ *
+ *  Covers the field group, post type, taxonomy and options page editors and their
+ *  sub-pages (e.g. Tools), plus ACF 4's "acf" post type. Not the plugin's own settings
+ *  page, which shows the error inline.
+ *
+ *  acft_is_acf_admin_screen()
+ *
+ *  @since      3.3.0
+ *  @return     bool
+ */
+function acft_is_acf_admin_screen() {
+
+	$screen = function_exists( 'get_current_screen' ) ? get_current_screen() : null;
+
+	if ( ! $screen || empty( $screen->post_type ) ) {
+		return false;
+	}
+
+	return 'acf' === $screen->post_type || 0 === strpos( $screen->post_type, 'acf-' );
+}
+
+
+/**
+ *  Warn admins on ACF screens when the Google Fonts list could not be loaded
+ *
+ *  Without it a broken key goes unnoticed: the field just offers web-safe fonts (or
+ *  an old list). Kept to one line; the full error is on the settings page. Not
+ *  dismissible; it disappears once a fetch succeeds.
+ *
+ *  acft_google_fonts_error_notice()
+ *
+ *  @since      3.3.0
+ */
+add_action( 'admin_notices', 'acft_google_fonts_error_notice' );
+function acft_google_fonts_error_notice() {
+
+	if ( ! current_user_can( 'manage_options' ) || ! acft_is_acf_admin_screen() || '' === acft_google_api_key_source() ) {
+		return;
+	}
+
+	$fonts_cache = acft_get_google_fonts_cache();
+
+	if ( '' === $fonts_cache['error'] ) {
+		return;
+	}
+
+	?>
+	<div class="notice notice-warning">
+		<p>
+			<?php esc_html_e( 'ACF Typography: Google Fonts could not be loaded.', 'acf-typography-field' ); ?>
+			<a class="button button-small" href="<?php echo esc_url( admin_url( 'options-general.php?page=acf-typography-field' ) ); ?>"><?php esc_html_e( 'Settings', 'acf-typography-field' ); ?></a>
+		</p>
+	</div>
+	<?php
+}
+
+
 function acft_options_page() {
 
 	?>
