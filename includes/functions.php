@@ -400,6 +400,11 @@ function acft_get_acf_blocks_data( $blocks ) {
 add_action( 'wp_enqueue_scripts', 'acft_enqueue_google_fonts_file' );
 function acft_enqueue_google_fonts_file() {
 
+	// ACF inactive: nothing to read, and get_fields() would be undefined
+	if ( ! function_exists( 'get_fields' ) ) {
+		return;
+	}
+
 	global $post;
 
 	$all_post_fields   = array();
