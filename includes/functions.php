@@ -490,7 +490,8 @@ function acft_google_fonts_url( $weights ) {
 		return '';
 	}
 
-	return 'https://fonts.googleapis.com/css?family=' . implode( '|', $families );
+	// display=swap: show fallback text while the font loads; the v1 API accepts it too
+	return 'https://fonts.googleapis.com/css?family=' . implode( '|', $families ) . '&display=swap';
 }
 
 /**
