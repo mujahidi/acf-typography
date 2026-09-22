@@ -85,7 +85,8 @@ function acft_get_google_api_key() {
 
 		case 'legacy_constant':
 			static $warned = false;
-			if ( ! $warned ) {
+			// normal wp-admin pages only: on REST and admin-ajax, a notice shown by WP_DEBUG_DISPLAY would break the JSON response
+			if ( ! $warned && is_admin() && ! wp_doing_ajax() ) {
 				$warned = true;
 				_doing_it_wrong(
 					__FUNCTION__,

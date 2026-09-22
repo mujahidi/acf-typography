@@ -582,6 +582,10 @@ if ( ! class_exists( 'acf_field_Typography' ) ) :
 							<?php
 								$options = '';
 								$current = ! empty( $field['value'][ $f ] ) ? $field['value'][ $f ] : $field[ $f ];
+								// a value saved as a list key (e.g. a field group default) maps to its label, which is what the options show
+								if ( is_string( $current ) && isset( $this->$f[ $current ] ) ) {
+									$current = $this->$f[ $current ];
+								}
 							foreach ( $this->$f as $opt ) {
 								$options .= '<option val="' . esc_attr( $opt ) . '" ' . ( $current == $opt ? 'selected' : '' ) . '>' . esc_html( $opt ) . '</option>';
 							}

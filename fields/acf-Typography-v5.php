@@ -489,6 +489,10 @@ if ( ! class_exists( 'acf_field_Typography' ) ) :
 								<?php
 									$options = '';
 									$current = ! empty( $field['value'][ $f ] ) ? $field['value'][ $f ] : $field[ $f ];
+									// a value saved as a list key (e.g. a field group default) maps to its label, which is what the options show
+									if ( is_string( $current ) && isset( $this->$f[ $current ] ) ) {
+										$current = $this->$f[ $current ];
+									}
 								foreach ( $this->$f as $opt ) {
 									$options .= '<option val="' . esc_attr( $opt ) . '" ' . ( $current == $opt ? 'selected' : '' ) . '>' . esc_html( $opt ) . '</option>';
 								}
@@ -791,7 +795,7 @@ if ( ! class_exists( 'acf_field_Typography' ) ) :
 					if ( in_array( $rf, $display_properties, true ) && empty( $value[ $rf ] ) ) {
 						// acf_validate_value() expects a field array as its second argument, so add the error directly
 						acf_add_validation_error(
-							$field['prefix'] . '[' . $field['key'] . '][' . $rf . ']',
+							$input . '[' . $rf . ']', // $input is the full input name, also inside repeaters, groups and blocks
 							/* translators: %s: name of the required typography property, e.g. Font Family */
 							sprintf( __( '%s value is required', 'acf-typography-field' ), ucwords( str_replace( '_', ' ', $rf ) ) )
 						);
