@@ -1,0 +1,22 @@
+{
+    "name": "mujahidi/acf-typography",
+    "description": "Dev tooling for ACF Typography Field. Not shipped to WordPress.org.",
+    "type": "wordpress-plugin",
+    "license": "GPL-2.0-or-later",
+    "minimum-stability": "alpha",
+    "prefer-stable": true,
+    "require-dev": {
+        "phpcompatibility/phpcompatibility-wp": "3.0.0-alpha2",
+        "wp-coding-standards/wpcs": "^3.4",
+        "dealerdirect/phpcodesniffer-composer-installer": "^1.2"
+    },
+    "config": {
+        "allow-plugins": {
+            "dealerdirect/phpcodesniffer-composer-installer": true
+        }
+    },
+    "scripts": {
+        "compat": "phpcs --standard=PHPCompatibilityWP --runtime-set testVersion 7.4-8.5 --extensions=php --ignore=vendor/*,tests/* -p .",
+        "lint:wpcs": "phpcs"
+    }
+}
