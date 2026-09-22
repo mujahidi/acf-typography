@@ -7,33 +7,42 @@
  */
 function get_typography_field( $selector, $property, $post_id = false, $format_value = true ) {
 
-	// filter post_id
-	$post_id = acf_get_valid_post_id( $post_id );
+	if ( function_exists( 'acf_get_valid_post_id' ) ) {
 
-	// get field
-	$field = acf_maybe_get_field( $selector, $post_id );
+		// filter post_id
+		$post_id = acf_get_valid_post_id( $post_id );
 
-	// create dummy field
-	if ( ! $field ) {
-		$field = acf_get_valid_field(
-			array(
-				'name' => $selector,
-				'key'  => '',
-				'type' => '',
-			)
-		);
+		// get field
+		$field = acf_maybe_get_field( $selector, $post_id );
 
-		// prevent formatting
-		$format_value = false;
-	}
+		// create dummy field
+		if ( ! $field ) {
+			$field = acf_get_valid_field(
+				array(
+					'name' => $selector,
+					'key'  => '',
+					'type' => '',
+				)
+			);
 
-	// get value for field
-	$value = acf_get_value( $post_id, $field );
+			// prevent formatting
+			$format_value = false;
+		}
 
-	// format value
-	if ( $format_value ) {
 		// get value for field
-		$value = acf_format_value( $value, $post_id, $field );
+		$value = acf_get_value( $post_id, $field );
+
+		// format value
+		if ( $format_value ) {
+			// get value for field
+			$value = acf_format_value( $value, $post_id, $field );
+		}
+	} elseif ( function_exists( 'get_field' ) ) {
+		// ACF 4 has no acf_get_valid_post_id()
+		$value = get_field( $selector, $post_id, $format_value );
+	} else {
+		// ACF inactive
+		return '';
 	}
 
 	// get property
@@ -68,6 +77,11 @@ function the_typography_field( $selector, $property, $post_id = false, $format_v
  *  @since      3.0.0
  */
 function get_typography_sub_field( $selector, $property, $format_value = true, $load_value = true ) {
+
+	// ACF inactive
+	if ( ! function_exists( 'get_sub_field_object' ) ) {
+		return false;
+	}
 
 	// get sub field
 	$sub_field = get_sub_field_object( $selector, $format_value );
