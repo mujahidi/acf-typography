@@ -494,12 +494,12 @@ if ( ! class_exists( 'acf_field_Typography' ) ) :
 										$current = $this->$f[ $current ];
 									}
 								foreach ( $this->$f as $opt ) {
-									$options .= '<option val="' . esc_attr( $opt ) . '" ' . ( $current == $opt ? 'selected' : '' ) . '>' . esc_html( $opt ) . '</option>';
+									$options .= '<option value="' . esc_attr( $opt ) . '" ' . ( $current == $opt ? 'selected' : '' ) . '>' . esc_html( $opt ) . '</option>';
 								}
 									// keep a saved value that is missing from the list (e.g. a Google font while the list is unavailable), so saving again does not overwrite it
 								if ( ! empty( $current ) && is_scalar( $current ) && ! in_array( $current, (array) $this->$f ) ) {
 									// escaped: the saved value is whatever was posted, not one of our choices
-									$options = '<option val="' . esc_attr( $current ) . '" selected>' . esc_html( $current ) . '</option>' . $options;
+									$options = '<option value="' . esc_attr( $current ) . '" selected>' . esc_html( $current ) . '</option>' . $options;
 								}
 									echo $options;
 								?>
