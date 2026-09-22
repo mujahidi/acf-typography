@@ -21,6 +21,9 @@ if ( ! class_exists( 'acf_plugin_Typography' ) ) :
 
 	class acf_plugin_Typography {
 
+		// plugin url, path and version; declared to avoid PHP 8.2 dynamic property deprecations
+		public $settings = array();
+
 		/*
 		*  __construct
 		*

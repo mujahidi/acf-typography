@@ -16,6 +16,16 @@ if ( ! class_exists( 'acf_field_Typography' ) ) :
 		var $settings, // will hold info such as dir / path
 		$defaults; // will hold default field options
 
+		// declared to avoid PHP 8.2 dynamic property deprecations
+		public $font_family     = array(); // choices for each select sub field
+		public $font_weight     = array();
+		public $font_style      = array();
+		public $font_variant    = array();
+		public $font_stretch    = array();
+		public $text_align      = array();
+		public $text_decoration = array();
+		public $text_transform  = array();
+
 
 		/*
 		*  __construct
