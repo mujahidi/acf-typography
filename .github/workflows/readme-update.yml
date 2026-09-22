@@ -1,0 +1,25 @@
+name: Update readme on WordPress.org
+
+# Pushes readme.txt changes (e.g. "Tested up to") to WordPress.org without a new release.
+# The action stops without deploying if any plugin file changed since the last release.
+on:
+  push:
+    branches:
+      - master
+    paths:
+      - 'readme.txt'
+
+jobs:
+  readme-update:
+    name: Update readme
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: WordPress.org readme update
+        uses: 10up/action-wordpress-plugin-asset-update@stable
+        env:
+          SVN_PASSWORD: ${{ secrets.SVN_PASSWORD }}
+          SVN_USERNAME: ${{ secrets.SVN_USERNAME }}
+          SLUG: acf-typography-field
+          # No .wordpress-org folder in this repo. Without this, the live banners/icons in SVN assets/ would be deleted.
+          SKIP_ASSETS: true
