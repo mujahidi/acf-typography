@@ -38,14 +38,18 @@ function acft_settings_init() {
 
 function acft_google_key_field() {
 
-	$acft_options = get_option( 'acft_settings' );
-	$google_key   = '';
-	if ( is_array( $acft_options ) && ! empty( $acft_options['google_key'] ) ) {
-		$google_key = $acft_options['google_key'];
-	}
+	$google_key = acft_get_saved_google_api_key();
+	$key_source = acft_google_api_key_source();
+	// readonly, not disabled: a disabled field is not submitted and saving would wipe the stored key
+	$readonly = in_array( $key_source, array( 'constant', 'legacy_constant' ), true );
 	?>
-	<input type='text' name='acft_settings[google_key]' value='<?php echo $google_key; ?>'>
+	<input type='text' name='acft_settings[google_key]' value='<?php echo esc_attr( $google_key ); ?>'<?php echo $readonly ? ' readonly' : ''; ?>>
 	<?php
+	if ( 'constant' === $key_source ) {
+		echo '<p class="description">' . wp_kses( __( 'The key is set by the <code>ACFT_GOOGLE_API_KEY</code> constant, which overrides this field.', 'acf-typography-field' ), array( 'code' => array() ) ) . '</p>';
+	} elseif ( 'legacy_constant' === $key_source ) {
+		echo '<p class="description">' . wp_kses( __( 'The key is set by the <code>YOUR_API_KEY</code> constant, which overrides this field. That constant is deprecated and will stop working in 4.0. Please rename it to <code>ACFT_GOOGLE_API_KEY</code>.', 'acf-typography-field' ), array( 'code' => array() ) ) . '</p>';
+	}
 }
 
 

@@ -16,12 +16,6 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-$acft_options = get_option( 'acft_settings' );
-
-if ( is_array( $acft_options ) && ! empty( $acft_options['google_key'] ) && ! defined( 'YOUR_API_KEY' ) ) {
-	define( 'YOUR_API_KEY', $acft_options['google_key'] );
-}
-
 // check if class already exists
 if ( ! class_exists( 'acf_plugin_Typography' ) ) :
 
@@ -94,6 +88,9 @@ if ( ! class_exists( 'acf_plugin_Typography' ) ) :
 
 	// initialize
 	new acf_plugin_Typography();
+
+	// keep the legacy YOUR_API_KEY constant available until 4.0
+	acft_maybe_define_legacy_api_key();
 
 
 	// class_exists check

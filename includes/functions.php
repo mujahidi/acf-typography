@@ -1,6 +1,132 @@
 <?php
 
 /**
+ *  Get the Google Fonts API key saved on the settings page
+ *
+ *  acft_get_saved_google_api_key()
+ *
+ *  @since      3.3.0
+ *  @return     string  Empty string when no key is saved.
+ */
+function acft_get_saved_google_api_key() {
+
+	$acft_options = get_option( 'acft_settings' );
+
+	if ( is_array( $acft_options ) && ! empty( $acft_options['google_key'] ) && is_string( $acft_options['google_key'] ) ) {
+		return $acft_options['google_key'];
+	}
+
+	return '';
+}
+
+/**
+ *  Remember whether this plugin defined the legacy YOUR_API_KEY constant itself
+ *
+ *  acft_legacy_api_key_is_ours()
+ *
+ *  @since      3.3.0
+ *  @param      bool|null $set  Pass true once the plugin has defined the constant.
+ *  @return     bool
+ */
+function acft_legacy_api_key_is_ours( $set = null ) {
+
+	static $ours = false;
+
+	if ( null !== $set ) {
+		$ours = (bool) $set;
+	}
+
+	return $ours;
+}
+
+/**
+ *  Where the Google Fonts API key comes from
+ *
+ *  Order: ACFT_GOOGLE_API_KEY constant, the legacy YOUR_API_KEY constant (when
+ *  something other than this plugin defined it), then the settings page.
+ *
+ *  acft_google_api_key_source()
+ *
+ *  @since      3.3.0
+ *  @return     string  'constant', 'legacy_constant', 'option' or '' when no key is set.
+ */
+function acft_google_api_key_source() {
+
+	if ( defined( 'ACFT_GOOGLE_API_KEY' ) && is_string( ACFT_GOOGLE_API_KEY ) && '' !== ACFT_GOOGLE_API_KEY ) {
+		return 'constant';
+	}
+
+	// phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedConstantFound -- legacy constant, removed in 4.0.
+	if ( defined( 'YOUR_API_KEY' ) && ! acft_legacy_api_key_is_ours() && is_string( YOUR_API_KEY ) && '' !== YOUR_API_KEY ) {
+		return 'legacy_constant';
+	}
+
+	if ( '' !== acft_get_saved_google_api_key() ) {
+		return 'option';
+	}
+
+	return '';
+}
+
+/**
+ *  Get the Google Fonts API key
+ *
+ *  acft_get_google_api_key()
+ *
+ *  @since      3.3.0
+ *  @return     string  Empty string when no key is set.
+ */
+function acft_get_google_api_key() {
+
+	switch ( acft_google_api_key_source() ) {
+
+		case 'constant':
+			return ACFT_GOOGLE_API_KEY;
+
+		case 'legacy_constant':
+			static $warned = false;
+			if ( ! $warned ) {
+				$warned = true;
+				_doing_it_wrong(
+					__FUNCTION__,
+					esc_html__( 'The YOUR_API_KEY constant is deprecated and will be removed in 4.0. Define ACFT_GOOGLE_API_KEY instead.', 'acf-typography-field' ),
+					'3.3.0'
+				);
+			}
+			return YOUR_API_KEY;
+
+		case 'option':
+			return acft_get_saved_google_api_key();
+	}
+
+	return '';
+}
+
+/**
+ *  Define the legacy YOUR_API_KEY constant for code that still reads it
+ *
+ *  acft_maybe_define_legacy_api_key()
+ *
+ *  @since      3.3.0
+ */
+function acft_maybe_define_legacy_api_key() {
+
+	if ( defined( 'YOUR_API_KEY' ) ) {
+		return;
+	}
+
+	$api_key = acft_get_google_api_key();
+
+	if ( '' === $api_key ) {
+		return;
+	}
+
+	// phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedConstantFound -- kept for backward compatibility until 4.0.
+	define( 'YOUR_API_KEY', $api_key );
+	acft_legacy_api_key_is_ours( true );
+}
+
+/**
  *  Update Google Fonts JSON file
  *
  *  acft_update_gf_json_file()
@@ -39,11 +165,13 @@ function acft_update_gf_json_file( $API_KEY ) {
  */
 function acft_get_google_font_family() {
 
-	if ( ! defined( 'YOUR_API_KEY' ) ) {
+	$api_key = acft_get_google_api_key();
+
+	if ( '' === $api_key ) {
 		return;
 	}
 
-	acft_update_gf_json_file( YOUR_API_KEY );
+	acft_update_gf_json_file( $api_key );
 
 	// Load json file for extra seting
 	$dir         = plugin_dir_path( __DIR__ );
