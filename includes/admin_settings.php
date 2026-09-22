@@ -161,16 +161,18 @@ function acft_google_fonts_error_notice() {
 function acft_options_page() {
 
 	?>
-	<form action='options.php' method='post'>
+	<div class="wrap">
+		<form action='options.php' method='post'>
 
-		<h2><?php esc_html_e( 'ACF Typography Settings', 'acf-typography-field' ); ?></h2>
+			<h2><?php esc_html_e( 'ACF Typography Settings', 'acf-typography-field' ); ?></h2>
 
-		<?php
-		settings_fields( 'acf-typography-field' );
-		do_settings_sections( 'acf-typography-field' );
-		submit_button();
-		?>
+			<?php
+			settings_fields( 'acf-typography-field' );
+			do_settings_sections( 'acf-typography-field' );
+			submit_button();
+			?>
 
-	</form>
+		</form>
+	</div>
 	<?php
 }
