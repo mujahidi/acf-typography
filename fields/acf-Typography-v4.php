@@ -159,6 +159,9 @@ if ( ! class_exists( 'acf_field_Typography' ) ) :
 				'inherit'    => 'inherit',
 			);
 
+			// plugin settings (url, path, version), used by input_admin_enqueue_scripts()
+			$this->settings = $settings;
+
 			// do not delete!
 			parent::__construct();
 		}
