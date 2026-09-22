@@ -1,22 +1,21 @@
 name: Deploy to WordPress.org
 
+# Deploys only when a version tag (e.g. 3.3.0) is pushed.
+# Pushes to master never deploy. The action takes the version from the tag name.
 on:
   push:
     tags:
-      - '*'
-    branches:
-      - master
+      - '[0-9]+.[0-9]+.[0-9]+'
 
 jobs:
   deploy-plugin:
     name: Deploy Plugin
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@master
+      - uses: actions/checkout@v4
       - name: WordPress Plugin Deploy
         uses: 10up/action-wordpress-plugin-deploy@stable
         env:
           SVN_PASSWORD: ${{ secrets.SVN_PASSWORD }}
           SVN_USERNAME: ${{ secrets.SVN_USERNAME }}
           SLUG: acf-typography-field
-          VERSION: 3.2.3

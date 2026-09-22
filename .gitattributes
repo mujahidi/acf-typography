@@ -1,10 +1,19 @@
 # Directories
 /.wordpress-org  export-ignore
 /.github         export-ignore
+/.plans          export-ignore
+/.audit          export-ignore
+/tests           export-ignore
+/vendor          export-ignore
 
 # Files
 /.editorconfig   export-ignore
 /.gitattributes  export-ignore
 /.gitignore      export-ignore
+/.distignore     export-ignore
 /CHANGELOG.md    export-ignore
 /README.md       export-ignore
+/composer.json   export-ignore
+/composer.lock   export-ignore
+/phpcs.xml       export-ignore
+/phpcs.xml.dist  export-ignore
