@@ -84,7 +84,7 @@ if ( ! class_exists( 'acf_plugin_Typography' ) ) :
 
 		function field_group_admin_enqueue_scripts() {
 
-			wp_enqueue_script( 'acf-typography-fieldgroup-script', plugin_dir_url( __FILE__ ) . 'assets/js/admin-field-group.js', array(), $this->settings['version'] );
+			wp_enqueue_script( 'acf-typography-fieldgroup-script', plugin_dir_url( __FILE__ ) . 'assets/js/admin-field-group.js', array( 'jquery' ), $this->settings['version'] );
 		}
 	}
 
