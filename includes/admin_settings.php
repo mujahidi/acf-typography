@@ -50,6 +50,22 @@ function acft_google_key_field() {
 	} elseif ( 'legacy_constant' === $key_source ) {
 		echo '<p class="description">' . wp_kses( __( 'The key is set by the <code>YOUR_API_KEY</code> constant, which overrides this field. That constant is deprecated and will stop working in 4.0. Please rename it to <code>ACFT_GOOGLE_API_KEY</code>.', 'acf-typography-field' ), array( 'code' => array() ) ) . '</p>';
 	}
+
+	if ( '' === $key_source ) {
+		return;
+	}
+
+	$fonts_cache = acft_get_google_fonts_cache();
+
+	if ( '' !== $fonts_cache['error'] ) {
+		/* translators: %s: error message returned by the Google Fonts API */
+		echo '<div class="notice notice-error inline"><p>' . esc_html( sprintf( __( 'Google Fonts could not be loaded: %s', 'acf-typography-field' ), $fonts_cache['error'] ) ) . '</p></div>';
+	}
+
+	if ( $fonts_cache['fetched'] ) {
+		/* translators: 1: number of Google Fonts, 2: date and time of the last update */
+		echo '<p class="description">' . esc_html( sprintf( __( '%1$d Google Fonts available, last updated %2$s.', 'acf-typography-field' ), count( $fonts_cache['families'] ), wp_date( get_option( 'date_format' ) . ' ' . get_option( 'time_format' ), $fonts_cache['fetched'] ) ) ) . '</p>';
+	}
 }
 
 

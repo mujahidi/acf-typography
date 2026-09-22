@@ -79,7 +79,7 @@ if ( ! class_exists( 'acf_field_Typography' ) ) :
 				'Verdana, Geneva, sans-serif'           => 'Verdana, Geneva, sans-serif',
 			);
 
-			$google_font_family = acft_get_google_font_family(); // get google fonts from json file
+			$google_font_family = acft_get_google_font_family(); // get google fonts from the cached list
 
 			// merge web-safe-fonts and google fonts arrays
 			if ( is_array( $google_font_family ) ) {

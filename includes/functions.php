@@ -127,43 +127,96 @@ function acft_maybe_define_legacy_api_key() {
 }
 
 /**
- *  Update Google Fonts JSON file
+ *  Get the cached Google Fonts list and its fetch status
  *
- *  acft_update_gf_json_file()
+ *  Stored in a non-autoloaded option, so it survives plugin updates and
+ *  works on hosts where the plugin folder is read-only.
  *
- *  @since      3.0.0
+ *  acft_get_google_fonts_cache()
+ *
+ *  @since      3.3.0
+ *  @return     array  families (string[]), fetched (int), attempted (int), error (string), key_hash (string).
  */
-function acft_update_gf_json_file( $API_KEY ) {
+function acft_get_google_fonts_cache() {
 
-	$dir      = plugin_dir_path( __DIR__ );
-	$filename = $dir . 'google_fonts.json';
+	$cache = get_option( 'acft_google_fonts' );
 
-	if ( file_exists( $filename ) ) {
-
-		$file_date = date( 'Ymd', filemtime( $filename ) );
-		$now       = date( 'Ymd', time() );
-		$time      = $now - $file_date;
-
-		if ( ! filesize( $filename ) || $time > 2 ) {
-
-			$json = file_get_contents( 'https://www.googleapis.com/webfonts/v1/webfonts?key=' . $API_KEY );
-
-			$gf_file = fopen( $filename, 'wb' );
-			fwrite( $gf_file, $json );
-			fclose( $gf_file );
-
-		}
+	if ( ! is_array( $cache ) ) {
+		$cache = array();
 	}
+
+	$cache = wp_parse_args(
+		$cache,
+		array(
+			'families'  => array(),
+			'fetched'   => 0,
+			'attempted' => 0,
+			'error'     => '',
+			'key_hash'  => '',
+		)
+	);
+
+	if ( ! is_array( $cache['families'] ) ) {
+		$cache['families'] = array();
+	}
+
+	return $cache;
 }
 
 /**
- *  Get google fonts for Font-Family drop-down subfield
+ *  Fetch the Google Fonts family list from the Google Fonts Developer API
  *
- *  acft_get_google_font_family()
+ *  acft_fetch_google_fonts()
  *
- *  @since      3.0.0
+ *  @since      3.3.0
+ *  @param      string $api_key  Google API key.
+ *  @return     string[]|WP_Error  Family names, or the reason the request failed.
  */
-function acft_get_google_font_family() {
+function acft_fetch_google_fonts( $api_key ) {
+
+	$response = wp_remote_get(
+		'https://www.googleapis.com/webfonts/v1/webfonts?key=' . rawurlencode( $api_key ),
+		array( 'timeout' => 10 )
+	);
+
+	if ( is_wp_error( $response ) ) {
+		return $response;
+	}
+
+	$code = (int) wp_remote_retrieve_response_code( $response );
+	$body = json_decode( wp_remote_retrieve_body( $response ), true );
+
+	if ( 200 !== $code ) {
+		$message = isset( $body['error']['message'] ) && is_string( $body['error']['message'] ) ? $body['error']['message'] : sprintf( 'HTTP %d', $code );
+		return new WP_Error( 'acft_google_fonts_http', $message );
+	}
+
+	if ( ! isset( $body['items'] ) || ! is_array( $body['items'] ) ) {
+		return new WP_Error( 'acft_google_fonts_response', __( 'Unexpected response from the Google Fonts API.', 'acf-typography-field' ) );
+	}
+
+	$families = array();
+	foreach ( $body['items'] as $item ) {
+		if ( isset( $item['family'] ) && is_string( $item['family'] ) ) {
+			$families[] = $item['family'];
+		}
+	}
+
+	return $families;
+}
+
+/**
+ *  Refresh the cached Google Fonts list when it is stale
+ *
+ *  Refreshes when the list is older than a week or the API key changed. After a
+ *  failed request it waits an hour before trying again, keeping the old list.
+ *
+ *  acft_refresh_google_fonts()
+ *
+ *  @since      3.3.0
+ *  @param      bool $force  Fetch now, ignoring the cache age and the retry delay.
+ */
+function acft_refresh_google_fonts( $force = false ) {
 
 	$api_key = acft_get_google_api_key();
 
@@ -171,29 +224,94 @@ function acft_get_google_font_family() {
 		return;
 	}
 
-	acft_update_gf_json_file( $api_key );
+	$cache    = acft_get_google_fonts_cache();
+	$key_hash = md5( $api_key );
+	$now      = time();
 
-	// Load json file for extra seting
-	$dir         = plugin_dir_path( __DIR__ );
-	$json        = file_get_contents( "{$dir}google_fonts.json" );
-	$fontArray   = json_decode( $json );
-	$font_family = array();
+	if ( ! $force ) {
 
-	if ( $fontArray ) {
-		foreach ( $fontArray as $k => $v ) {
-			if ( is_array( $v ) ) {
-				foreach ( $v as $value ) {
-					foreach ( $value as $key1 => $value1 ) {
-						if ( $key1 == 'family' ) {
-							$font_family[ $value1 ] = $value1;
-						}
-					}
-				}
-			}
+		$stale = $cache['key_hash'] !== $key_hash || $cache['fetched'] < $now - WEEK_IN_SECONDS;
+
+		if ( ! $stale ) {
+			return;
+		}
+
+		if ( '' !== $cache['error'] && $cache['key_hash'] === $key_hash && $cache['attempted'] > $now - HOUR_IN_SECONDS ) {
+			return; // a request for this key failed within the hour
 		}
 	}
 
-	return $font_family;
+	$families = acft_fetch_google_fonts( $api_key );
+
+	$cache['attempted'] = $now;
+	$cache['key_hash']  = $key_hash;
+
+	if ( is_wp_error( $families ) ) {
+		$cache['error'] = $families->get_error_message();
+	} else {
+		$cache['families'] = $families;
+		$cache['fetched']  = $now;
+		$cache['error']    = '';
+	}
+
+	update_option( 'acft_google_fonts', $cache, false );
+}
+
+/**
+ *  Fetch the Google Fonts list right away when the settings are saved
+ *
+ *  @since      3.3.0
+ */
+add_action( 'add_option_acft_settings', 'acft_refresh_google_fonts_on_save' );
+add_action( 'update_option_acft_settings', 'acft_refresh_google_fonts_on_save' );
+function acft_refresh_google_fonts_on_save() {
+
+	acft_refresh_google_fonts( true );
+}
+
+/**
+ *  Update Google Fonts JSON file
+ *
+ *  The list is no longer stored in google_fonts.json. Kept so older theme code
+ *  calling it does not fatal; removed in 4.0.
+ *
+ *  acft_update_gf_json_file()
+ *
+ *  @since      3.0.0
+ *  @deprecated 3.3.0 Use acft_refresh_google_fonts() instead.
+ *  @param      string $api_key  Ignored; the key comes from acft_get_google_api_key().
+ */
+function acft_update_gf_json_file( $api_key = '' ) { // phpcs:ignore Generic.CodeAnalysis.UnusedFunctionParameter.Found -- kept for backward compatibility.
+
+	_deprecated_function( __FUNCTION__, '3.3.0', 'acft_refresh_google_fonts()' );
+
+	acft_refresh_google_fonts();
+}
+
+/**
+ *  Get google fonts for Font-Family drop-down subfield
+ *
+ *  Only fetches from Google on wp-admin page loads, so front-end visitors never
+ *  wait on the API. admin-ajax.php is skipped: it also serves front-end requests.
+ *
+ *  acft_get_google_font_family()
+ *
+ *  @since      3.0.0
+ *  @return     array  Family names as both keys and values; empty when no API key is set.
+ */
+function acft_get_google_font_family() {
+
+	if ( '' === acft_get_google_api_key() ) {
+		return array();
+	}
+
+	if ( is_admin() && ! wp_doing_ajax() ) {
+		acft_refresh_google_fonts();
+	}
+
+	$families = acft_get_google_fonts_cache()['families'];
+
+	return array_combine( $families, $families );
 }
 
 /**
