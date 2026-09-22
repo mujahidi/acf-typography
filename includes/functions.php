@@ -208,8 +208,9 @@ function acft_fetch_google_fonts( $api_key ) {
 /**
  *  Refresh the cached Google Fonts list when it is stale
  *
- *  Refreshes when the list is older than a week or the API key changed. After a
- *  failed request it waits an hour before trying again, keeping the old list.
+ *  Refreshes when the list is older than a week, the API key changed, or the last
+ *  request failed. After a failed request it waits an hour before trying again,
+ *  keeping the old list. A short lock stops parallel requests from all fetching.
  *
  *  acft_refresh_google_fonts()
  *
@@ -230,7 +231,8 @@ function acft_refresh_google_fonts( $force = false ) {
 
 	if ( ! $force ) {
 
-		$stale = $cache['key_hash'] !== $key_hash || $cache['fetched'] < $now - WEEK_IN_SECONDS;
+		// an error counts as stale, so a failed request is retried even when an older list is still fresh
+		$stale = $cache['key_hash'] !== $key_hash || $cache['fetched'] < $now - WEEK_IN_SECONDS || '' !== $cache['error'];
 
 		if ( ! $stale ) {
 			return;
@@ -239,9 +241,20 @@ function acft_refresh_google_fonts( $force = false ) {
 		if ( '' !== $cache['error'] && $cache['key_hash'] === $key_hash && $cache['attempted'] > $now - HOUR_IN_SECONDS ) {
 			return; // a request for this key failed within the hour
 		}
+
+		if ( get_transient( 'acft_google_fonts_lock' ) ) {
+			return; // another request is fetching right now
+		}
 	}
 
+	set_transient( 'acft_google_fonts_lock', 1, MINUTE_IN_SECONDS / 2 );
+
 	$families = acft_fetch_google_fonts( $api_key );
+
+	// re-read: another request may have saved the list while this one waited on Google
+	wp_cache_delete( 'acft_google_fonts', 'options' );
+	wp_cache_delete( 'notoptions', 'options' );
+	$cache = acft_get_google_fonts_cache();
 
 	$cache['attempted'] = $now;
 	$cache['key_hash']  = $key_hash;
@@ -255,6 +268,8 @@ function acft_refresh_google_fonts( $force = false ) {
 	}
 
 	update_option( 'acft_google_fonts', $cache, false );
+
+	delete_transient( 'acft_google_fonts_lock' );
 }
 
 /**
@@ -268,6 +283,34 @@ function acft_refresh_google_fonts_on_save() {
 
 	acft_refresh_google_fonts( true );
 }
+
+/**
+ *  Also fetch when the settings are saved unchanged
+ *
+ *  update_option() skips the hooks above when the value did not change, so saving
+ *  the same key again (e.g. after fixing the key in Google Cloud) would not retry.
+ *
+ *  @since      3.3.0
+ *  @param      mixed $value      New value.
+ *  @param      mixed $old_value  Current value.
+ *  @return     mixed  The new value, unchanged.
+ */
+add_filter( 'pre_update_option_acft_settings', 'acft_refresh_google_fonts_on_unchanged_save', 10, 2 );
+function acft_refresh_google_fonts_on_unchanged_save( $value, $old_value ) {
+
+	if ( $value === $old_value ) {
+		acft_refresh_google_fonts( true );
+	}
+
+	return $value;
+}
+
+/**
+ *  Background refresh, scheduled when the list has never been fetched
+ *
+ *  @since      3.3.0
+ */
+add_action( 'acft_refresh_google_fonts_event', 'acft_refresh_google_fonts' );
 
 /**
  *  Update Google Fonts JSON file
@@ -293,6 +336,8 @@ function acft_update_gf_json_file( $api_key = '' ) { // phpcs:ignore Generic.Cod
  *
  *  Only fetches from Google on wp-admin page loads, so front-end visitors never
  *  wait on the API. admin-ajax.php is skipped: it also serves front-end requests.
+ *  If the list has never been fetched (e.g. just updated from 3.2.x on a site that
+ *  only uses front-end forms), other requests schedule a one-off background fetch.
  *
  *  acft_get_google_font_family()
  *
@@ -307,6 +352,8 @@ function acft_get_google_font_family() {
 
 	if ( is_admin() && ! wp_doing_ajax() ) {
 		acft_refresh_google_fonts();
+	} elseif ( ! acft_get_google_fonts_cache()['attempted'] && ! wp_next_scheduled( 'acft_refresh_google_fonts_event' ) ) {
+		wp_schedule_single_event( time(), 'acft_refresh_google_fonts_event' );
 	}
 
 	$families = acft_get_google_fonts_cache()['families'];
