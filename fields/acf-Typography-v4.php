@@ -52,6 +52,7 @@ if ( ! class_exists( 'acf_field_Typography' ) ) :
 				'font_style'          => 'normal',
 				'font_variant'        => 'normal',
 				'font_stretch'        => 'normal',
+				'line_height'         => '', // no default: a number here would change what existing field groups render
 				'text_align'          => 'left',
 				'letter_spacing'      => 0,
 				'text_decoration'     => 'none',
