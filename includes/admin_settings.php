@@ -17,22 +17,44 @@ function acft_add_admin_menu() {
 
 function acft_settings_init() {
 
-	register_setting( 'acf-typography-field', 'acft_settings' );
+	register_setting(
+		'acf-typography-field',
+		'acft_settings',
+		array( 'sanitize_callback' => 'acft_sanitize_settings' )
+	);
 
 	add_settings_section(
 		'acft_acf-typography-field_section',
-		__( '', 'acf' ),
+		'',
 		'acft_settings_section_callback',
 		'acf-typography-field'
 	);
 
 	add_settings_field(
 		'acft_text_field_0',
-		__( 'Google Fonts Key', 'acf' ),
+		__( 'Google Fonts Key', 'acf-typography-field' ),
 		'acft_google_key_field',
 		'acf-typography-field',
 		'acft_acf-typography-field_section'
 	);
+}
+
+/**
+ * Sanitize the API key submitted through the settings form.
+ *
+ * @param mixed $settings Submitted option value.
+ * @return array
+ */
+function acft_sanitize_settings( $settings ) {
+	if ( in_array( acft_google_api_key_source(), array( 'constant', 'legacy_constant' ), true ) ) {
+		return array( 'google_key' => acft_get_saved_google_api_key() );
+	}
+
+	if ( ! is_array( $settings ) || ! isset( $settings['google_key'] ) || ! is_string( $settings['google_key'] ) ) {
+		return array( 'google_key' => '' );
+	}
+
+	return array( 'google_key' => sanitize_text_field( $settings['google_key'] ) );
 }
 
 
@@ -136,7 +158,7 @@ function acft_options_page() {
 	?>
 	<form action='options.php' method='post'>
 
-		<h2>ACF Typography Settings</h2>
+		<h2><?php esc_html_e( 'ACF Typography Settings', 'acf-typography-field' ); ?></h2>
 
 		<?php
 		settings_fields( 'acf-typography-field' );

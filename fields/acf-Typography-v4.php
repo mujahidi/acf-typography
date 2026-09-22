@@ -39,8 +39,8 @@ if ( ! class_exists( 'acf_field_Typography' ) ) :
 		function __construct( $settings ) {
 			// vars
 			$this->name     = 'Typography';
-			$this->label    = __( 'Typography', 'acf-typography' );
-			$this->category = __( 'Content', 'acf-typography' ); // Basic, Content, Choice, etc
+			$this->label    = __( 'Typography', 'acf-typography-field' );
+			$this->category = __( 'Content', 'acf-typography-field' ); // Basic, Content, Choice, etc
 			$this->defaults = array(
 				// add default here to merge into your field.
 				// This makes life easy when creating the field options as you don't need to use any if( isset('') ) logic. eg:
@@ -189,10 +189,10 @@ if ( ! class_exists( 'acf_field_Typography' ) ) :
 
 			// Create Field Options HTML
 			?>
-		<tr class="field_option field_option_<?php echo $this->name; ?>">
+		<tr class="field_option field_option_<?php echo esc_attr( $this->name ); ?>">
 			<td class="label">
-				<label><?php _e( 'Display Properties', 'acf-typography' ); ?></label>
-				<p class="description"><?php _e( 'Select fields to display on edit page', 'acf-typography' ); ?></p>
+				<label><?php esc_html_e( 'Display Properties', 'acf-typography-field' ); ?></label>
+				<p class="description"><?php esc_html_e( 'Select fields to display on edit page', 'acf-typography-field' ); ?></p>
 			</td>
 			<td>
 				<?php
@@ -203,18 +203,18 @@ if ( ! class_exists( 'acf_field_Typography' ) ) :
 						'name'    => 'fields[' . $key . '][display_properties]',
 						'value'   => $field['display_properties'],
 						'choices' => array(
-							'font_size'       => __( 'Font Size', 'acf-typography' ),
-							'font_family'     => __( 'Font Family', 'acf-typography' ),
-							'font_weight'     => __( 'Font Weight', 'acf-typography' ),
-							'font_style'      => __( 'Font Style', 'acf-typography' ),
-							'font_variant'    => __( 'Font Variant', 'acf-typography' ),
-							'font_stretch'    => __( 'Font Stretch', 'acf-typography' ),
-							'line_height'     => __( 'Line Height', 'acf-typography' ),
-							'letter_spacing'  => __( 'Letter Spacing', 'acf-typography' ),
-							'text_align'      => __( 'Text Align', 'acf-typography' ),
-							'text_color'      => __( 'Text Color', 'acf-typography' ),
-							'text_decoration' => __( 'Text Decoration', 'acf-typography' ),
-							'text_transform'  => __( 'Text Transform', 'acf-typography' ),
+							'font_size'       => __( 'Font Size', 'acf-typography-field' ),
+							'font_family'     => __( 'Font Family', 'acf-typography-field' ),
+							'font_weight'     => __( 'Font Weight', 'acf-typography-field' ),
+							'font_style'      => __( 'Font Style', 'acf-typography-field' ),
+							'font_variant'    => __( 'Font Variant', 'acf-typography-field' ),
+							'font_stretch'    => __( 'Font Stretch', 'acf-typography-field' ),
+							'line_height'     => __( 'Line Height', 'acf-typography-field' ),
+							'letter_spacing'  => __( 'Letter Spacing', 'acf-typography-field' ),
+							'text_align'      => __( 'Text Align', 'acf-typography-field' ),
+							'text_color'      => __( 'Text Color', 'acf-typography-field' ),
+							'text_decoration' => __( 'Text Decoration', 'acf-typography-field' ),
+							'text_transform'  => __( 'Text Transform', 'acf-typography-field' ),
 						),
 						'layout'  => 'horizontal',
 					)
@@ -222,10 +222,10 @@ if ( ! class_exists( 'acf_field_Typography' ) ) :
 				?>
 			</td>
 		</tr>
-		<tr class="field_option field_option_<?php echo $this->name; ?>">
+		<tr class="field_option field_option_<?php echo esc_attr( $this->name ); ?>">
 			<td class="label">
-				<label><?php _e( 'Required Properties', 'acf-typography' ); ?></label>
-				<p class="description"><?php _e( 'Select fields which are required on edit page', 'acf-typography' ); ?></p>
+				<label><?php esc_html_e( 'Required Properties', 'acf-typography-field' ); ?></label>
+				<p class="description"><?php esc_html_e( 'Select fields which are required on edit page', 'acf-typography-field' ); ?></p>
 			</td>
 			<td>
 				<?php
@@ -236,18 +236,18 @@ if ( ! class_exists( 'acf_field_Typography' ) ) :
 						'name'    => 'fields[' . $key . '][required_properties]',
 						'value'   => $field['required_properties'],
 						'choices' => array(
-							'font_size'       => __( 'Font Size', 'acf-typography' ),
-							'font_family'     => __( 'Font Family', 'acf-typography' ),
-							'font_weight'     => __( 'Font Weight', 'acf-typography' ),
-							'font_style'      => __( 'Font Style', 'acf-typography' ),
-							'font_variant'    => __( 'Font Variant', 'acf-typography' ),
-							'font_stretch'    => __( 'Font Stretch', 'acf-typography' ),
-							'line_height'     => __( 'Line Height', 'acf-typography' ),
-							'letter_spacing'  => __( 'Letter Spacing', 'acf-typography' ),
-							'text_align'      => __( 'Text Align', 'acf-typography' ),
-							'text_color'      => __( 'Text Color', 'acf-typography' ),
-							'text_decoration' => __( 'Text Decoration', 'acf-typography' ),
-							'text_transform'  => __( 'Text Transform', 'acf-typography' ),
+							'font_size'       => __( 'Font Size', 'acf-typography-field' ),
+							'font_family'     => __( 'Font Family', 'acf-typography-field' ),
+							'font_weight'     => __( 'Font Weight', 'acf-typography-field' ),
+							'font_style'      => __( 'Font Style', 'acf-typography-field' ),
+							'font_variant'    => __( 'Font Variant', 'acf-typography-field' ),
+							'font_stretch'    => __( 'Font Stretch', 'acf-typography-field' ),
+							'line_height'     => __( 'Line Height', 'acf-typography-field' ),
+							'letter_spacing'  => __( 'Letter Spacing', 'acf-typography-field' ),
+							'text_align'      => __( 'Text Align', 'acf-typography-field' ),
+							'text_color'      => __( 'Text Color', 'acf-typography-field' ),
+							'text_decoration' => __( 'Text Decoration', 'acf-typography-field' ),
+							'text_transform'  => __( 'Text Transform', 'acf-typography-field' ),
 						),
 						'layout'  => 'horizontal',
 					)
@@ -255,10 +255,10 @@ if ( ! class_exists( 'acf_field_Typography' ) ) :
 				?>
 			</td>
 		</tr>
-		<tr class="field_option field_option_<?php echo $this->name; ?>">
+		<tr class="field_option field_option_<?php echo esc_attr( $this->name ); ?>">
 			<td class="label">
-				<label><?php _e( 'Font Size', 'acf-typography' ); ?></label>
-				<p class="description"><?php _e( '(Default)', 'acf-typography' ); ?></p>
+				<label><?php esc_html_e( 'Font Size', 'acf-typography-field' ); ?></label>
+				<p class="description"><?php esc_html_e( '(Default)', 'acf-typography-field' ); ?></p>
 			</td>
 			<td>
 				<?php
@@ -274,10 +274,10 @@ if ( ! class_exists( 'acf_field_Typography' ) ) :
 				?>
 			</td>
 		</tr>
-		<tr class="field_option field_option_<?php echo $this->name; ?>">
+		<tr class="field_option field_option_<?php echo esc_attr( $this->name ); ?>">
 			<td class="label">
-				<label><?php _e( 'Font Family', 'acf-typography' ); ?></label>
-				<p class="description"><?php _e( '(Default)', 'acf-typography' ); ?></p>
+				<label><?php esc_html_e( 'Font Family', 'acf-typography-field' ); ?></label>
+				<p class="description"><?php esc_html_e( '(Default)', 'acf-typography-field' ); ?></p>
 			</td>
 			<td>
 				<?php
@@ -294,10 +294,10 @@ if ( ! class_exists( 'acf_field_Typography' ) ) :
 				?>
 			</td>
 		</tr>
-		<tr class="field_option field_option_<?php echo $this->name; ?>">
+		<tr class="field_option field_option_<?php echo esc_attr( $this->name ); ?>">
 			<td class="label">
-				<label><?php _e( 'Font Weight', 'acf-typography' ); ?></label>
-				<p class="description"><?php _e( '(Default)', 'acf-typography' ); ?></p>
+				<label><?php esc_html_e( 'Font Weight', 'acf-typography-field' ); ?></label>
+				<p class="description"><?php esc_html_e( '(Default)', 'acf-typography-field' ); ?></p>
 			</td>
 			<td>
 				<?php
@@ -314,10 +314,10 @@ if ( ! class_exists( 'acf_field_Typography' ) ) :
 				?>
 			</td>
 		</tr>
-		<tr class="field_option field_option_<?php echo $this->name; ?>">
+		<tr class="field_option field_option_<?php echo esc_attr( $this->name ); ?>">
 			<td class="label">
-				<label><?php _e( 'Font Style', 'acf-typography' ); ?></label>
-				<p class="description"><?php _e( '(Default)', 'acf-typography' ); ?></p>
+				<label><?php esc_html_e( 'Font Style', 'acf-typography-field' ); ?></label>
+				<p class="description"><?php esc_html_e( '(Default)', 'acf-typography-field' ); ?></p>
 			</td>
 			<td>
 				<?php
@@ -335,10 +335,10 @@ if ( ! class_exists( 'acf_field_Typography' ) ) :
 				?>
 			</td>
 		</tr>
-		<tr class="field_option field_option_<?php echo $this->name; ?>">
+		<tr class="field_option field_option_<?php echo esc_attr( $this->name ); ?>">
 			<td class="label">
-				<label><?php _e( 'Font Variant', 'acf-typography' ); ?></label>
-				<p class="description"><?php _e( '(Default)', 'acf-typography' ); ?></p>
+				<label><?php esc_html_e( 'Font Variant', 'acf-typography-field' ); ?></label>
+				<p class="description"><?php esc_html_e( '(Default)', 'acf-typography-field' ); ?></p>
 			</td>
 			<td>
 				<?php
@@ -356,10 +356,10 @@ if ( ! class_exists( 'acf_field_Typography' ) ) :
 				?>
 			</td>
 		</tr>
-		<tr class="field_option field_option_<?php echo $this->name; ?>">
+		<tr class="field_option field_option_<?php echo esc_attr( $this->name ); ?>">
 			<td class="label">
-				<label><?php _e( 'Font Stretch', 'acf-typography' ); ?></label>
-				<p class="description"><?php _e( '(Default)', 'acf-typography' ); ?></p>
+				<label><?php esc_html_e( 'Font Stretch', 'acf-typography-field' ); ?></label>
+				<p class="description"><?php esc_html_e( '(Default)', 'acf-typography-field' ); ?></p>
 			</td>
 			<td>
 				<?php
@@ -377,10 +377,10 @@ if ( ! class_exists( 'acf_field_Typography' ) ) :
 				?>
 			</td>
 		</tr>
-		<tr class="field_option field_option_<?php echo $this->name; ?>">
+		<tr class="field_option field_option_<?php echo esc_attr( $this->name ); ?>">
 			<td class="label">
-				<label><?php _e( 'Line Height', 'acf-typography' ); ?></label>
-				<p class="description"><?php _e( '(Default)', 'acf-typography' ); ?></p>
+				<label><?php esc_html_e( 'Line Height', 'acf-typography-field' ); ?></label>
+				<p class="description"><?php esc_html_e( '(Default)', 'acf-typography-field' ); ?></p>
 			</td>
 			<td>
 				<?php
@@ -396,10 +396,10 @@ if ( ! class_exists( 'acf_field_Typography' ) ) :
 				?>
 			</td>
 		</tr>
-		<tr class="field_option field_option_<?php echo $this->name; ?>">
+		<tr class="field_option field_option_<?php echo esc_attr( $this->name ); ?>">
 			<td class="label">
-				<label><?php _e( 'Letter Spacing', 'acf-typography' ); ?></label>
-				<p class="description"><?php _e( '(Default)', 'acf-typography' ); ?></p>
+				<label><?php esc_html_e( 'Letter Spacing', 'acf-typography-field' ); ?></label>
+				<p class="description"><?php esc_html_e( '(Default)', 'acf-typography-field' ); ?></p>
 			</td>
 			<td>
 				<?php
@@ -415,10 +415,10 @@ if ( ! class_exists( 'acf_field_Typography' ) ) :
 				?>
 			</td>
 		</tr>
-		<tr class="field_option field_option_<?php echo $this->name; ?>">
+		<tr class="field_option field_option_<?php echo esc_attr( $this->name ); ?>">
 			<td class="label">
-				<label><?php _e( 'Text Align', 'acf-typography' ); ?></label>
-				<p class="description"><?php _e( '(Default)', 'acf-typography' ); ?></p>
+				<label><?php esc_html_e( 'Text Align', 'acf-typography-field' ); ?></label>
+				<p class="description"><?php esc_html_e( '(Default)', 'acf-typography-field' ); ?></p>
 			</td>
 			<td>
 				<?php
@@ -436,10 +436,10 @@ if ( ! class_exists( 'acf_field_Typography' ) ) :
 				?>
 			</td>
 		</tr>
-		<tr class="field_option field_option_<?php echo $this->name; ?>">
+		<tr class="field_option field_option_<?php echo esc_attr( $this->name ); ?>">
 			<td class="label">
-				<label><?php _e( 'Text Color', 'acf-typography' ); ?></label>
-				<p class="description"><?php _e( '(Default)', 'acf-typography' ); ?></p>
+				<label><?php esc_html_e( 'Text Color', 'acf-typography-field' ); ?></label>
+				<p class="description"><?php esc_html_e( '(Default)', 'acf-typography-field' ); ?></p>
 			</td>
 			<td>
 				<?php
@@ -454,10 +454,10 @@ if ( ! class_exists( 'acf_field_Typography' ) ) :
 				?>
 			</td>
 		</tr>
-		<tr class="field_option field_option_<?php echo $this->name; ?>">
+		<tr class="field_option field_option_<?php echo esc_attr( $this->name ); ?>">
 			<td class="label">
-				<label><?php _e( 'Text Decoration', 'acf-typography' ); ?></label>
-				<p class="description"><?php _e( '(Default)', 'acf-typography' ); ?></p>
+				<label><?php esc_html_e( 'Text Decoration', 'acf-typography-field' ); ?></label>
+				<p class="description"><?php esc_html_e( '(Default)', 'acf-typography-field' ); ?></p>
 			</td>
 			<td>
 				<?php
@@ -475,10 +475,10 @@ if ( ! class_exists( 'acf_field_Typography' ) ) :
 				?>
 			</td>
 		</tr>
-		<tr class="field_option field_option_<?php echo $this->name; ?>">
+		<tr class="field_option field_option_<?php echo esc_attr( $this->name ); ?>">
 			<td class="label">
-				<label><?php _e( 'Text Transform', 'acf-typography' ); ?></label>
-				<p class="description"><?php _e( '(Default)', 'acf-typography' ); ?></p>
+				<label><?php esc_html_e( 'Text Transform', 'acf-typography-field' ); ?></label>
+				<p class="description"><?php esc_html_e( '(Default)', 'acf-typography-field' ); ?></p>
 			</td>
 			<td>
 				<?php
@@ -543,10 +543,10 @@ if ( ! class_exists( 'acf_field_Typography' ) ) :
 
 					if ( in_array( $f, $numbers ) ) {
 						?>
-					<div id="acf-<?php echo $f; ?>" class="field field_type-number field_key-<?php echo $key; ?> <?php echo $required; ?>" data-field_name="<?php echo $f; ?>" data-field_key="<?php echo $key; ?>" data-field_type="number">
+					<div id="acf-<?php echo esc_attr( $f ); ?>" class="field field_type-number field_key-<?php echo esc_attr( $key ); ?> <?php echo esc_attr( $required ); ?>" data-field_name="<?php echo esc_attr( $f ); ?>" data-field_key="<?php echo esc_attr( $key ); ?>" data-field_type="number">
 						<p class="label">
-							<label for="acf-field-<?php echo $f; ?>">
-									<?php echo ucfirst( str_replace( '_', ' ', $f ) ); ?>
+							<label for="acf-field-<?php echo esc_attr( $f ); ?>">
+									<?php echo esc_html( acft_typography_property_label( $f ) ); ?>
 									<?php if ( ! empty( $required ) ) { ?>
 									<span class="required">*</span>
 								<?php } ?>
@@ -568,17 +568,17 @@ if ( ! class_exists( 'acf_field_Typography' ) ) :
 							?>
 					</div>
 					<?php } elseif ( in_array( $f, $selects ) ) { ?>
-					<div id="acf-<?php echo $f; ?>" class="field field_type-select field_key-<?php echo $key; ?> <?php echo $required; ?>" data-field_name="<?php echo $f; ?>" data-field_key="<?php echo $key; ?>" data-field_type="select">
+					<div id="acf-<?php echo esc_attr( $f ); ?>" class="field field_type-select field_key-<?php echo esc_attr( $key ); ?> <?php echo esc_attr( $required ); ?>" data-field_name="<?php echo esc_attr( $f ); ?>" data-field_key="<?php echo esc_attr( $key ); ?>" data-field_type="select">
 						<p class="label">
-							<label for="acf-field-<?php echo $f; ?>">
-								<?php echo ucfirst( str_replace( '_', ' ', $f ) ); ?>
+							<label for="acf-field-<?php echo esc_attr( $f ); ?>">
+								<?php echo esc_html( acft_typography_property_label( $f ) ); ?>
 								<?php if ( ! empty( $required ) ) { ?>
 									<span class="required">*</span>
 								<?php } ?>
 							</label>
 						</p>
 
-						<select id="acf-field-<?php echo $f; ?>" class="select" name="<?php echo $field['name'] . '[' . $f . ']'; ?>">
+						<select id="acf-field-<?php echo esc_attr( $f ); ?>" class="select" name="<?php echo esc_attr( $field['name'] . '[' . $f . ']' ); ?>">
 							<?php
 								$options = '';
 								$current = ! empty( $field['value'][ $f ] ) ? $field['value'][ $f ] : $field[ $f ];
@@ -600,10 +600,10 @@ if ( ! class_exists( 'acf_field_Typography' ) ) :
 						</select>
 					</div>
 				<?php } else { ?>
-					<div id="acf-<?php echo $f; ?>" class="field field_type-text field_key-<?php echo $key; ?> <?php echo $required; ?> acf-color_picker" data-field_name="<?php echo $f; ?>" data-field_key="<?php echo $key; ?>" data-field_type="text">
+					<div id="acf-<?php echo esc_attr( $f ); ?>" class="field field_type-text field_key-<?php echo esc_attr( $key ); ?> <?php echo esc_attr( $required ); ?> acf-color_picker" data-field_name="<?php echo esc_attr( $f ); ?>" data-field_key="<?php echo esc_attr( $key ); ?>" data-field_type="text">
 						<p class="label">
-							<label for="acf-field-<?php echo $f; ?>">
-								<?php echo ucfirst( str_replace( '_', ' ', $f ) ); ?>
+							<label for="acf-field-<?php echo esc_attr( $f ); ?>">
+								<?php echo esc_html( acft_typography_property_label( $f ) ); ?>
 								<?php if ( ! empty( $required ) ) { ?>
 									<span class="required">*</span>
 								<?php } ?>
@@ -873,5 +873,3 @@ if ( ! class_exists( 'acf_field_Typography' ) ) :
 
 	// class_exists check
 endif;
-
-?>

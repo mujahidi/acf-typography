@@ -9,6 +9,7 @@ Author: Mujahid Ishtiaq
 Author URI: https://github.com/mujahidi
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
+Text Domain: acf-typography-field
 */
 
 // exit if accessed directly

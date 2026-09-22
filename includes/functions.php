@@ -1,6 +1,61 @@
 <?php
 
 /**
+ * Get the translated label for a typography property.
+ *
+ * @param string $property Property name.
+ * @return string
+ */
+function acft_typography_property_label( $property ) {
+	$labels = array(
+		'font_size'       => __( 'Font Size', 'acf-typography-field' ),
+		'font_family'     => __( 'Font Family', 'acf-typography-field' ),
+		'font_weight'     => __( 'Font Weight', 'acf-typography-field' ),
+		'font_style'      => __( 'Font Style', 'acf-typography-field' ),
+		'font_variant'    => __( 'Font Variant', 'acf-typography-field' ),
+		'font_stretch'    => __( 'Font Stretch', 'acf-typography-field' ),
+		'line_height'     => __( 'Line Height', 'acf-typography-field' ),
+		'letter_spacing'  => __( 'Letter Spacing', 'acf-typography-field' ),
+		'text_align'      => __( 'Text Align', 'acf-typography-field' ),
+		'text_color'      => __( 'Text Color', 'acf-typography-field' ),
+		'text_decoration' => __( 'Text Decoration', 'acf-typography-field' ),
+		'text_transform'  => __( 'Text Transform', 'acf-typography-field' ),
+	);
+
+	return isset( $labels[ $property ] ) ? $labels[ $property ] : ucwords( str_replace( '_', ' ', $property ) );
+}
+
+/**
+ *  Keep text changes made through the old text domains
+ *
+ *  Up to 3.2.3 the strings used 'acf-typography' (and 'acf' for the settings field
+ *  label). A theme may have changed them with a gettext filter or its own .mo file
+ *  under those domains. Their version wins over a translation in the new domain.
+ *  Removed in 4.0.
+ *
+ *  acft_legacy_text_domain()
+ *
+ *  @since      3.3.0
+ *  @param      string $translation  Text translated in the acf-typography-field domain.
+ *  @param      string $text         Original text.
+ *  @return     string
+ */
+add_filter( 'gettext_acf-typography-field', 'acft_legacy_text_domain', 10, 2 );
+function acft_legacy_text_domain( $translation, $text ) {
+
+	// phpcs:ignore WordPress.WP.I18n -- deliberate lookup of a variable string in the old domain.
+	$legacy = translate( $text, 'acf-typography' );
+
+	// only this string used ACF's domain
+	if ( $legacy === $text && 'Google Fonts Key' === $text ) {
+		// phpcs:ignore WordPress.WP.I18n -- deliberate lookup in the old domain.
+		$legacy = translate( $text, 'acf' );
+	}
+
+	return $legacy !== $text ? $legacy : $translation;
+}
+
+/**
  *  Get the Google Fonts API key saved on the settings page
  *
  *  acft_get_saved_google_api_key()

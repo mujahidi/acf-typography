@@ -129,18 +129,28 @@ function the_typography_sub_field( $field_name, $property, $format_value = true 
 
 function acf_typography_shortcode( $atts ) {
 
-	// extract attributs
-	extract(
-		shortcode_atts(
-			array(
-				'field'        => '',
-				'property'     => '',
-				'post_id'      => false,
-				'format_value' => true,
-			),
-			$atts
-		)
+	$atts = shortcode_atts(
+		array(
+			'field'        => '',
+			'property'     => '',
+			'post_id'      => false,
+			'format_value' => true,
+		),
+		$atts
 	);
+
+	if ( ! is_string( $atts['field'] ) || ! is_string( $atts['property'] ) || '' === $atts['field'] || '' === $atts['property'] ) {
+		return '';
+	}
+
+	// not sanitize_key(): it lowercases and strips dots, and ACF field names are case-sensitive
+	$field    = sanitize_text_field( $atts['field'] );
+	$property = sanitize_key( $atts['property'] );
+	$post_id  = false;
+	if ( is_scalar( $atts['post_id'] ) && false !== $atts['post_id'] ) {
+		$post_id = sanitize_text_field( (string) $atts['post_id'] );
+	}
+	$format_value = filter_var( $atts['format_value'], FILTER_VALIDATE_BOOLEAN );
 
 	// get value and return it
 	$value = get_typography_field( $field, $property, $post_id, $format_value );
