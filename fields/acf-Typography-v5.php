@@ -778,12 +778,21 @@ if ( ! class_exists( 'acf_field_Typography' ) ) :
 
 		function validate_value( $valid, $value, $field, $input ) {
 
-			if ( $field['required_properties'] ) {
+			// a field group saved without these settings stores an empty string, or omits them altogether
+			$required_properties = isset( $field['required_properties'] ) && is_array( $field['required_properties'] ) ? $field['required_properties'] : array();
+			$display_properties  = isset( $field['display_properties'] ) && is_array( $field['display_properties'] ) ? $field['display_properties'] : array();
 
-				foreach ( $field['required_properties'] as $rf ) {
+			if ( $required_properties ) {
 
-					if ( in_array( $rf, $field['display_properties'] ) && empty( $value[ $rf ] ) ) {
-						acf_validate_value( $value[ $rf ], ' ', $field['prefix'] . '[' . $field['key'] . '][' . $rf . ']' );
+				foreach ( $required_properties as $rf ) {
+
+					if ( in_array( $rf, $display_properties, true ) && empty( $value[ $rf ] ) ) {
+						// acf_validate_value() expects a field array as its second argument, so add the error directly
+						acf_add_validation_error(
+							$field['prefix'] . '[' . $field['key'] . '][' . $rf . ']',
+							/* translators: %s: name of the required typography property, e.g. Font Family */
+							sprintf( __( '%s value is required', 'acf-typography-field' ), ucwords( str_replace( '_', ' ', $rf ) ) )
+						);
 					}
 				}
 			}
