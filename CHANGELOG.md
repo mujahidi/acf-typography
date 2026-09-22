@@ -1,5 +1,19 @@
 # CHANGELOG
 
+##### 3.3.0
+* Now requires WordPress 6.2+ and PHP 7.4+. Tested up to WordPress 7.1.
+* [NEW] `ACFT_GOOGLE_API_KEY` constant to set the Google API key in `wp-config.php`.
+* [NEW] Admins see a notice on ACF screens when Google Fonts can't be loaded.
+* [BUG] Chosen font weights are now loaded. Web-safe fonts are no longer sent to Google Fonts.
+* [BUG] Google Fonts now use `display=swap`.
+* [BUG] Fixed warnings and errors on PHP 8.x (404, archive and search pages, ACF blocks without fields, nested blocks, required subfields). #29
+* [BUG] No fatal error when ACF is inactive. Template functions and shortcode work on ACF 4.
+* [BUG] The Google Fonts list is now cached in the database instead of a file inside the plugin folder, and a bad key or network error no longer causes warnings. #27
+* [BUG] A saved font missing from the list is kept instead of being replaced on save.
+* Security: escaped output and sanitized settings and shortcode attributes.
+* Text domain is now `acf-typography-field`, so the plugin can be translated on WordPress.org. Changes made through the old `acf-typography` text domain keep working until 4.0. #24
+* Deprecated: the `YOUR_API_KEY` constant still works but will be removed in 4.0. Use `ACFT_GOOGLE_API_KEY`.
+
 ##### 3.2.3
 * Added new font-weight values
 

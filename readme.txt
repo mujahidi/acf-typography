@@ -1,9 +1,10 @@
 === Advanced Custom Fields: Typography Field ===
 Contributors: mujahid158
-Tags: typography, acf, advanced custom fields, addon, admin, field, custom, custom field, acf typography, acf google fonts, google fonts
-Requires at least: 3.5.0
-Tested up to: 6.4.3
-Stable tag: 3.2.3
+Tags: typography, acf, advanced custom fields, google fonts, custom field
+Requires at least: 6.2
+Tested up to: 7.1
+Requires PHP: 7.4
+Stable tag: 3.3.0
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -65,6 +66,7 @@ This ACF field type is compatible with:
 1. Copy the `acf-typography-field` folder into your `wp-content/plugins` folder
 2. Activate the Typography plugin via the plugins admin page
 3. Google API Key is required for Google Fonts. Please add one by going to `WordPress Admin Dashboard > Settings > ACF Typography Settings`
+   Or define it in `wp-config.php`: `define( 'ACFT_GOOGLE_API_KEY', 'your-key' );` (this overrides the settings page)
 4. Create a new field via ACF and select the Typography type
 5. Please refer to the description for more info regarding the field type settings
 
@@ -77,6 +79,7 @@ A. Version 3.0.0 and greater supports Google Fonts
 
 = Q. Why I do not see Google Fonts in the Font Family drop down?
 A. Google API Key is required for Google Fonts. Please add one by going to `WordPress Admin Dashboard > Settings > ACF Typography Settings`
+You can also define it in `wp-config.php` with `define( 'ACFT_GOOGLE_API_KEY', 'your-key' );`. If the fonts can't be loaded, the settings page shows the reason.
 
 = Q. Does it enqueue selected Google Fonts? =
 A. Yes. This plugin automatically enqueues user selected Google Fonts to front-end of posts/pages.
@@ -97,8 +100,24 @@ A. Join in on Github repository [@mujahidi/acf-typography](https://github.com/mu
 
 == Upgrade Notice ==
 
+= 3.3.0 =
+Compatibility and bug-fix release for WordPress up to 7.1 and PHP 8.x. Now requires WordPress 6.2+ and PHP 7.4+. The YOUR_API_KEY constant is deprecated; use ACFT_GOOGLE_API_KEY instead.
 
 == Changelog ==
+= 3.3.0 =
+* Now requires WordPress 6.2+ and PHP 7.4+. Tested up to WordPress 7.1.
+* [NEW] `ACFT_GOOGLE_API_KEY` constant to set the Google API key in `wp-config.php`.
+* [NEW] Admins see a notice on ACF screens when Google Fonts can't be loaded.
+* [BUG] Chosen font weights are now loaded. Web-safe fonts are no longer sent to Google Fonts.
+* [BUG] Google Fonts now use `display=swap`.
+* [BUG] Fixed warnings and errors on PHP 8.x (404, archive and search pages, ACF blocks without fields, nested blocks, required subfields).
+* [BUG] No fatal error when ACF is inactive. Template functions and shortcode work on ACF 4.
+* [BUG] The Google Fonts list is now cached in the database instead of a file inside the plugin folder, and a bad key or network error no longer causes warnings.
+* [BUG] A saved font missing from the list is kept instead of being replaced on save.
+* Security: escaped output and sanitized settings and shortcode attributes.
+* Text domain is now `acf-typography-field`, so the plugin can be translated on WordPress.org. Changes made through the old `acf-typography` text domain keep working until 4.0.
+* Deprecated: the `YOUR_API_KEY` constant still works but will be removed in 4.0. Use `ACFT_GOOGLE_API_KEY`.
+
 = 3.2.3 =
 * Added new font-weight values
 

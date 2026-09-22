@@ -2,10 +2,11 @@
 
 A Typography Add-on for the Advanced Custom Fields Plugin.
 
-  - Requires at least: WP 3.5.0
-  - Tested up to: WP 6.4.3
-  - Stable: 3.2.3
-  - Latest: 3.2.3
+  - Requires at least: WP 6.2
+  - Tested up to: WP 7.1
+  - Requires PHP: 7.4
+  - Stable: 3.3.0
+  - Latest: 3.3.0
 
 ## Description
 Typography field type for "Advanced Custom Fields" plugin that lets you add different text properties e.g. Font Size, Font Family, Font Color etc.
@@ -61,6 +62,11 @@ This ACF field type is compatible with:
 
 - Download the plugin from [WordPress Repository](https://wordpress.org/plugins/acf-typography-field/) or use the latest release from this repository.
 - Google API Key is required for Google Fonts. Please add one by going to `WordPress Admin Dashboard > Settings > ACF Typography Settings`
+- Or define the key in `wp-config.php` (this overrides the settings page):
+  ```php
+  define( 'ACFT_GOOGLE_API_KEY', 'your-key' );
+  ```
+  The old `YOUR_API_KEY` constant still works but is deprecated and will be removed in 4.0.
 
 ## Changelog
 See changelog on [CHANGELOG.md](CHANGELOG.md) file.
