@@ -1,5 +1,41 @@
 <?php
 
+// exit if accessed directly
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
+
+/**
+ *  Clean a Typography value before it is saved
+ *
+ *  Strips tags and line breaks from each property, so a crafted request cannot store
+ *  markup that the_typography_field() prints as is. Quotes are kept: web-safe font
+ *  values such as "Arial Black", Gadget, sans-serif need them. A property that is
+ *  not a plain value (e.g. a posted array) is dropped.
+ *
+ *  acft_sanitize_typography_value()
+ *
+ *  @since      3.3.0
+ *  @param      mixed $value  Field value about to be saved.
+ *  @return     mixed
+ */
+function acft_sanitize_typography_value( $value ) {
+
+	if ( ! is_array( $value ) ) {
+		return is_string( $value ) ? sanitize_text_field( $value ) : $value;
+	}
+
+	foreach ( $value as $property => $property_value ) {
+		if ( is_string( $property_value ) ) {
+			$value[ $property ] = sanitize_text_field( $property_value );
+		} elseif ( null !== $property_value && ! is_scalar( $property_value ) ) {
+			unset( $value[ $property ] );
+		}
+	}
+
+	return $value;
+}
+
 /**
  * Get the translated label for a typography property.
  *

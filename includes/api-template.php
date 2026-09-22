@@ -1,5 +1,10 @@
 <?php
 
+// exit if accessed directly
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
+
 /**
  *  get_typography_field()
  *
@@ -68,7 +73,8 @@ function the_typography_field( $selector, $property, $post_id = false, $format_v
 		$value = @implode( ', ', $value );
 	}
 
-	echo $value;
+	// already escaped: the getter returns esc_attr() output (unchanged since 3.0)
+	echo $value; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 }
 
 /**
@@ -116,7 +122,8 @@ function the_typography_sub_field( $field_name, $property, $format_value = true 
 
 	}
 
-	echo $value;
+	// already escaped: the getter returns esc_attr() output (unchanged since 3.0)
+	echo $value; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 }
 
 /**

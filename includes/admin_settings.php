@@ -1,5 +1,10 @@
 <?php
 
+// exit if accessed directly
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
+
 /**
  *  Admin settings page for Google Fonts API
  *

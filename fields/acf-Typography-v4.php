@@ -580,21 +580,19 @@ if ( ! class_exists( 'acf_field_Typography' ) ) :
 
 						<select id="acf-field-<?php echo esc_attr( $f ); ?>" class="select" name="<?php echo esc_attr( $field['name'] . '[' . $f . ']' ); ?>">
 							<?php
-								$options = '';
 								$current = ! empty( $field['value'][ $f ] ) ? $field['value'][ $f ] : $field[ $f ];
 								// a value saved as a list key (e.g. a field group default) maps to its label, which is what the options show
-								if ( is_string( $current ) && isset( $this->$f[ $current ] ) ) {
-									$current = $this->$f[ $current ];
+								if ( is_string( $current ) && isset( $this->{$f}[ $current ] ) ) {
+									$current = $this->{$f}[ $current ];
 								}
-							foreach ( $this->$f as $opt ) {
-								$options .= '<option value="' . esc_attr( $opt ) . '" ' . ( $current == $opt ? 'selected' : '' ) . '>' . esc_html( $opt ) . '</option>';
-							}
 								// keep a saved value that is missing from the list (e.g. a Google font while the list is unavailable), so saving again does not overwrite it
 							if ( ! empty( $current ) && is_scalar( $current ) && ! in_array( $current, (array) $this->$f ) ) {
 								// escaped: the saved value is whatever was posted, not one of our choices
-								$options = '<option value="' . esc_attr( $current ) . '" selected>' . esc_html( $current ) . '</option>' . $options;
+								echo '<option value="' . esc_attr( $current ) . '" selected>' . esc_html( $current ) . '</option>';
 							}
-								echo $options;
+							foreach ( $this->$f as $opt ) {
+								echo '<option value="' . esc_attr( $opt ) . '" ' . ( $current == $opt ? 'selected' : '' ) . '>' . esc_html( $opt ) . '</option>';
+							}
 							?>
 
 						</select>
@@ -748,8 +746,8 @@ if ( ! class_exists( 'acf_field_Typography' ) ) :
 		*/
 
 		function update_value( $value, $post_id, $field ) {
-			// Note: This function can be removed if not used
-			return $value;
+
+			return acft_sanitize_typography_value( $value );
 		}
 
 
