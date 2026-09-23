@@ -560,7 +560,7 @@ if ( ! class_exists( 'acf_field_Typography' ) ) :
 								array(
 									'type'   => 'number',
 									'name'   => $field['name'] . '[' . $f . ']',
-									'value'  => ( ! empty( $field['value'][ $f ] ) ? $field['value'][ $f ] : $field[ $f ] ),
+									'value'  => ( acft_typography_has_property( $field['value'], $f ) ? $field['value'][ $f ] : $field[ $f ] ),
 									'id'     => 'acf-field-' . $f,
 									'append' => 'px',
 								)
@@ -580,7 +580,7 @@ if ( ! class_exists( 'acf_field_Typography' ) ) :
 
 						<select id="acf-field-<?php echo esc_attr( $f ); ?>" class="select" name="<?php echo esc_attr( $field['name'] . '[' . $f . ']' ); ?>">
 							<?php
-								$current = ! empty( $field['value'][ $f ] ) ? $field['value'][ $f ] : $field[ $f ];
+								$current = acft_typography_has_property( $field['value'], $f ) ? $field['value'][ $f ] : $field[ $f ];
 								// a value saved as a list key (e.g. a field group default) maps to its label, which is what the options show
 								if ( is_string( $current ) && isset( $this->{$f}[ $current ] ) ) {
 									$current = $this->{$f}[ $current ];
@@ -614,7 +614,7 @@ if ( ! class_exists( 'acf_field_Typography' ) ) :
 								array(
 									'type'  => 'text',
 									'name'  => $field['name'] . '[' . $f . ']',
-									'value' => ( ! empty( $field['value'][ $f ] ) ? $field['value'][ $f ] : $field[ $f ] ),
+									'value' => ( acft_typography_has_property( $field['value'], $f ) ? $field['value'][ $f ] : $field[ $f ] ),
 									'id'    => 'acf-field-' . $f,
 								)
 							);

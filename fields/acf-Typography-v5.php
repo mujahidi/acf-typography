@@ -469,7 +469,7 @@ if ( ! class_exists( 'acf_field_Typography' ) ) :
 						<div class="acf-input">
 							<div class="acf-input-append">px</div>
 							<div class="acf-input-wrap">
-								<input type="number" id="<?php echo esc_attr( 'acf-field-' . $f ); ?>" class="acf-is-appended" min="" max="" step="any" name="<?php echo esc_attr( $field['name'] . '[' . $f . ']' ); ?>" value="<?php echo esc_attr( ( ! empty( $field['value'][ $f ] ) ? $field['value'][ $f ] : $field[ $f ] ) ); ?>">
+								<input type="number" id="<?php echo esc_attr( 'acf-field-' . $f ); ?>" class="acf-is-appended" min="" max="" step="any" name="<?php echo esc_attr( $field['name'] . '[' . $f . ']' ); ?>" value="<?php echo esc_attr( ( acft_typography_has_property( $field['value'], $f ) ? $field['value'][ $f ] : $field[ $f ] ) ); ?>">
 							</div>
 						</div>
 					</div>
@@ -487,7 +487,7 @@ if ( ! class_exists( 'acf_field_Typography' ) ) :
 						<div class="acf-input">
 							<select id="acf-<?php echo esc_attr( $f ); ?>" class="" name="<?php echo esc_attr( $field['name'] . '[' . $f . ']' ); ?>" data-ui="0" data-ajax="0" data-multiple="0" data-placeholder="Select" data-allow_null="0">
 								<?php
-									$current = ! empty( $field['value'][ $f ] ) ? $field['value'][ $f ] : $field[ $f ];
+									$current = acft_typography_has_property( $field['value'], $f ) ? $field['value'][ $f ] : $field[ $f ];
 									// a value saved as a list key (e.g. a field group default) maps to its label, which is what the options show
 									if ( is_string( $current ) && isset( $this->{$f}[ $current ] ) ) {
 										$current = $this->{$f}[ $current ];
@@ -517,8 +517,8 @@ if ( ! class_exists( 'acf_field_Typography' ) ) :
 						</div>
 						<div class="acf-input">
 							<div class="acf-color_picker">
-								<input type="hidden" name="<?php echo esc_attr( $field['name'] . '[' . $f . ']' ); ?>" value="<?php echo esc_attr( ( ! empty( $field['value'][ $f ] ) ? $field['value'][ $f ] : $field[ $f ] ) ); ?>">
-								<input type="text" id="<?php echo esc_attr( 'acf-field-' . $f ); ?>" name="<?php echo esc_attr( $field['name'] . '[' . $f . ']' ); ?>" value="<?php echo esc_attr( ( ! empty( $field['value'][ $f ] ) ? $field['value'][ $f ] : $field[ $f ] ) ); ?>">
+								<input type="hidden" name="<?php echo esc_attr( $field['name'] . '[' . $f . ']' ); ?>" value="<?php echo esc_attr( ( acft_typography_has_property( $field['value'], $f ) ? $field['value'][ $f ] : $field[ $f ] ) ); ?>">
+								<input type="text" id="<?php echo esc_attr( 'acf-field-' . $f ); ?>" name="<?php echo esc_attr( $field['name'] . '[' . $f . ']' ); ?>" value="<?php echo esc_attr( ( acft_typography_has_property( $field['value'], $f ) ? $field['value'][ $f ] : $field[ $f ] ) ); ?>">
 							</div>
 						</div>
 					</div>
@@ -790,7 +790,7 @@ if ( ! class_exists( 'acf_field_Typography' ) ) :
 
 				foreach ( $required_properties as $rf ) {
 
-					if ( in_array( $rf, $display_properties, true ) && empty( $value[ $rf ] ) ) {
+					if ( in_array( $rf, $display_properties, true ) && ! acft_typography_has_property( $value, $rf ) ) {
 						// acf_validate_value() expects a field array as its second argument, so add the error directly
 						acf_add_validation_error(
 							$input . '[' . $rf . ']', // $input is the full input name, also inside repeaters, groups and blocks

@@ -37,6 +37,23 @@ function acft_sanitize_typography_value( $value ) {
 }
 
 /**
+ *  Check whether a Typography value has a property filled in
+ *
+ *  0 is a real value (e.g. letter spacing), so only a missing, empty or
+ *  non-scalar property counts as not filled in.
+ *
+ *  acft_typography_has_property()
+ *
+ *  @since      3.3.0
+ *  @param      mixed  $value     Field value.
+ *  @param      string $property  Property name, e.g. font_size.
+ *  @return     bool
+ */
+function acft_typography_has_property( $value, $property ) {
+	return is_array( $value ) && isset( $value[ $property ] ) && is_scalar( $value[ $property ] ) && '' !== (string) $value[ $property ];
+}
+
+/**
  * Get the translated label for a typography property.
  *
  * @param string $property Property name.
