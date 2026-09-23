@@ -159,6 +159,11 @@ function acf_typography_shortcode( $atts ) {
 	}
 	$format_value = filter_var( $atts['format_value'], FILTER_VALIDATE_BOOLEAN );
 
+	// anyone who can write a post can use the shortcode, so it must not read other data
+	if ( ! acft_shortcode_field_is_typography( $field, $post_id ) ) {
+		return '';
+	}
+
 	// get value and return it
 	$value = get_typography_field( $field, $property, $post_id, $format_value );
 
@@ -174,3 +179,33 @@ function acf_typography_shortcode( $atts ) {
 }
 
 add_shortcode( 'acf_typography', 'acf_typography_shortcode' );
+
+/**
+ *  Whether the shortcode's field is a Typography field
+ *
+ *  get_typography_field() reads any meta value by name, like ACF's get_field(). That is
+ *  fine in theme code, but the shortcode's attributes come from whoever writes the post,
+ *  e.g. a Contributor, who could otherwise read other stored data (user roles, other
+ *  plugins' settings). Typography values themselves are not secret: they end up on the
+ *  page as CSS, so they are printed from any post, user, term or options page.
+ *
+ *  acft_shortcode_field_is_typography()
+ *
+ *  @since      3.3.0
+ *  @param      string       $selector  Field name or key.
+ *  @param      string|false $post_id   Post ID as given to the shortcode; false is the current post.
+ *  @return     bool
+ */
+function acft_shortcode_field_is_typography( $selector, $post_id ) {
+
+	if ( function_exists( 'acf_get_valid_post_id' ) ) {
+		$field = acf_maybe_get_field( $selector, acf_get_valid_post_id( $post_id ) );
+	} elseif ( function_exists( 'get_field_object' ) ) {
+		// ACF 4: a name that is not a field comes back as a stand-in text field
+		$field = get_field_object( $selector, $post_id, array( 'load_value' => false ) );
+	} else {
+		return false;
+	}
+
+	return is_array( $field ) && isset( $field['type'] ) && 'Typography' === $field['type'];
+}

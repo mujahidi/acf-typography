@@ -53,6 +53,8 @@ the_typography_sub_field( $selector, $property, [$format_value] );
 #### Shortcode
 `[acf_typography field="field-name" property="font_size" post_id="123" format_value="1"]`
 
+The shortcode only reads Typography fields.
+
 ## Compatibility
 
 This ACF field type is compatible with:

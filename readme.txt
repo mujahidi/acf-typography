@@ -53,6 +53,8 @@ the_typography_sub_field( $selector, $property, [$format_value] );
 = Shortcode =
 `[acf_typography field="field-name" property="font_size" post_id="123" format_value="1"]`
 
+The shortcode only reads Typography fields.
+
 = Github repository =
 [@mujahidi/acf-typography](https://github.com/mujahidi/acf-typography)
 
@@ -115,6 +117,7 @@ Compatibility and bug-fix release for WordPress up to 7.1 and PHP 8.x. Now requi
 * [BUG] The Google Fonts list is now cached in the database instead of a file inside the plugin folder, and a bad key or network error no longer causes warnings.
 * [BUG] A saved font missing from the list is kept instead of being replaced on save.
 * Security: escaped output and sanitized settings and shortcode attributes.
+* Security: the `[acf_typography]` shortcode now only reads Typography fields. Before, a Contributor could use it to read other stored data.
 * Text domain is now `acf-typography-field`, so the plugin can be translated on WordPress.org. Changes made through the old `acf-typography` text domain keep working until 4.0.
 * Deleting the plugin now removes its settings (including the saved Google API key) and the cached font list.
 * Deprecated: the `YOUR_API_KEY` constant still works but will be removed in 4.0. Use `ACFT_GOOGLE_API_KEY`.
