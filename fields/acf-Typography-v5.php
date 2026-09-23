@@ -795,7 +795,7 @@ if ( ! class_exists( 'acf_field_Typography' ) ) :
 						acf_add_validation_error(
 							$input . '[' . $rf . ']', // $input is the full input name, also inside repeaters, groups and blocks
 							/* translators: %s: name of the required typography property, e.g. Font Family */
-							sprintf( __( '%s value is required', 'acf-typography-field' ), ucwords( str_replace( '_', ' ', $rf ) ) )
+							sprintf( __( '%s value is required', 'acf-typography-field' ), acft_typography_property_label( $rf ) )
 						);
 					}
 				}

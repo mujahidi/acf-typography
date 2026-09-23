@@ -4,7 +4,7 @@
 * Now requires WordPress 6.2+ and PHP 7.4+. Tested up to WordPress 7.1.
 * [NEW] `ACFT_GOOGLE_API_KEY` constant to set the Google API key in `wp-config.php`.
 * [NEW] Admins see a notice on ACF screens when Google Fonts can't be loaded.
-* [BUG] Chosen font weights are now loaded. Web-safe fonts are no longer sent to Google Fonts.
+* [BUG] Chosen font weights are now loaded (in addition to regular and bold). Web-safe fonts are no longer sent to Google Fonts.
 * [BUG] Google Fonts now use `display=swap`.
 * [BUG] Fixed warnings and errors on PHP 8.x (404, archive and search pages, ACF blocks without fields, nested blocks, required subfields). #29
 * [BUG] No fatal error when ACF is inactive. Template functions and shortcode work on ACF 4.

@@ -294,6 +294,11 @@ function acft_fetch_google_fonts( $api_key ) {
 		}
 	}
 
+	// an empty list would replace the last good one and hold for a week
+	if ( ! $families ) {
+		return new WP_Error( 'acft_google_fonts_response', __( 'Unexpected response from the Google Fonts API.', 'acf-typography-field' ) );
+	}
+
 	return $families;
 }
 
@@ -571,12 +576,13 @@ function acft_collect_font_weights( $value, &$weights ) {
 			$weights[ $family ] = array();
 		}
 
+		// regular and bold always, as in 3.2.x: bold text needs 700, and Google rejects a
+		// family (e.g. Lobster:700) when none of the requested weights exist
+		$weights[ $family ]['400'] = true;
+		$weights[ $family ]['700'] = true;
+
 		if ( preg_match( '/^[1-9]00$/', $weight ) ) {
 			$weights[ $family ][ $weight ] = true;
-		} else {
-			// no weight chosen: the theme decides, so load regular and bold as before
-			$weights[ $family ]['400'] = true;
-			$weights[ $family ]['700'] = true;
 		}
 	}
 
