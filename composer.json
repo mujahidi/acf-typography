@@ -16,7 +16,7 @@
         }
     },
     "scripts": {
-        "compat": "phpcs --standard=PHPCompatibilityWP --runtime-set testVersion 7.4-8.5 --extensions=php --ignore=vendor/*,tests/* -p .",
+        "compat": "phpcs --standard=PHPCompatibilityWP --runtime-set testVersion 7.4-8.5 --extensions=php --ignore=vendor/*,tests/*,.plans/*,.audit/* -p .",
         "lint:wpcs": "phpcs"
     }
 }
