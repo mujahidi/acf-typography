@@ -225,20 +225,7 @@ if ( ! class_exists( 'acf_field_Typography' ) ) :
 						'type'    => 'checkbox',
 						'name'    => 'fields[' . $key . '][display_properties]',
 						'value'   => $field['display_properties'],
-						'choices' => array(
-							'font_size'       => __( 'Font Size', 'acf-typography-field' ),
-							'font_family'     => __( 'Font Family', 'acf-typography-field' ),
-							'font_weight'     => __( 'Font Weight', 'acf-typography-field' ),
-							'font_style'      => __( 'Font Style', 'acf-typography-field' ),
-							'font_variant'    => __( 'Font Variant', 'acf-typography-field' ),
-							'font_stretch'    => __( 'Font Stretch', 'acf-typography-field' ),
-							'line_height'     => __( 'Line Height', 'acf-typography-field' ),
-							'letter_spacing'  => __( 'Letter Spacing', 'acf-typography-field' ),
-							'text_align'      => __( 'Text Align', 'acf-typography-field' ),
-							'text_color'      => __( 'Text Color', 'acf-typography-field' ),
-							'text_decoration' => __( 'Text Decoration', 'acf-typography-field' ),
-							'text_transform'  => __( 'Text Transform', 'acf-typography-field' ),
-						),
+						'choices' => acft_typography_property_labels(),
 						'layout'  => 'horizontal',
 					)
 				);
@@ -258,20 +245,7 @@ if ( ! class_exists( 'acf_field_Typography' ) ) :
 						'type'    => 'checkbox',
 						'name'    => 'fields[' . $key . '][required_properties]',
 						'value'   => $field['required_properties'],
-						'choices' => array(
-							'font_size'       => __( 'Font Size', 'acf-typography-field' ),
-							'font_family'     => __( 'Font Family', 'acf-typography-field' ),
-							'font_weight'     => __( 'Font Weight', 'acf-typography-field' ),
-							'font_style'      => __( 'Font Style', 'acf-typography-field' ),
-							'font_variant'    => __( 'Font Variant', 'acf-typography-field' ),
-							'font_stretch'    => __( 'Font Stretch', 'acf-typography-field' ),
-							'line_height'     => __( 'Line Height', 'acf-typography-field' ),
-							'letter_spacing'  => __( 'Letter Spacing', 'acf-typography-field' ),
-							'text_align'      => __( 'Text Align', 'acf-typography-field' ),
-							'text_color'      => __( 'Text Color', 'acf-typography-field' ),
-							'text_decoration' => __( 'Text Decoration', 'acf-typography-field' ),
-							'text_transform'  => __( 'Text Transform', 'acf-typography-field' ),
-						),
+						'choices' => acft_typography_property_labels(),
 						'layout'  => 'horizontal',
 					)
 				);
@@ -545,6 +519,9 @@ if ( ! class_exists( 'acf_field_Typography' ) ) :
 
 			$key = $field['key'];
 
+			// ACF gives each field a unique id, also in repeaters; the inputs build theirs from it
+			$id_prefix = empty( $field['id'] ) ? 'acf-field' : $field['id'];
+
 			$field['value'] = acf_force_type_array( $field['value'] );
 
 			// create Field HTML
@@ -560,6 +537,8 @@ if ( ! class_exists( 'acf_field_Typography' ) ) :
 						$required = 'required';
 					}
 
+					$input_id = $id_prefix . '-' . $f;
+
 					if ( $f == 'font_size' || $f == 'line_height' || $f == 'letter_spacing' ) {
 						$numbers[] = $f;
 					} elseif ( $f == 'font_family' || $f == 'font_weight' || $f == 'font_style' || $f == 'font_variant' || $f == 'font_stretch' || $f == 'text_align' || $f == 'text_decoration' || $f == 'text_transform' ) {
@@ -568,9 +547,9 @@ if ( ! class_exists( 'acf_field_Typography' ) ) :
 
 					if ( in_array( $f, $numbers ) ) {
 						?>
-					<div id="acf-<?php echo esc_attr( $f ); ?>" class="field field_type-number field_key-<?php echo esc_attr( $key ); ?> <?php echo esc_attr( $required ); ?>" data-field_name="<?php echo esc_attr( $f ); ?>" data-field_key="<?php echo esc_attr( $key ); ?>" data-field_type="number">
+					<div id="<?php echo esc_attr( $input_id . '-wrap' ); ?>" class="field field_type-number field_key-<?php echo esc_attr( $key ); ?> <?php echo esc_attr( $required ); ?>" data-field_name="<?php echo esc_attr( $f ); ?>" data-field_key="<?php echo esc_attr( $key ); ?>" data-field_type="number">
 						<p class="label">
-							<label for="acf-field-<?php echo esc_attr( $f ); ?>">
+							<label for="<?php echo esc_attr( $input_id ); ?>">
 									<?php echo esc_html( acft_typography_property_label( $f ) ); ?>
 									<?php if ( ! empty( $required ) ) { ?>
 									<span class="required">*</span>
@@ -586,16 +565,16 @@ if ( ! class_exists( 'acf_field_Typography' ) ) :
 									'type'   => 'number',
 									'name'   => $field['name'] . '[' . $f . ']',
 									'value'  => ( acft_typography_has_property( $field['value'], $f ) ? $field['value'][ $f ] : $field[ $f ] ),
-									'id'     => 'acf-field-' . $f,
+									'id'     => $input_id,
 									'append' => 'px',
 								)
 							);
 							?>
 					</div>
 					<?php } elseif ( in_array( $f, $selects ) ) { ?>
-					<div id="acf-<?php echo esc_attr( $f ); ?>" class="field field_type-select field_key-<?php echo esc_attr( $key ); ?> <?php echo esc_attr( $required ); ?>" data-field_name="<?php echo esc_attr( $f ); ?>" data-field_key="<?php echo esc_attr( $key ); ?>" data-field_type="select">
+					<div id="<?php echo esc_attr( $input_id . '-wrap' ); ?>" class="field field_type-select field_key-<?php echo esc_attr( $key ); ?> <?php echo esc_attr( $required ); ?>" data-field_name="<?php echo esc_attr( $f ); ?>" data-field_key="<?php echo esc_attr( $key ); ?>" data-field_type="select">
 						<p class="label">
-							<label for="acf-field-<?php echo esc_attr( $f ); ?>">
+							<label for="<?php echo esc_attr( $input_id ); ?>">
 								<?php echo esc_html( acft_typography_property_label( $f ) ); ?>
 								<?php if ( ! empty( $required ) ) { ?>
 									<span class="required">*</span>
@@ -603,25 +582,15 @@ if ( ! class_exists( 'acf_field_Typography' ) ) :
 							</label>
 						</p>
 
-						<select id="acf-field-<?php echo esc_attr( $f ); ?>" class="select" name="<?php echo esc_attr( $field['name'] . '[' . $f . ']' ); ?>">
-							<?php
-								$current = acft_typography_has_property( $field['value'], $f ) ? $field['value'][ $f ] : $field[ $f ];
-								// keep a saved value that is missing from the list (e.g. a Google font while the list is unavailable), so saving again does not overwrite it
-							if ( ! empty( $current ) && is_scalar( $current ) && ! in_array( $current, (array) $this->$f ) ) {
-								// escaped: the saved value is whatever was posted, not one of our choices
-								echo '<option value="' . esc_attr( $current ) . '" selected>' . esc_html( $current ) . '</option>';
-							}
-							foreach ( $this->$f as $opt ) {
-								echo '<option value="' . esc_attr( $opt ) . '" ' . ( $current == $opt ? 'selected' : '' ) . '>' . esc_html( $opt ) . '</option>';
-							}
-							?>
+						<select id="<?php echo esc_attr( $input_id ); ?>" class="select" name="<?php echo esc_attr( $field['name'] . '[' . $f . ']' ); ?>">
+							<?php acft_render_typography_select_options( $this->{$f}, acft_typography_has_property( $field['value'], $f ) ? $field['value'][ $f ] : $field[ $f ] ); ?>
 
 						</select>
 					</div>
 				<?php } else { ?>
-					<div id="acf-<?php echo esc_attr( $f ); ?>" class="field field_type-text field_key-<?php echo esc_attr( $key ); ?> <?php echo esc_attr( $required ); ?> acf-color_picker" data-field_name="<?php echo esc_attr( $f ); ?>" data-field_key="<?php echo esc_attr( $key ); ?>" data-field_type="text">
+					<div id="<?php echo esc_attr( $input_id . '-wrap' ); ?>" class="field field_type-text field_key-<?php echo esc_attr( $key ); ?> <?php echo esc_attr( $required ); ?> acf-color_picker" data-field_name="<?php echo esc_attr( $f ); ?>" data-field_key="<?php echo esc_attr( $key ); ?>" data-field_type="text">
 						<p class="label">
-							<label for="acf-field-<?php echo esc_attr( $f ); ?>">
+							<label for="<?php echo esc_attr( $input_id ); ?>">
 								<?php echo esc_html( acft_typography_property_label( $f ) ); ?>
 								<?php if ( ! empty( $required ) ) { ?>
 									<span class="required">*</span>
@@ -636,7 +605,7 @@ if ( ! class_exists( 'acf_field_Typography' ) ) :
 									'type'  => 'text',
 									'name'  => $field['name'] . '[' . $f . ']',
 									'value' => ( acft_typography_has_property( $field['value'], $f ) ? $field['value'][ $f ] : $field[ $f ] ),
-									'id'    => 'acf-field-' . $f,
+									'id'    => $input_id,
 								)
 							);
 						?>

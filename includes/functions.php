@@ -60,13 +60,13 @@ function acft_typography_has_property( $value, $property ) {
 }
 
 /**
- * Get the translated label for a typography property.
+ * Get the translated labels of all typography properties, in display order.
  *
- * @param string $property Property name.
- * @return string
+ * @since 3.3.0
+ * @return array Property name => label.
  */
-function acft_typography_property_label( $property ) {
-	$labels = array(
+function acft_typography_property_labels() {
+	return array(
 		'font_size'       => __( 'Font Size', 'acf-typography-field' ),
 		'font_family'     => __( 'Font Family', 'acf-typography-field' ),
 		'font_weight'     => __( 'Font Weight', 'acf-typography-field' ),
@@ -80,8 +80,44 @@ function acft_typography_property_label( $property ) {
 		'text_decoration' => __( 'Text Decoration', 'acf-typography-field' ),
 		'text_transform'  => __( 'Text Transform', 'acf-typography-field' ),
 	);
+}
+
+/**
+ * Get the translated label for a typography property.
+ *
+ * @param string $property Property name.
+ * @return string
+ */
+function acft_typography_property_label( $property ) {
+	$labels = acft_typography_property_labels();
 
 	return isset( $labels[ $property ] ) ? $labels[ $property ] : ucwords( str_replace( '_', ' ', $property ) );
+}
+
+/**
+ *  Print the <option> elements of a typography select
+ *
+ *  A saved value that is missing from the choices (e.g. a Google font while the
+ *  list is unavailable) is kept as the first, selected option, so saving again
+ *  does not overwrite it.
+ *
+ *  acft_render_typography_select_options()
+ *
+ *  @since      3.3.0
+ *  @param      array $choices  Choices of the property; the values are shown and saved.
+ *  @param      mixed $current  Saved value, or the field group default.
+ */
+function acft_render_typography_select_options( $choices, $current ) {
+
+	// loose comparisons on purpose: a value saved as a number (e.g. 700) matches its '700' choice
+	if ( ! empty( $current ) && is_scalar( $current ) && ! in_array( $current, (array) $choices ) ) { // phpcs:ignore WordPress.PHP.StrictInArray.MissingTrueStrict
+		// escaped: the saved value is whatever was posted, not one of our choices
+		echo '<option value="' . esc_attr( $current ) . '" selected>' . esc_html( $current ) . '</option>';
+	}
+
+	foreach ( (array) $choices as $opt ) {
+		echo '<option value="' . esc_attr( $opt ) . '" ' . ( $current == $opt ? 'selected' : '' ) . '>' . esc_html( $opt ) . '</option>'; // phpcs:ignore Universal.Operators.StrictComparisons.LooseEqual
+	}
 }
 
 /**

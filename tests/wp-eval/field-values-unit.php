@@ -199,6 +199,56 @@ t( 'k8 saved value wins over the default', array( 'selected' => array( 'Georgia,
 t( 'k9 saved Tahoma text (what posts store) is selected', array( 'selected' => array( 'Tahoma, Geneva, sans-serif' ), 'options' => $count ), family_select( $type, 'field_acft_kt_georgia', array( 'font_family' => 'Tahoma, Geneva, sans-serif' ) ) );
 t( 'k10 saved value missing from the list is kept', array( 'selected' => array( 'Foo Sans' ), 'options' => $count + 1 ), family_select( $type, 'field_acft_kt_georgia', array( 'font_family' => 'Foo Sans' ) ) );
 
+echo "-- editor markup: labels close, point at their input, ids unique per field\n";
+$props = array( 'font_size', 'font_family', 'font_weight', 'font_style', 'font_variant', 'font_stretch', 'line_height', 'letter_spacing', 'text_align', 'text_color', 'text_decoration', 'text_transform' );
+t( 'l1 property labels: all 12, in display order', $props, function_exists( 'acft_typography_property_labels' ) ? array_keys( acft_typography_property_labels() ) : 'no acft_typography_property_labels()' );
+t( 'l2 single label comes from the same list', 'Letter Spacing|Text Color|Foo Bar', acft_typography_property_label( 'letter_spacing' ) . '|' . acft_typography_property_label( 'text_color' ) . '|' . acft_typography_property_label( 'foo_bar' ) );
+acf_add_local_field_group(
+	array(
+		'key'      => 'group_acft_markup_test',
+		'title'    => 'ACFT markup test',
+		'fields'   => array(
+			array( 'key' => 'field_acft_mt_a', 'name' => 'mtA', 'type' => 'Typography', 'label' => 'A', 'display_properties' => $props, 'required_properties' => array( 'font_size', 'font_family', 'text_color' ) ),
+			array( 'key' => 'field_acft_mt_b', 'name' => 'mtB', 'type' => 'Typography', 'label' => 'B', 'display_properties' => $props ),
+		),
+		'location' => array( array( array( 'param' => 'post_type', 'operator' => '==', 'value' => 'post' ) ) ),
+	)
+);
+function render_html( $type, $key, $id = null ) {
+	$field          = acf_get_field( $key );
+	$field['name']  = 'acf[' . $key . ']';
+	$field['id']    = null === $id ? acf_idify( $field['name'] ) : $id;
+	$field['value'] = '';
+	ob_start();
+	$type->render_field( $field );
+	return ob_get_clean();
+}
+$a = render_html( $type, 'field_acft_mt_a' );
+$b = render_html( $type, 'field_acft_mt_b' );
+preg_match_all( '#<label for="([^"]*)"#', $a, $for );
+preg_match_all( '# id="([^"]*)"#', $a . $b, $ids );
+$missing = array_values( array_diff( $for[1], $ids[1] ) );
+$dupes   = array_values( array_unique( array_diff_assoc( $ids[1], array_unique( $ids[1] ) ) ) );
+t( 'l3 every <label> is closed', array( 12, 12 ), array( substr_count( $a, '<label' ), substr_count( $a, '</label>' ) ) );
+t( 'l4 every label points at an input of the field', array(), $missing );
+t( 'l5 ids built from the field id', 'acf-field_acft_mt_a-font_size|acf-field_acft_mt_a-font_family|acf-field_acft_mt_a-text_color', $for[1][0] . '|' . $for[1][1] . '|' . $for[1][9] );
+t( 'l6 two fields on one page share no ids', array(), $dupes );
+t( 'l7 required stars: 3, each inside its label', 3, preg_match_all( '#<label for="[^"]*">\s*[^<]*<span class="acf-required">\*</span>\s*</label>#', $a ) );
+preg_match_all( '#<label for="([^"]*)"#', render_html( $type, 'field_acft_mt_b', '' ), $for );
+t( 'l8 no field id: old ids kept', 'acf-field-font_size|acf-field-text_transform', $for[1][0] . '|' . $for[1][11] );
+$s = acf_get_field( 'field_acft_mt_a' );
+$s['prefix'] = 'acf_fields[1]';
+ob_start();
+$type->render_field_settings( $s );
+$h = ob_get_clean();
+preg_match_all( '#name="acf_fields\[1\]\[display_properties\]\[\]" value="([^"]*)"#', $h, $d );
+preg_match_all( '#name="acf_fields\[1\]\[required_properties\]\[\]" value="([^"]*)"#', $h, $r );
+t( 'l9 settings checkboxes: same 12 properties in order', array( $props, $props ), array( $d[1], $r[1] ) );
+ob_start();
+acft_render_typography_select_options( $type->font_weight, 700 );
+$h = ob_get_clean();
+t( 'l10 a weight saved as a number selects its choice, no extra option', array( 9, 1, true ), array( substr_count( $h, '<option' ), substr_count( $h, 'selected' ), false !== strpos( $h, '<option value="700" selected>' ) ) );
+
 // clean up
 foreach ( $GLOBALS['posts'] as $id ) {
 	wp_delete_post( $id, true );
