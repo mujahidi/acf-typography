@@ -98,6 +98,9 @@ if ( ! class_exists( 'acf_plugin_Typography' ) ) :
 	// keep the legacy YOUR_API_KEY constant available until 4.0
 	acft_maybe_define_legacy_api_key();
 
+	// stop the background Google Fonts refresh; saved data is removed in uninstall.php
+	register_deactivation_hook( __FILE__, 'acft_deactivate' );
+
 
 	// class_exists check
 endif;

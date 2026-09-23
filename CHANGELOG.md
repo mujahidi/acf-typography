@@ -12,6 +12,7 @@
 * [BUG] A saved font missing from the list is kept instead of being replaced on save.
 * Security: escaped output and sanitized settings and shortcode attributes.
 * Text domain is now `acf-typography-field`, so the plugin can be translated on WordPress.org. Changes made through the old `acf-typography` text domain keep working until 4.0. #24
+* Deleting the plugin now removes its settings (including the saved Google API key) and the cached font list.
 * Deprecated: the `YOUR_API_KEY` constant still works but will be removed in 4.0. Use `ACFT_GOOGLE_API_KEY`.
 
 ##### 3.2.3

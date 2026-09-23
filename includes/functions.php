@@ -470,6 +470,20 @@ function acft_refresh_google_fonts_on_unchanged_save( $value, $old_value ) {
 add_action( 'acft_refresh_google_fonts_event', 'acft_refresh_google_fonts' );
 
 /**
+ *  Stop the background refresh when the plugin is deactivated
+ *
+ *  Registered in acf-typography.php. Saved data is removed in uninstall.php.
+ *
+ *  acft_deactivate()
+ *
+ *  @since      3.3.0
+ */
+function acft_deactivate() {
+
+	wp_clear_scheduled_hook( 'acft_refresh_google_fonts_event' );
+}
+
+/**
  *  Update Google Fonts JSON file
  *
  *  The list is no longer stored in google_fonts.json. Kept so older theme code
