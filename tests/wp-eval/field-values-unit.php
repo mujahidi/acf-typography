@@ -1,7 +1,8 @@
 <?php
 /**
  * What a Typography value becomes when it is saved (acft_sanitize_typography_value) and when it is
- * printed (the_typography_field, the [acf_typography] shortcode). Dev only; never ship.
+ * printed (the_typography_field, the [acf_typography] shortcode), and which Font Family option the
+ * editor selects (list keys, old field group defaults). Dev only; never ship.
  *
  * Registers its own field group, creates throwaway posts, and deletes them at the end, so it needs
  * nothing from the site except this plugin and ACF (free or Pro).
@@ -144,6 +145,59 @@ t( 'o2 post_id="user_N"', '24', sc( 'field="heroTypo" property="font_size" post_
 $private = new_post( 'private' );
 update_field( 'field_acft_vt_typo', array( 'font_size' => '26' ), $private );
 t( 'o3 private post still prints (by design: styles are not secret)', '26', sc( 'field="heroTypo" property="font_size" post_id="' . $private . '"' ) );
+
+echo "-- font family keys: list keys match their labels, old field group defaults are corrected\n";
+foreach ( $GLOBALS['wp_filter']['acf/validate_value/type=Typography']->callbacks as $cbs ) {
+	foreach ( $cbs as $cb ) {
+		if ( is_array( $cb['function'] ) ) {
+			$type = $cb['function'][0];
+		}
+	}
+}
+$type->load_font_family();
+$mismatch = array();
+foreach ( $type->font_family as $k => $v ) {
+	if ( (string) $k !== $v ) {
+		$mismatch[] = $k;
+	}
+}
+t( 'k1 every font family key equals its label', array(), $mismatch );
+
+acf_add_local_field_group(
+	array(
+		'key'      => 'group_acft_keys_test',
+		'title'    => 'ACFT keys test',
+		'fields'   => array(
+			array( 'key' => 'field_acft_kt_tahoma', 'name' => 'ktTahoma', 'type' => 'Typography', 'label' => 'T', 'display_properties' => array( 'font_family' ), 'font_family' => 'Tahoma,Geneva, sans-serif' ),
+			array( 'key' => 'field_acft_kt_times', 'name' => 'ktTimes', 'type' => 'Typography', 'label' => 'T', 'display_properties' => array( 'font_family' ), 'font_family' => '"Times New Roman", Times,serif' ),
+			array( 'key' => 'field_acft_kt_georgia', 'name' => 'ktGeorgia', 'type' => 'Typography', 'label' => 'G', 'display_properties' => array( 'font_family' ), 'font_family' => 'Georgia, serif' ),
+		),
+		'location' => array( array( array( 'param' => 'post_type', 'operator' => '==', 'value' => 'post' ) ) ),
+	)
+);
+// the font family <select> of a rendered field: selected values and number of options
+function family_select( $type, $key, $value ) {
+	$field          = acf_get_field( $key );
+	$field['name']  = 'acf[' . $key . ']';
+	$field['id']    = acf_idify( $field['name'] );
+	$field['value'] = $value;
+	ob_start();
+	$type->render_field( $field );
+	$html = ob_get_clean();
+	preg_match( '#<select[^>]*\[font_family\]"[^>]*>(.*?)</select>#s', $html, $m );
+	preg_match_all( '#<option value="([^"]*)" ?selected#', $m[1], $sel );
+	return array( 'selected' => array_map( 'html_entity_decode', $sel[1] ), 'options' => substr_count( $m[1], '<option' ) );
+}
+$count = count( $type->font_family );
+t( 'k2 old Tahoma default corrected on load', 'Tahoma, Geneva, sans-serif', acf_get_field( 'field_acft_kt_tahoma' )['font_family'] );
+t( 'k3 old Times default corrected on load', '"Times New Roman", Times, serif', acf_get_field( 'field_acft_kt_times' )['font_family'] );
+t( 'k4 other default untouched', 'Georgia, serif', acf_get_field( 'field_acft_kt_georgia' )['font_family'] );
+t( 'k5 non-string and unknown values untouched', array( array( 'x' ), 'Arial, Helvetica, sans-serif', 'Tahoma,Geneva,sans-serif' ), array( acft_typography_fix_font_family_key( array( 'x' ) ), acft_typography_fix_font_family_key( 'Arial, Helvetica, sans-serif' ), acft_typography_fix_font_family_key( 'Tahoma,Geneva,sans-serif' ) ) );
+t( 'k6 old Tahoma default: selected once, no extra option', array( 'selected' => array( 'Tahoma, Geneva, sans-serif' ), 'options' => $count ), family_select( $type, 'field_acft_kt_tahoma', '' ) );
+t( 'k7 old Times default: selected once, no extra option', array( 'selected' => array( '"Times New Roman", Times, serif' ), 'options' => $count ), family_select( $type, 'field_acft_kt_times', '' ) );
+t( 'k8 saved value wins over the default', array( 'selected' => array( 'Georgia, serif' ), 'options' => $count ), family_select( $type, 'field_acft_kt_tahoma', array( 'font_family' => 'Georgia, serif' ) ) );
+t( 'k9 saved Tahoma text (what posts store) is selected', array( 'selected' => array( 'Tahoma, Geneva, sans-serif' ), 'options' => $count ), family_select( $type, 'field_acft_kt_georgia', array( 'font_family' => 'Tahoma, Geneva, sans-serif' ) ) );
+t( 'k10 saved value missing from the list is kept', array( 'selected' => array( 'Foo Sans' ), 'options' => $count + 1 ), family_select( $type, 'field_acft_kt_georgia', array( 'font_family' => 'Foo Sans' ) ) );
 
 // clean up
 foreach ( $GLOBALS['posts'] as $id ) {

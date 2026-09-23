@@ -92,8 +92,8 @@ if ( ! class_exists( 'acf_field_Typography' ) ) :
 				'"MS Sans Serif", Geneva, sans-serif'   => '"MS Sans Serif", Geneva, sans-serif',
 				'"MS Serif", "New York", sans-serif'    => '"MS Serif", "New York", sans-serif',
 				'"Palatino Linotype", "Book Antiqua", Palatino, serif' => '"Palatino Linotype", "Book Antiqua", Palatino, serif',
-				'Tahoma,Geneva, sans-serif'             => 'Tahoma, Geneva, sans-serif',
-				'"Times New Roman", Times,serif'        => '"Times New Roman", Times, serif',
+				'Tahoma, Geneva, sans-serif'            => 'Tahoma, Geneva, sans-serif',
+				'"Times New Roman", Times, serif'       => '"Times New Roman", Times, serif',
 				'"Trebuchet MS", Helvetica, sans-serif' => '"Trebuchet MS", Helvetica, sans-serif',
 				'Verdana, Geneva, sans-serif'           => 'Verdana, Geneva, sans-serif',
 			);
@@ -513,10 +513,6 @@ if ( ! class_exists( 'acf_field_Typography' ) ) :
 							<select id="acf-<?php echo esc_attr( $f ); ?>" class="" name="<?php echo esc_attr( $field['name'] . '[' . $f . ']' ); ?>" data-ui="0" data-ajax="0" data-multiple="0" data-placeholder="Select" data-allow_null="0">
 								<?php
 									$current = acft_typography_has_property( $field['value'], $f ) ? $field['value'][ $f ] : $field[ $f ];
-									// a value saved as a list key (e.g. a field group default) maps to its label, which is what the options show
-									if ( is_string( $current ) && isset( $this->{$f}[ $current ] ) ) {
-										$current = $this->{$f}[ $current ];
-									}
 									// keep a saved value that is missing from the list (e.g. a Google font while the list is unavailable), so saving again does not overwrite it
 								if ( ! empty( $current ) && is_scalar( $current ) && ! in_array( $current, (array) $this->$f ) ) {
 									// escaped: the saved value is whatever was posted, not one of our choices
@@ -871,6 +867,11 @@ if ( ! class_exists( 'acf_field_Typography' ) ) :
 		*/
 
 		function load_field( $field ) {
+
+			// a field group saved before 3.3.0 can hold an old font family key as its default
+			if ( isset( $field['font_family'] ) ) {
+				$field['font_family'] = acft_typography_fix_font_family_key( $field['font_family'] );
+			}
 
 			return $field;
 		}

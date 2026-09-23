@@ -85,6 +85,28 @@ function acft_typography_property_label( $property ) {
 }
 
 /**
+ *  Correct a font family saved with one of the two old list keys
+ *
+ *  Up to 3.2.x two web-safe keys were missing a space. A field group stores its
+ *  default as the key, so field groups saved before 3.3.0 can still hold the old
+ *  form. Post values store the option text, which was always correct.
+ *
+ *  acft_typography_fix_font_family_key()
+ *
+ *  @since      3.3.0
+ *  @param      mixed $font_family  Saved font family.
+ *  @return     mixed
+ */
+function acft_typography_fix_font_family_key( $font_family ) {
+	$old_keys = array(
+		'Tahoma,Geneva, sans-serif'      => 'Tahoma, Geneva, sans-serif',
+		'"Times New Roman", Times,serif' => '"Times New Roman", Times, serif',
+	);
+
+	return is_string( $font_family ) && isset( $old_keys[ $font_family ] ) ? $old_keys[ $font_family ] : $font_family;
+}
+
+/**
  *  Keep text changes made through the old text domains
  *
  *  Up to 3.2.3 the strings used 'acf-typography' (and 'acf' for the settings field
