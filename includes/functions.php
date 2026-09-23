@@ -9,9 +9,11 @@ if ( ! defined( 'ABSPATH' ) ) {
  *  Clean a Typography value before it is saved
  *
  *  Strips tags and line breaks from each property, so a crafted request cannot store
- *  markup that the_typography_field() prints as is. Quotes are kept: web-safe font
- *  values such as "Arial Black", Gadget, sans-serif need them. A property that is
- *  not a plain value (e.g. a posted array) is dropped.
+ *  markup that the_typography_field() prints as is. Also strips ; : { } and \, so a
+ *  value printed inside a style attribute or a CSS rule cannot add more CSS (e.g.
+ *  18px;background:url(...)). Quotes are kept: web-safe font values such as
+ *  "Arial Black", Gadget, sans-serif need them. A property that is not a plain
+ *  value (e.g. a posted array) is dropped.
  *
  *  acft_sanitize_typography_value()
  *
@@ -21,13 +23,17 @@ if ( ! defined( 'ABSPATH' ) ) {
  */
 function acft_sanitize_typography_value( $value ) {
 
+	$clean = function ( $text ) {
+		return str_replace( array( ';', ':', '{', '}', '\\' ), '', sanitize_text_field( $text ) );
+	};
+
 	if ( ! is_array( $value ) ) {
-		return is_string( $value ) ? sanitize_text_field( $value ) : $value;
+		return is_string( $value ) ? $clean( $value ) : $value;
 	}
 
 	foreach ( $value as $property => $property_value ) {
 		if ( is_string( $property_value ) ) {
-			$value[ $property ] = sanitize_text_field( $property_value );
+			$value[ $property ] = $clean( $property_value );
 		} elseif ( null !== $property_value && ! is_scalar( $property_value ) ) {
 			unset( $value[ $property ] );
 		}

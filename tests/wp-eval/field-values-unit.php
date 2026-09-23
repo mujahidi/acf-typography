@@ -61,7 +61,7 @@ update_field(
 );
 $v = stored( $id );
 t( 's1 script tag and its content removed', 'Roboto', $v['font_family'] );
-t( 's2 line break replaced by a space', '18 font-size:99', $v['font_size'] );
+t( 's2 line break replaced by a space, colon stripped', '18 font-size99', $v['font_size'] );
 t( 's3 quotes kept (output escaping handles them)', '" onmouseover=alert(1) x="', $v['text_color'] );
 t( 's4 array property dropped', false, array_key_exists( 'font_weight', $v ) );
 t( 's5 other tags stripped, text kept', 'uppercase', $v['text_transform'] );
@@ -74,6 +74,25 @@ t( 's8 quoted web-safe family unchanged', '"Arial Black", Gadget, sans-serif', $
 t( 's9 int unchanged', 18, $v['font_size'] );
 t( 's10 plain value unchanged', 'center', $v['text_align'] );
 t( 's11 a plain string value is cleaned too', 'x', acft_sanitize_typography_value( '<b>x</b>' ) );
+
+update_field(
+	'field_acft_vt_typo',
+	array(
+		'font_size'   => '18px;background:url(https://evil.example/t)',
+		'text_color'  => 'red}body{display:none',
+		'line_height' => 'normal\\3b color\\3a red',
+		'font_style'  => 'italic',
+	),
+	$id
+);
+$v = stored( $id );
+t( 's12 ; and : stripped, so no extra declaration', '18pxbackgroundurl(https//evil.example/t)', $v['font_size'] );
+t( 's13 { and } stripped, so no new rule', 'redbodydisplaynone', $v['text_color'] );
+t( 's14 backslash stripped, so no CSS escapes', 'normal3b color3a red', $v['line_height'] );
+t( 's15 plain keyword unchanged', 'italic', $v['font_style'] );
+update_field( 'field_acft_vt_typo', array( 'font_size' => '16px', 'line_height' => 'normal', 'text_color' => 'rgba(0, 0, 0, .5)', 'letter_spacing' => '-0.5' ), $id );
+$v = stored( $id );
+t( 's16 unit, keyword, rgba() and negative number unchanged', array( '16px', 'normal', 'rgba(0, 0, 0, .5)', '-0.5' ), array( $v['font_size'], $v['line_height'], $v['text_color'], $v['letter_spacing'] ) );
 
 echo "-- printing: the_typography_field() escapes values saved before 3.3.0 (not cleaned)\n";
 $old = new_post();
