@@ -18,6 +18,7 @@ if ( ! class_exists( 'acf_field_Typography' ) ) :
 
 		// declared to avoid PHP 8.2 dynamic property deprecations
 		public $font_family     = array(); // choices for each select sub field
+		private $font_family_loaded = false; // Google fonts added, see load_font_family()
 		public $font_weight     = array();
 		public $font_style      = array();
 		public $font_variant    = array();
@@ -78,25 +79,6 @@ if ( ! class_exists( 'acf_field_Typography' ) ) :
 				'"Times New Roman", Times,serif'        => '"Times New Roman", Times, serif',
 				'"Trebuchet MS", Helvetica, sans-serif' => '"Trebuchet MS", Helvetica, sans-serif',
 				'Verdana, Geneva, sans-serif'           => 'Verdana, Geneva, sans-serif',
-			);
-
-			$google_font_family = acft_get_google_font_family(); // get google fonts from the cached list
-
-			// merge web-safe-fonts and google fonts arrays
-			if ( is_array( $google_font_family ) ) {
-				$this->font_family = array_merge( $this->font_family, $google_font_family );
-			}
-
-			// sort array by array key
-			ksort( $this->font_family );
-
-			// add 'initial' and 'inherit' property values to top of the array
-			$this->font_family = array_merge(
-				array(
-					'initial' => 'initial',
-					'inherit' => 'inherit',
-				),
-				$this->font_family
 			);
 
 			$this->font_weight     = array(
@@ -168,6 +150,45 @@ if ( ! class_exists( 'acf_field_Typography' ) ) :
 
 
 		/*
+		*  load_font_family()
+		*
+		*  Adds the Google fonts, sorted, to the Font Family choices. Called where the
+		*  choices are shown, not in the constructor: ACF builds field types on every
+		*  request, and reading (or refreshing) the list is only needed here.
+		*
+		*  @since   3.3.0
+		*/
+
+		public function load_font_family() {
+
+			if ( $this->font_family_loaded ) {
+				return;
+			}
+
+			$this->font_family_loaded = true;
+
+			$google_font_family = acft_get_google_font_family(); // get google fonts from the cached list
+
+			// merge web-safe-fonts and google fonts arrays
+			if ( is_array( $google_font_family ) ) {
+				$this->font_family = array_merge( $this->font_family, $google_font_family );
+			}
+
+			// sort array by array key
+			ksort( $this->font_family );
+
+			// add 'initial' and 'inherit' property values to top of the array
+			$this->font_family = array_merge(
+				array(
+					'initial' => 'initial',
+					'inherit' => 'inherit',
+				),
+				$this->font_family
+			);
+		}
+
+
+		/*
 		*  create_options()
 		*
 		*  Create extra options for your field. This is rendered when editing a field.
@@ -181,6 +202,8 @@ if ( ! class_exists( 'acf_field_Typography' ) ) :
 		*/
 
 		function create_options( $field ) {
+
+			$this->load_font_family();
 			// defaults?
 			$field = array_merge( $this->defaults, $field );
 
@@ -514,6 +537,8 @@ if ( ! class_exists( 'acf_field_Typography' ) ) :
 		*/
 
 		function create_field( $field ) {
+
+			$this->load_font_family();
 			// defaults?
 
 			$field = array_merge( $this->defaults, $field );

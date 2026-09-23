@@ -427,9 +427,13 @@ function acft_refresh_google_fonts( $force = false ) {
 	$cache = acft_get_google_fonts_cache();
 
 	// a result saved while this request waited is newer (e.g. the key was changed and fetched meanwhile);
-	// only replace it when it was a failure for the same key and this fetch worked
+	// only replace it when it was a failure for the same key and this fetch worked, or when this is a
+	// settings save (forced, so it has the current key) and the newer result is for another key: a
+	// request that started before the save, with the old key, can finish first
 	$newer   = $cache !== $before;
-	$replace = ! $newer || ( $cache['key_hash'] === $key_hash && '' !== $cache['error'] && ! is_wp_error( $families ) );
+	$replace = ! $newer
+		|| ( $force && $cache['key_hash'] !== $key_hash )
+		|| ( $cache['key_hash'] === $key_hash && '' !== $cache['error'] && ! is_wp_error( $families ) );
 
 	if ( $replace ) {
 
@@ -486,24 +490,71 @@ function acft_refresh_google_fonts_on_unchanged_save( $value, $old_value ) {
 }
 
 /**
- *  Background refresh, scheduled by front-end requests when the list is due a refresh
+ *  Daily background refresh
+ *
+ *  Runs acft_refresh_google_fonts(), which only fetches when the list is due (a
+ *  week old, the key changed, or the last request failed), so most runs do not
+ *  call Google.
  *
  *  @since      3.3.0
  */
 add_action( 'acft_refresh_google_fonts_event', 'acft_refresh_google_fonts' );
 
 /**
+ *  Keep the daily background refresh scheduled
+ *
+ *  Plugin updates do not run the activation hook, so this checks on every request
+ *  (the cron list is already in memory). Also replaces a one-off event left by a
+ *  3.3.0 development build.
+ *
+ *  acft_schedule_google_fonts_refresh()
+ *
+ *  @since      3.3.0
+ */
+add_action( 'init', 'acft_schedule_google_fonts_refresh' );
+function acft_schedule_google_fonts_refresh() {
+
+	$event = wp_get_scheduled_event( 'acft_refresh_google_fonts_event' );
+
+	if ( $event && 'daily' === $event->schedule ) {
+		return;
+	}
+
+	wp_clear_scheduled_hook( 'acft_refresh_google_fonts_event' );
+	wp_schedule_event( time(), 'daily', 'acft_refresh_google_fonts_event' );
+}
+
+/**
  *  Stop the background refresh when the plugin is deactivated
  *
  *  Registered in acf-typography.php. Saved data is removed in uninstall.php.
+ *  A network deactivation runs this once, on the current site, so it clears
+ *  the refresh on every site of the network itself.
  *
  *  acft_deactivate()
  *
  *  @since      3.3.0
+ *  @param      bool $network_wide  Whether the plugin is deactivated for the whole network.
  */
-function acft_deactivate() {
+function acft_deactivate( $network_wide = false ) {
 
-	wp_clear_scheduled_hook( 'acft_refresh_google_fonts_event' );
+	if ( ! is_multisite() || ! $network_wide ) {
+		wp_clear_scheduled_hook( 'acft_refresh_google_fonts_event' );
+		return;
+	}
+
+	$site_ids = get_sites(
+		array(
+			'fields' => 'ids',
+			'number' => 0,
+		)
+	);
+
+	foreach ( $site_ids as $site_id ) {
+		switch_to_blog( $site_id );
+		wp_clear_scheduled_hook( 'acft_refresh_google_fonts_event' );
+		restore_current_blog();
+	}
 }
 
 /**
@@ -528,11 +579,9 @@ function acft_update_gf_json_file( $api_key = '' ) { // phpcs:ignore Generic.Cod
 /**
  *  Get google fonts for Font-Family drop-down subfield
  *
- *  Only fetches from Google on wp-admin page loads, so front-end visitors never
- *  wait on the API. admin-ajax.php is skipped: it also serves front-end requests.
- *  When the list is due a refresh (e.g. never fetched right after updating from
- *  3.2.x, or the last fetch failed), other requests schedule a one-off background
- *  fetch, so sites that only use front-end forms still get the list.
+ *  Called when a Typography field or its settings are shown. Reads the cached
+ *  list only: the daily background refresh, ACF screens, the settings page and a
+ *  settings save keep it up to date, so no page with a field waits on Google.
  *
  *  acft_get_google_font_family()
  *
@@ -541,16 +590,8 @@ function acft_update_gf_json_file( $api_key = '' ) { // phpcs:ignore Generic.Cod
  */
 function acft_get_google_font_family() {
 
-	$api_key = acft_get_google_api_key();
-
-	if ( '' === $api_key ) {
+	if ( '' === acft_get_google_api_key() ) {
 		return array();
-	}
-
-	if ( is_admin() && ! wp_doing_ajax() ) {
-		acft_refresh_google_fonts();
-	} elseif ( acft_google_fonts_needs_refresh( acft_get_google_fonts_cache(), md5( $api_key ), time() ) && ! wp_next_scheduled( 'acft_refresh_google_fonts_event' ) ) {
-		wp_schedule_single_event( time(), 'acft_refresh_google_fonts_event' );
 	}
 
 	$families = acft_get_google_fonts_cache()['families'];

@@ -23,6 +23,19 @@ function t( $name, $exp, $got ) {
 $warn = array();
 set_error_handler( function ( $n, $s ) use ( &$warn ) { $warn[] = $s; return true; } );
 
+echo "-- #6 the list is only read where a Typography field is shown\n";
+// WP-CLI has no persistent object cache here, so a cached option means it was read while loading WordPress
+t( '6a list not read while loading WordPress', false, wp_cache_get( 'acft_google_fonts', 'options' ) );
+$ft = null;
+foreach ( $GLOBALS['wp_filter']['acf/validate_value/type=Typography']->callbacks as $cbs ) { foreach ( $cbs as $cb ) { if ( is_array( $cb['function'] ) ) { $ft = $cb['function'][0]; } } }
+t( '6b before: web-safe choices only', false, isset( $ft->font_family['inherit'] ) );
+$ft->load_font_family();
+$gf = (array) acft_get_google_fonts_cache()['families'];
+t( '6c after: initial, inherit, then web-safe + Google sorted', array( 'initial', 'inherit' ), array_slice( array_keys( $ft->font_family ), 0, 2 ) );
+t( '6d after: every cached Google family offered', array(), array_values( array_diff( $gf, array_keys( $ft->font_family ) ) ) );
+$n = count( $ft->font_family ); $ft->load_font_family();
+t( '6e loaded once', $n, count( $ft->font_family ) );
+
 $bak = array(
 	'settings' => get_option( 'acft_settings' ),
 	'fonts'    => get_option( 'acft_google_fonts' ),
@@ -64,15 +77,24 @@ t( '3h URL from given weights', 'https://fonts.googleapis.com/css?family=Merriwe
 $w = array(); acft_collect_font_weights( array( array( 'font_family' => 'Merriweather', 'font_weight' => '300' ), array( 'font_family' => 'Open Sans', 'font_weight' => '' ), array( 'font_family' => 'Georgia, serif', 'font_weight' => '400' ) ), $w );
 t( '3i URL from saved values', 'https://fonts.googleapis.com/css?family=Merriweather:300,400,700|Open+Sans:400,700&display=swap', acft_google_fonts_url( $w ) );
 
-echo '-- #1 front-end scheduling (is_admin=' . var_export( is_admin(), true ) . ")\n";
+echo "-- #1 daily background refresh\n";
 update_option( 'acft_test_http_mock', 'ok' );
-unsched(); setc( array() ); acft_get_google_font_family(); t( '1a fresh list: nothing scheduled', false, (bool) wp_next_scheduled( 'acft_refresh_google_fonts_event' ) );
-unsched(); setc( array( 'fetched' => time() - 8 * DAY_IN_SECONDS ) ); acft_get_google_font_family(); t( '1b stale list: scheduled', true, (bool) wp_next_scheduled( 'acft_refresh_google_fonts_event' ) );
-unsched(); setc( array( 'error' => 'HTTP 400', 'attempted' => time() - 2 * HOUR_IN_SECONDS ) ); acft_get_google_font_family(); t( '1c failed >1h ago: scheduled', true, (bool) wp_next_scheduled( 'acft_refresh_google_fonts_event' ) );
-unsched(); setc( array( 'error' => 'HTTP 400', 'attempted' => time() - 60 ) ); acft_get_google_font_family(); t( '1d failed <1h ago: backoff, not scheduled', false, (bool) wp_next_scheduled( 'acft_refresh_google_fonts_event' ) );
-unsched(); delete_option( 'acft_google_fonts' ); acft_get_google_font_family(); t( '1e never fetched: scheduled', true, (bool) wp_next_scheduled( 'acft_refresh_google_fonts_event' ) );
+function ev() { $e = wp_get_scheduled_event( 'acft_refresh_google_fonts_event' ); return $e ? $e->schedule : 'none'; }
+unsched(); acft_schedule_google_fonts_refresh(); t( '1a missing event: scheduled daily', 'daily', ev() );
+$ts = wp_next_scheduled( 'acft_refresh_google_fonts_event' ); acft_schedule_google_fonts_refresh(); t( '1b already scheduled: left alone', $ts, wp_next_scheduled( 'acft_refresh_google_fonts_event' ) );
+unsched(); wp_schedule_single_event( time() + 60, 'acft_refresh_google_fonts_event' ); acft_schedule_google_fonts_refresh();
+t( '1c one-off event replaced by the daily one', array( 'daily', 1 ), array( ev(), count( array_filter( _get_cron_array(), function ( $h ) { return isset( $h['acft_refresh_google_fonts_event'] ); } ) ) ) );
+setc( array( 'fetched' => time() - 8 * DAY_IN_SECONDS, 'families' => array( 'Old' ) ) ); do_action( 'acft_refresh_google_fonts_event' );
+t( '1d run with a stale list: fetched', '|3', acft_get_google_fonts_cache()['error'] . '|' . count( acft_get_google_fonts_cache()['families'] ) );
+setc( array( 'fetched' => time() - DAY_IN_SECONDS, 'families' => array( 'Kept' ) ) ); do_action( 'acft_refresh_google_fonts_event' );
+t( '1e run with a fresh list: no fetch', array( 'Kept' ), acft_get_google_fonts_cache()['families'] );
+setc( array( 'error' => 'HTTP 400', 'attempted' => time() - 60, 'families' => array( 'Kept' ) ) ); do_action( 'acft_refresh_google_fonts_event' );
+t( '1f run within an hour of a failure: no fetch', 'HTTP 400|Kept', acft_get_google_fonts_cache()['error'] . '|' . implode( ',', acft_get_google_fonts_cache()['families'] ) );
 setc( array( 'error' => 'HTTP 400', 'attempted' => time() - 2 * HOUR_IN_SECONDS, 'fetched' => 0 ) ); do_action( 'acft_refresh_google_fonts_event' );
-$c = acft_get_google_fonts_cache(); t( '1f event run recovers the list', '|3', $c['error'] . '|' . count( $c['families'] ) ); unsched();
+t( '1g run after a failure over an hour ago: recovers', '|3', acft_get_google_fonts_cache()['error'] . '|' . count( acft_get_google_fonts_cache()['families'] ) );
+unsched(); setc( array( 'fetched' => time() - 8 * DAY_IN_SECONDS, 'families' => array( 'Old' ) ) ); $got = acft_get_google_font_family();
+t( '1h showing a field neither fetches nor schedules', array( array( 'Old' => 'Old' ), false ), array( $got, (bool) wp_next_scheduled( 'acft_refresh_google_fonts_event' ) ) );
+unsched();
 
 echo "-- #2 lock\n";
 acft_google_fonts_lock( false );
@@ -94,8 +116,10 @@ function during( $c ) { $GLOBALS['during'] = $c; }
 add_filter( 'pre_http_request', function ( $r ) { if ( null !== $GLOBALS['during'] ) { setc( $GLOBALS['during'] ); $GLOBALS['during'] = null; } return $r; }, 1 );
 $GLOBALS['during'] = null;
 update_option( 'acft_test_http_mock', 'ok' );
-setc( array( 'fetched' => time() - 8 * DAY_IN_SECONDS ) ); during( array( 'key_hash' => 'otherkey', 'families' => array( 'X' ) ) ); acft_refresh_google_fonts( true );
+setc( array( 'fetched' => time() - 8 * DAY_IN_SECONDS ) ); during( array( 'key_hash' => 'otherkey', 'families' => array( 'X' ) ) ); acft_refresh_google_fonts();
 t( '2i newer result for another key kept', array( 'otherkey', array( 'X' ) ), array( acft_get_google_fonts_cache()['key_hash'], acft_get_google_fonts_cache()['families'] ) );
+setc( array() ); during( array( 'key_hash' => 'oldkey', 'families' => array( 'X' ) ) ); acft_refresh_google_fonts( true );
+t( '2n settings save replaces a newer result for the old key', array( $GLOBALS['key'], 3 ), array( acft_get_google_fonts_cache()['key_hash'], count( acft_get_google_fonts_cache()['families'] ) ) );
 setc( array() ); during( array( 'error' => 'HTTP 500', 'families' => array() ) ); acft_refresh_google_fonts( true );
 t( '2j newer failure (same key) replaced by success', '|3', acft_get_google_fonts_cache()['error'] . '|' . count( acft_get_google_fonts_cache()['families'] ) );
 update_option( 'acft_test_http_mock', 'error400' );

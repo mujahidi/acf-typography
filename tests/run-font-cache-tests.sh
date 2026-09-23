@@ -52,7 +52,9 @@ state() { wpe '$c=acft_get_google_fonts_cache(); echo count($c["families"]),"|",
 setkey() { wpe 'remove_all_actions("update_option_acft_settings"); remove_all_actions("add_option_acft_settings"); remove_all_filters("pre_update_option_acft_settings"); update_option("acft_settings", array("google_key"=>"'"$1"'"));'; }
 # constants for the site, as if set in wp-config.php; WP-Cron stays off so background fetches never land in a count
 consts() { wpe 'update_option("acft_test_constants", array("DISABLE_WP_CRON"=>true'"${1:+, $1}"'));'; }
-scheduled() { wpe 'echo wp_next_scheduled("acft_refresh_google_fonts_event") ? "yes" : "no";'; }
+schedule() { wpe '$e=wp_get_scheduled_event("acft_refresh_google_fonts_event"); echo $e ? $e->schedule : "none";'; }
+# the daily refresh is re-added on every request; park it a day ahead so WP-Cron cannot fetch during a check
+park() { wpe 'wp_clear_scheduled_hook("acft_refresh_google_fonts_event"); wp_schedule_event(time()+DAY_IN_SECONDS,"daily","acft_refresh_google_fonts_event");'; }
 unsched() { wpe 'wp_clear_scheduled_hook("acft_refresh_google_fonts_event");'; }
 
 restore() {
@@ -100,7 +102,7 @@ umask 022
 wpe 'update_option("acft_test_backup", array("settings"=>get_option("acft_settings"), "fonts"=>get_option("acft_google_fonts"), "mock"=>get_option("acft_test_http_mock"), "consts"=>get_option("acft_test_constants"), "site_typo"=>get_option("options_site_typo"), "site_typo_ref"=>get_option("_options_site_typo")), false);'
 trap 'echo; echo "Interrupted: restoring the site options"; restore; echo; rm -rf "$SCRATCH"; exit 130' INT TERM
 consts
-unsched
+park
 setkey test-key-A
 wpe 'update_option("acft_test_http_mock","ok");'
 flush
@@ -113,14 +115,18 @@ if [ -n "$UNIT" ]; then read -r up uf <<< "$UNIT"; PASS=$((PASS+up)); FAIL=$((FA
 flush
 
 echo; echo "Part 2: page loads"
+# the list is refreshed on ACF screens, the settings page and where a Typography field is shown;
+# other admin pages and the front end never read it
+ACF_SCREEN=/wp-admin/edit.php?post_type=acf-field-group
 # 1. upgrade from 3.2.3: option absent
-wpe 'delete_option("acft_google_fonts");'; unsched; flush
+wpe 'delete_option("acft_google_fonts");'; park; flush
 O=$(off); front /; front '/?s=acft'; front /no-such-page-xyz/
 check "1a upgrade: front end makes no call" 0 "$(calls "$O")"
-check "1b upgrade: front end schedules a background fetch instead" yes "$(scheduled)"
-unsched; flush
-O=$(off); admin /wp-admin/
-check "1c upgrade: first admin load makes 1 call" 1 "$(calls "$O")"
+O=$(off); admin /wp-admin/; admin /wp-admin/edit.php
+check "1c0 upgrade: Dashboard and Posts list make no call" 0 "$(calls "$O")"
+flush
+O=$(off); admin "$ACF_SCREEN"
+check "1c upgrade: first ACF screen load makes 1 call" 1 "$(calls "$O")"
 check "1d upgrade: list saved" "3|noerr|fresh" "$(state)"
 check "1e option not autoloaded" "off" "$(wpe 'global $wpdb; $a=$wpdb->get_var("SELECT autoload FROM $wpdb->options WHERE option_name=\"acft_google_fonts\""); echo in_array($a,array("no","off","auto-off"),true)?"off":$a;')"
 if [ "$(val optpage)" = 1 ]; then
@@ -132,68 +138,67 @@ else
 fi
 
 # 2. fresh cache: no refetch
-flush; O=$(off); admin /wp-admin/; admin /wp-admin/edit.php
+flush; O=$(off); admin "$ACF_SCREEN"; admin '/wp-admin/options-general.php?page=acf-typography-field'
 check "2 fresh cache: no call" 0 "$(calls "$O")"
 
 # 3. stale (8 days) -> refetch
 wpe '$c=get_option("acft_google_fonts"); $c["fetched"]=time()-8*DAY_IN_SECONDS; update_option("acft_google_fonts",$c,false);'; flush
-O=$(off); admin /wp-admin/
+O=$(off); admin "$ACF_SCREEN"
 check "3 stale list: 1 call" 1 "$(calls "$O")"
 
 # 4. key changed -> refetch
 setkey test-key-B; flush
-O=$(off); admin /wp-admin/
+O=$(off); admin "$ACF_SCREEN"
 check "4 key changed: 1 call" 1 "$(calls "$O")"
 
 # 5. failure with no list: error saved, then 1h backoff
 wpe 'delete_option("acft_google_fonts"); update_option("acft_test_http_mock","error400");'; flush
-O=$(off); admin /wp-admin/
+O=$(off); admin "$ACF_SCREEN"
 check "5a error400: 1 call" 1 "$(calls "$O")"
 check "5b error stored, no list" "0|err|old" "$(state)"
-flush; O=$(off); admin /wp-admin/; admin '/wp-admin/options-general.php?page=acf-typography-field'
+flush; O=$(off); admin "$ACF_SCREEN"; admin '/wp-admin/options-general.php?page=acf-typography-field'
 check "5c backoff: no call within the hour" 0 "$(calls "$O")"
 check "5d settings page shows Google's message" 1 "$(grep -c 'Google Fonts could not be loaded: API key not valid' "$SCRATCH/last.html")"
 
 # 6. failure keeps the old list
 wpe 'update_option("acft_google_fonts", array("families"=>array("Roboto","Lato"),"fetched"=>time()-8*DAY_IN_SECONDS,"attempted"=>0,"error"=>"","key_hash"=>md5("test-key-B")), false); update_option("acft_test_http_mock","wp_error");'; flush
-O=$(off); admin /wp-admin/
+O=$(off); admin "$ACF_SCREEN"
 check "6a wp_error on stale list: 1 call" 1 "$(calls "$O")"
 check "6b old list kept, error set" "2|err|old" "$(state)"
 
 # 7. backoff expires after an hour
 wpe '$c=get_option("acft_google_fonts"); $c["attempted"]=time()-2*HOUR_IN_SECONDS; update_option("acft_google_fonts",$c,false); update_option("acft_test_http_mock","ok");'; flush
-O=$(off); admin /wp-admin/
+O=$(off); admin "$ACF_SCREEN"
 check "7a retry after 1h: 1 call" 1 "$(calls "$O")"
 check "7b recovered, error cleared" "3|noerr|fresh" "$(state)"
 
 # 8. no key anywhere: no call
 setkey ""; wpe 'delete_option("acft_google_fonts");'; flush
-O=$(off); admin /wp-admin/; front /
+O=$(off); admin "$ACF_SCREEN"; front /
 check "8 no key: no call" 0 "$(calls "$O")"
 
 # 9. ACFT_GOOGLE_API_KEY constant only (no saved key)
-consts '"ACFT_GOOGLE_API_KEY"=>"const-key-1"'; unsched; flush
+consts '"ACFT_GOOGLE_API_KEY"=>"const-key-1"'; park; flush
 O=$(off); front /
 check "9a constant, front end: no call" 0 "$(calls "$O")"
-check "9b constant, front end schedules a background fetch" yes "$(scheduled)"
-unsched; flush
-O=$(off); admin /wp-admin/
-check "9c constant, admin: 1 call" 1 "$(calls "$O")"
-check "9d cache keyed to the constant" "match" "$(wpe '$c=get_option("acft_google_fonts"); echo $c["key_hash"]===md5("const-key-1")?"match":"nomatch";')"
+flush
+O=$(off); admin "$ACF_SCREEN"
+check "9c constant, ACF screen: 1 call" 1 "$(calls "$O")"
+check "9d cache keyed to the constant" "match" "$(wpe '$c=get_option("acft_google_fonts"); echo is_array($c) && $c["key_hash"]===md5("const-key-1")?"match":"nomatch";')"
 consts '"ACFT_GOOGLE_API_KEY"=>"const-key-2"'; flush
-O=$(off); admin /wp-admin/
+O=$(off); admin "$ACF_SCREEN"
 check "9e constant changed in wp-config: 1 call" 1 "$(calls "$O")"
 
 # 10. constant beats saved key
 setkey saved-key; flush
-O=$(off); admin /wp-admin/
+O=$(off); admin "$ACF_SCREEN"
 check "10 constant + saved key: constant wins, no refetch" 0 "$(calls "$O")"
 
 # 11. legacy YOUR_API_KEY defined by the site
 consts '"YOUR_API_KEY"=>"legacy-key"'; wpe 'delete_option("acft_google_fonts");'; setkey ""; flush
-O=$(off); admin /wp-admin/
+O=$(off); admin "$ACF_SCREEN"
 check "11a legacy constant: 1 call" 1 "$(calls "$O")"
-check "11b cache keyed to legacy constant" "match" "$(wpe '$c=get_option("acft_google_fonts"); echo $c["key_hash"]===md5("legacy-key")?"match":"nomatch";')"
+check "11b cache keyed to legacy constant" "match" "$(wpe '$c=get_option("acft_google_fonts"); echo is_array($c) && $c["key_hash"]===md5("legacy-key")?"match":"nomatch";')"
 check "11c deprecation notice logged" 1 "$(newlog "$O" | grep -c 'YOUR_API_KEY constant is deprecated' | awk '{print ($1>0)?1:0}')"
 consts
 
@@ -203,7 +208,7 @@ O=$(off); wpe 'add_option("acft_settings", array("google_key"=>"save-key-1"));'
 check "12a add_option save: 1 call" 1 "$(calls "$O")"
 O=$(off); wpe 'update_option("acft_settings", array("google_key"=>"save-key-2"));'
 check "12b update_option save: 1 call" 1 "$(calls "$O")"
-check "12c key hash follows the save" "match" "$(wpe '$c=get_option("acft_google_fonts"); echo $c["key_hash"]===md5("save-key-2")?"match":"nomatch";')"
+check "12c key hash follows the save" "match" "$(wpe '$c=get_option("acft_google_fonts"); echo is_array($c) && $c["key_hash"]===md5("save-key-2")?"match":"nomatch";')"
 wpe 'update_option("acft_test_http_mock","error400"); acft_refresh_google_fonts(true); update_option("acft_test_http_mock","ok");'
 check "12d setup: fetch failed, error stored" "3|err|fresh" "$(state)"
 O=$(off); wpe 'update_option("acft_settings", get_option("acft_settings"));'
@@ -211,14 +216,12 @@ check "12e saving the same key again: 1 call" 1 "$(calls "$O")"
 check "12f error cleared after the unchanged save" "3|noerr|fresh" "$(state)"
 
 # 13. admin-ajax (heartbeat, logged in and logged out) never fetches
-wpe '$c=get_option("acft_google_fonts"); $c["fetched"]=0; update_option("acft_google_fonts",$c,false);'; unsched; flush
+wpe '$c=get_option("acft_google_fonts"); $c["fetched"]=0; update_option("acft_google_fonts",$c,false);'; park; flush
 O=$(off)
 curl -sS -o /dev/null -H "@$COOKIE_HDR" -d 'action=heartbeat&interval=60' "$SITE_URL/wp-admin/admin-ajax.php"
 curl -sS -o /dev/null -d 'action=heartbeat&interval=60' "$SITE_URL/wp-admin/admin-ajax.php"
 curl -sS -o /dev/null -d 'action=nopriv_whatever' "$SITE_URL/wp-admin/admin-ajax.php"
 check "13a admin-ajax with stale list: no call" 0 "$(calls "$O")"
-check "13b admin-ajax schedules a background fetch instead" yes "$(scheduled)"
-unsched
 
 # 14. deprecated acft_update_gf_json_file() still works
 O=$(off); R=$(wpe '$u=get_users(array("role"=>"administrator","number"=>1,"fields"=>"ID")); wp_set_current_user((int)$u[0]); acft_update_gf_json_file("ignored"); echo "ran";')
@@ -231,19 +234,74 @@ check "15 google_fonts.json absent" absent "$(wpe 'echo file_exists(dirname((new
 
 # 16. other failed responses keep the old list and save the reason
 wpe 'update_option("acft_google_fonts", array("families"=>array("Roboto","Lato"),"fetched"=>time()-8*DAY_IN_SECONDS,"attempted"=>0,"error"=>"","key_hash"=>md5(acft_get_google_api_key())), false); update_option("acft_test_http_mock","bad_body");'; flush
-O=$(off); admin /wp-admin/
+O=$(off); admin "$ACF_SCREEN"
 check "16a 200 without a font list: 1 call" 1 "$(calls "$O")"
 check "16b old list kept, error set" "2|err|old" "$(state)"
 check "16c error text" "Unexpected response from the Google Fonts API." "$(wpe 'echo acft_get_google_fonts_cache()["error"];')"
 wpe '$c=get_option("acft_google_fonts"); $c["attempted"]=time()-2*HOUR_IN_SECONDS; update_option("acft_google_fonts",$c,false); update_option("acft_test_http_mock","error503_html");'; flush
-O=$(off); admin /wp-admin/; admin '/wp-admin/options-general.php?page=acf-typography-field'
+O=$(off); admin '/wp-admin/options-general.php?page=acf-typography-field'
 check "16d 503 with an HTML body: 1 call" 1 "$(calls "$O")"
 check "16e old list kept, error set" "2|err|old" "$(state)"
 check "16f settings page shows the HTTP status" 1 "$(grep -c 'Google Fonts could not be loaded: HTTP 503' "$SCRATCH/last.html")"
 
+# 17. a Typography field shown on another admin screen refreshes a stale list
+if [ "$(val optpage)" = 1 ]; then
+	wpe '$c=get_option("acft_google_fonts"); $c["fetched"]=time()-8*DAY_IN_SECONDS; $c["attempted"]=0; update_option("acft_google_fonts",$c,false); update_option("acft_test_http_mock","ok");'; flush
+	O=$(off); admin /wp-admin/
+	check "17a stale list, Dashboard: no call" 0 "$(calls "$O")"
+	O=$(off); admin '/wp-admin/admin.php?page=acft-test-options'
+	check "17b stale list, options page with a Typography field: no call (left to the daily refresh)" 0 "$(calls "$O")"
+	check "17c the field still offers the cached list" 1 "$(grep -c '<option value="Roboto"' "$SCRATCH/last.html" | awk '{print ($1>0)?1:0}')"
+else
+	skip "17 Typography field on other admin screens" "needs ACF Pro and acft-test-options-page.php"
+fi
+
+# 18. saving a new key through the real settings form fetches once, with the new key,
+#     even when the list for the old key is due a refresh
+setkey old-form-key
+wpe 'update_option("acft_google_fonts", array("families"=>array("Roboto","Lato"),"fetched"=>time()-8*DAY_IN_SECONDS,"attempted"=>0,"error"=>"","key_hash"=>md5("old-form-key")), false); update_option("acft_test_http_mock","ok");'; flush
+admin '/wp-admin/options-general.php?page=acf-typography-field'
+NONCE=$(grep -o 'name="_wpnonce" value="[a-f0-9]*"' "$SCRATCH/last.html" | head -1 | sed 's/.*value="//; s/"//')
+wpe '$c=get_option("acft_google_fonts"); $c["fetched"]=time()-8*DAY_IN_SECONDS; update_option("acft_google_fonts",$c,false);'; flush
+O=$(off); curl -sS -o /dev/null -H "@$COOKIE_HDR" -e "$SITE_URL/wp-admin/options-general.php?page=acf-typography-field" \
+	--data-urlencode option_page=acf-typography-field --data-urlencode action=update --data-urlencode "_wpnonce=$NONCE" \
+	--data-urlencode "_wp_http_referer=/wp-admin/options-general.php?page=acf-typography-field" \
+	--data-urlencode "acft_settings[google_key]=new-form-key" "$SITE_URL/wp-admin/options.php"
+check "18a settings form save: 1 call" 1 "$(calls "$O")"
+check "18c cache keyed to the new key" "match" "$(wpe '$c=get_option("acft_google_fonts"); echo is_array($c) && $c["key_hash"]===md5("new-form-key")?"match":"nomatch";')"
+
+# 19. the daily background refresh, run by WordPress's own wp-cron.php
+# a fresh list first, so the event WP-Cron may start right after it is re-added does not fetch
+setkey test-key-A
+wpe 'update_option("acft_google_fonts", array("families"=>array("Roboto"),"fetched"=>time(),"attempted"=>time(),"error"=>"","key_hash"=>md5(acft_get_google_api_key())), false);'; unsched; flush
+front /
+check "19a a missing daily refresh is added back by the next request" daily "$(schedule)"
+wpe 'update_option("acft_google_fonts", array("families"=>array("Roboto"),"fetched"=>time()-8*DAY_IN_SECONDS,"attempted"=>0,"error"=>"","key_hash"=>md5(acft_get_google_api_key())), false); update_option("acft_test_http_mock","ok");
+	wp_clear_scheduled_hook("acft_refresh_google_fonts_event"); wp_schedule_event(time()-60,"daily","acft_refresh_google_fonts_event");'; flush
+# Every WP-CLI call (and page load) with a due event takes the cron lock and then asks the site to run
+# wp-cron.php. When the site cannot reach its own URL (e.g. inside Docker) that request never arrives and the
+# lock blocks other runs for 60s. So pass the lock the way WordPress's own request does, and retry until the
+# event has run (once it has, it is rescheduled a day ahead).
+cronrun() {
+	for _ in 1 2 3 4 5 6 7 8 9 10; do
+		lock=$(wpe 'echo get_transient("doing_cron");')
+		flush; curl -sS -o /dev/null "$SITE_URL/wp-cron.php?doing_wp_cron=$lock"
+		[ "$(wpe '$t=wp_next_scheduled("acft_refresh_google_fonts_event"); echo ( $t && $t > time() + 3600 ) ? "ran" : "due";')" = ran ] && return
+		wpe 'if ( ! wp_next_scheduled("acft_refresh_google_fonts_event") ) { wp_schedule_event(time()-60,"daily","acft_refresh_google_fonts_event"); }'
+		sleep 3
+	done
+}
+O=$(off); cronrun
+check "19b wp-cron.php with a stale list: 1 call" 1 "$(calls "$O")"
+check "19c list refreshed" "3|noerr|fresh" "$(state)"
+check "19d next run is about a day later" yes "$(wpe '$t=wp_next_scheduled("acft_refresh_google_fonts_event"); echo ( $t > time() + DAY_IN_SECONDS - 600 && $t <= time() + DAY_IN_SECONDS ) ? "yes" : "no:" . ( $t - time() );')"
+wpe 'wp_clear_scheduled_hook("acft_refresh_google_fonts_event"); wp_schedule_event(time()-60,"daily","acft_refresh_google_fonts_event");'; flush
+O=$(off); cronrun
+check "19e wp-cron.php with a fresh list: no call" 0 "$(calls "$O")"
+
 # --- restore -------------------------------------------------------------------
 trap 'rm -rf "$SCRATCH"' INT TERM
-echo; restore; echo
+echo; restore; unsched; echo
 echo; echo "Other new debug.log lines (excluding ACFT_HTTP and expected deprecation notices):"; newlog "$START" | grep -v ACFT_HTTP | grep -v "YOUR_API_KEY constant is deprecated" | grep -v "acft_update_gf_json_file" | sed "s/^/  /" | head -30
 echo; echo "RESULT: $PASS passed, $FAIL failed, $SKIP skipped"
 [ "$FAIL" -eq 0 ]

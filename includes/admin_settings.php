@@ -124,6 +124,28 @@ function acft_is_acf_admin_screen() {
 
 
 /**
+ *  Refresh the Google Fonts list on ACF screens and on the settings page
+ *
+ *  Runs before these screens print the list's status (the notice below, the
+ *  message on the settings page), so it is current when an admin looks. Other
+ *  pages rely on the daily background refresh. The settings form posts to
+ *  options.php, which is not matched here, so a save only fetches once, with the
+ *  new key.
+ *
+ *  acft_refresh_google_fonts_on_screen()
+ *
+ *  @since      3.3.0
+ *  @param      WP_Screen $screen  Current admin screen.
+ */
+add_action( 'current_screen', 'acft_refresh_google_fonts_on_screen' );
+function acft_refresh_google_fonts_on_screen( $screen ) {
+
+	if ( acft_is_acf_admin_screen() || 'settings_page_acf-typography-field' === $screen->id ) {
+		acft_refresh_google_fonts();
+	}
+}
+
+/**
  *  Warn admins on ACF screens when the Google Fonts list could not be loaded
  *
  *  Without it a broken key goes unnoticed: the field just offers web-safe fonts (or
