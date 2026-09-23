@@ -11,3 +11,6 @@ Thumbs.db
 
 # Dev tooling
 /vendor/
+
+# Local test settings
+/tests/.env
