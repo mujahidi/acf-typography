@@ -1,0 +1,9 @@
+# Opens a pull request when a GitHub Action used in .github/workflows has a new release.
+version: 2
+updates:
+  - package-ecosystem: github-actions
+    directory: /
+    schedule:
+      interval: weekly
+    commit-message:
+      prefix: ci
