@@ -199,13 +199,51 @@ add_shortcode( 'acf_typography', 'acf_typography_shortcode' );
 function acft_shortcode_field_is_typography( $selector, $post_id ) {
 
 	if ( function_exists( 'acf_get_valid_post_id' ) ) {
-		$field = acf_maybe_get_field( $selector, acf_get_valid_post_id( $post_id ) );
+		$post_id = acf_get_valid_post_id( $post_id );
+		$field   = acf_maybe_get_field( $selector, $post_id );
 	} elseif ( function_exists( 'get_field_object' ) ) {
 		// ACF 4: a name that is not a field comes back as a stand-in text field
-		$field = get_field_object( $selector, $post_id, array( 'load_value' => false ) );
+		$post_id = apply_filters( 'acf/get_post_id', $post_id ); // phpcs:ignore WordPress.NamingConventions -- ACF 4's own filter, as its get_field() uses it
+		$field   = get_field_object( $selector, $post_id, array( 'load_value' => false ) );
 	} else {
 		return false;
 	}
 
-	return is_array( $field ) && isset( $field['type'] ) && 'Typography' === $field['type'];
+	if ( ! is_array( $field ) || ! isset( $field['type'], $field['name'], $field['key'] ) || 'Typography' !== $field['type'] ) {
+		return false;
+	}
+
+	// a name is found through the reference ACF saves next to the value, but a key finds
+	// its field anywhere, and the value is then read by the field's name: also require
+	// the reference, so a key cannot read same-named data the object stores for other code
+	if ( 0 === strpos( $selector, 'field_' ) ) {
+		return acft_get_field_reference( $field['name'], $post_id ) === $field['key'];
+	}
+
+	return true;
+}
+
+/**
+ *  Get the field key ACF saved next to a value
+ *
+ *  acft_get_field_reference()
+ *
+ *  @since      3.3.0
+ *  @param      string $field_name  Field name.
+ *  @param      mixed  $post_id     Post ID as ACF resolves it, e.g. 12, 'user_1' or 'options'.
+ *  @return     string  Field key, or '' when there is none.
+ */
+function acft_get_field_reference( $field_name, $post_id ) {
+
+	if ( function_exists( 'acf_get_reference' ) ) {
+		$reference = acf_get_reference( $field_name, $post_id ); // ACF 5.9+
+	} elseif ( function_exists( 'acf_get_field_reference' ) ) {
+		$reference = acf_get_field_reference( $field_name, $post_id ); // ACF 5 before 5.9
+	} elseif ( function_exists( 'get_field_reference' ) ) {
+		$reference = get_field_reference( $field_name, $post_id ); // ACF 4
+	} else {
+		$reference = '';
+	}
+
+	return is_string( $reference ) ? $reference : '';
 }

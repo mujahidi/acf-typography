@@ -124,6 +124,7 @@ t( 'c9 no field attribute', '', sc( 'property="font_size" post_id="' . $p . '"' 
 t( 'c10 wrong case does not match (names are case-sensitive)', '', sc( 'field="herotypo" property="font_size" post_id="' . $p . '"' ) );
 $GLOBALS['post'] = get_post( $p ); setup_postdata( $GLOBALS['post'] );
 t( 'c11 current post when post_id is left out', '18', sc( 'field="heroTypo" property="font_size"' ) );
+t( 'c12 field key, current post', '18', sc( 'field="field_acft_vt_typo" property="font_size"' ) );
 wp_reset_postdata();
 
 echo "-- shortcode reads Typography fields only\n";
@@ -145,6 +146,17 @@ t( 'o2 post_id="user_N"', '24', sc( 'field="heroTypo" property="font_size" post_
 $private = new_post( 'private' );
 update_field( 'field_acft_vt_typo', array( 'font_size' => '26' ), $private );
 t( 'o3 private post still prints (by design: styles are not secret)', '26', sc( 'field="heroTypo" property="font_size" post_id="' . $private . '"' ) );
+t( 'o4 field key on the options page and a user', '22|24', sc( 'field="field_acft_vt_typo" property="font_size" post_id="option"' ) . '|' . sc( 'field="field_acft_vt_typo" property="font_size" post_id="user_' . (int) $u[0] . '"' ) );
+
+echo "-- shortcode: a Typography field key only reads where that field is saved\n";
+// other code stored an array under the Typography field's name, with no ACF reference
+$q = new_post();
+update_post_meta( $q, 'heroTypo', array( 'k' => 'secret' ) );
+t( 'r6 control: get_typography_field() reads it by key', 'secret', get_typography_field( 'field_acft_vt_typo', 'k', $q ) );
+t( 'r6 shortcode with the key does not', '', sc( 'field="field_acft_vt_typo" property="k" post_id="' . $q . '"' ) );
+// same name, reference to another field
+update_post_meta( $q, '_heroTypo', 'field_acft_vt_choices' );
+t( 'r7 reference to another field', '', sc( 'field="field_acft_vt_typo" property="k" post_id="' . $q . '"' ) );
 
 echo "-- font family keys: list keys match their labels, old field group defaults are corrected\n";
 foreach ( $GLOBALS['wp_filter']['acf/validate_value/type=Typography']->callbacks as $cbs ) {
