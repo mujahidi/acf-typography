@@ -249,6 +249,38 @@ acft_render_typography_select_options( $type->font_weight, 700 );
 $h = ob_get_clean();
 t( 'l10 a weight saved as a number selects its choice, no extra option', array( 9, 1, true ), array( substr_count( $h, '<option' ), substr_count( $h, 'selected' ), false !== strpos( $h, '<option value="700" selected>' ) ) );
 
+echo "-- block data: values saved in ACF's stored format are cleaned too\n";
+if ( function_exists( 'acf_parse_save_blocks' ) && function_exists( 'acf_register_block_type' ) ) {
+	if ( ! acf_has_block_type( 'acf/acft-vt' ) ) {
+		acf_register_block_type( array( 'name' => 'acft-vt', 'title' => 'ACFT vt', 'render_callback' => '__return_empty_string', 'mode' => 'preview' ) );
+	}
+	$save_block = function ( $data ) {
+		$in = '<!-- wp:acf/acft-vt ' . wp_json_encode( array( 'name' => 'acf/acft-vt', 'data' => $data, 'mode' => 'preview' ) ) . ' /-->';
+		$b  = parse_blocks( wp_unslash( acf_parse_save_blocks( wp_slash( $in ) ) ) );
+		return $b[0]['attrs']['data'];
+	};
+	// stored format, as typed in the Code editor: ACF saves it without update_value()
+	$d = $save_block(
+		array(
+			'heroTypo'  => array( 'font_size' => '18px;position:fixed', 'font_family' => 'Lato' ),
+			'_heroTypo' => 'field_acft_vt_typo',
+			'noRef'     => array( 'text_color' => 'red}x' ),
+			'grp'       => array( 'inner' => array( 'line_height' => '1;a:b' ) ),
+			'other'     => 'a;b',
+			'list'      => array( 'x;y' ),
+		)
+	);
+	t( 'bk1 stored format: value cleaned, family kept', array( '18pxpositionfixed', 'Lato' ), array( $d['heroTypo']['font_size'], $d['heroTypo']['font_family'] ) );
+	t( 'bk2 value without a field reference cleaned', 'redx', $d['noRef']['text_color'] );
+	t( 'bk3 nested value cleaned', '1ab', $d['grp']['inner']['line_height'] );
+	t( 'bk4 other data untouched', array( 'a;b', array( 'x;y' ), 'field_acft_vt_typo' ), array( $d['other'], $d['list'], $d['_heroTypo'] ) );
+	// the block editor form sends field keys; ACF runs update_value() for those
+	$d = $save_block( array( 'field_acft_vt_typo' => array( 'font_size' => '20px;x:y' ) ) );
+	t( 'bk5 editor form format still cleaned', '20pxxy', $d['heroTypo']['font_size'] );
+} else {
+	echo "SKIP  block data checks (need ACF Pro)\n";
+}
+
 // clean up
 foreach ( $GLOBALS['posts'] as $id ) {
 	wp_delete_post( $id, true );

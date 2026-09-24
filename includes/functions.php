@@ -43,6 +43,54 @@ function acft_sanitize_typography_value( $value ) {
 }
 
 /**
+ *  Clean Typography values in ACF block data before the block is saved
+ *
+ *  ACF runs update_value() for block data sent by the block editor form, but data
+ *  already in ACF's stored format (e.g. typed in the Code editor) is saved as is.
+ *  A value can be read by its name even without its field reference, so values are
+ *  found by their shape: any array with a Typography property key.
+ *
+ *  acft_sanitize_block_data()
+ *
+ *  @since      3.3.0
+ *  @param      array $attrs  Block attributes, see the acf/pre_save_block filter.
+ *  @return     array
+ */
+add_filter( 'acf/pre_save_block', 'acft_sanitize_block_data' );
+function acft_sanitize_block_data( $attrs ) {
+
+	if ( is_array( $attrs ) && isset( $attrs['data'] ) && is_array( $attrs['data'] ) ) {
+		$attrs['data'] = acft_sanitize_typography_values_in( $attrs['data'] );
+	}
+
+	return $attrs;
+}
+
+/**
+ *  Clean every Typography-shaped array inside a value, at any depth
+ *
+ *  acft_sanitize_typography_values_in()
+ *
+ *  @since      3.3.0
+ *  @param      array $data  Block data, or part of it.
+ *  @return     array
+ */
+function acft_sanitize_typography_values_in( $data ) {
+
+	if ( array_intersect_key( $data, acft_typography_property_labels() ) ) {
+		return acft_sanitize_typography_value( $data );
+	}
+
+	foreach ( $data as $key => $child ) {
+		if ( is_array( $child ) ) {
+			$data[ $key ] = acft_sanitize_typography_values_in( $child );
+		}
+	}
+
+	return $data;
+}
+
+/**
  *  Check whether a Typography value has a property filled in
  *
  *  0 is a real value (e.g. letter spacing), so only a missing, empty or
