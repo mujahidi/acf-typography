@@ -131,6 +131,28 @@ update_option( 'acft_test_http_mock', 'ok' );
 setc( array( 'attempted' => time(), 'fetched' => time() - 8 * DAY_IN_SECONDS ) ); acft_refresh_google_fonts();
 t( '2m same-second cache still refreshed', true, acft_get_google_fonts_cache()['fetched'] >= time() - 5 );
 
+echo "-- #7 first fetch on any admin screen: only while a key is set and nothing was ever fetched or tried\n";
+delete_option( 'acft_google_fonts' );
+t( '7a key set, no list: never fetched', true, acft_google_fonts_never_fetched() );
+setc( array() );
+t( '7b list saved: false', false, acft_google_fonts_never_fetched() );
+setc( array( 'families' => array(), 'fetched' => 0, 'error' => 'HTTP 400' ) );
+t( '7c failed attempt only: false (no retry on every screen)', false, acft_google_fonts_never_fetched() );
+delete_option( 'acft_google_fonts' );
+delete_option( 'acft_settings' );
+if ( '' === acft_google_api_key_source() ) {
+	$reads = 0;
+	$count = function ( $q ) use ( &$reads ) { if ( false !== strpos( $q, 'acft_google_fonts' ) ) { $reads++; } return $q; };
+	add_filter( 'query', $count );
+	wp_cache_delete( 'notoptions', 'options' );
+	$never = acft_google_fonts_never_fetched();
+	remove_filter( 'query', $count );
+	t( '7d no key: false, and the list is not read', array( false, 0 ), array( $never, $reads ) );
+} else {
+	echo "SKIP  7d no key (a key constant is defined)\n";
+}
+setkey( 'unit-test-key' );
+
 // restore (the save hooks are still removed, so this does not fetch)
 false ===$bak['settings'] ? delete_option( 'acft_settings' ) : update_option( 'acft_settings', $bak['settings'] );
 false === $bak['fonts'] ? delete_option( 'acft_google_fonts' ) : update_option( 'acft_google_fonts', $bak['fonts'], false );

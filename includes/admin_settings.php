@@ -132,6 +132,13 @@ function acft_is_acf_admin_screen() {
  *  options.php, which is not matched here, so a save only fetches once, with the
  *  new key.
  *
+ *  Until the list has been fetched once (e.g. right after an update from 3.2.x),
+ *  any admin screen fetches it: on sites where WP-Cron never runs, editors would
+ *  otherwise see no Google fonts until someone opened an ACF screen. Any attempt,
+ *  good or failed, ends this, and the saved list survives later plugin updates,
+ *  so it runs once per site. Without a key nothing is fetched, so the list is not
+ *  even read.
+ *
  *  acft_refresh_google_fonts_on_screen()
  *
  *  @since      3.3.0
@@ -140,9 +147,29 @@ function acft_is_acf_admin_screen() {
 add_action( 'current_screen', 'acft_refresh_google_fonts_on_screen' );
 function acft_refresh_google_fonts_on_screen( $screen ) {
 
-	if ( acft_is_acf_admin_screen() || 'settings_page_acf-typography-field' === $screen->id ) {
+	if ( acft_is_acf_admin_screen() || 'settings_page_acf-typography-field' === $screen->id || acft_google_fonts_never_fetched() ) {
 		acft_refresh_google_fonts();
 	}
+}
+
+/**
+ *  Whether a key is set but the Google Fonts list was never fetched or tried
+ *
+ *  acft_google_fonts_never_fetched()
+ *
+ *  @since      3.3.0
+ *  @return     bool
+ */
+function acft_google_fonts_never_fetched() {
+
+	// the source check reads the settings only (autoloaded), and never shows the YOUR_API_KEY notice
+	if ( '' === acft_google_api_key_source() ) {
+		return false;
+	}
+
+	$cache = acft_get_google_fonts_cache();
+
+	return ! $cache['fetched'] && ! $cache['attempted'];
 }
 
 /**

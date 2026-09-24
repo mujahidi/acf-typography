@@ -122,9 +122,12 @@ ACF_SCREEN=/wp-admin/edit.php?post_type=acf-field-group
 wpe 'delete_option("acft_google_fonts");'; park; flush
 O=$(off); front /; front '/?s=acft'; front /no-such-page-xyz/
 check "1a upgrade: front end makes no call" 0 "$(calls "$O")"
-O=$(off); admin /wp-admin/; admin /wp-admin/edit.php
-check "1c0 upgrade: Dashboard and Posts list make no call" 0 "$(calls "$O")"
-flush
+O=$(off); admin /wp-admin/
+check "1c0 upgrade: first admin page (Dashboard) fetches the list once" 1 "$(calls "$O")"
+check "1c1 upgrade: list saved" "3|noerr|fresh" "$(state)"
+flush; O=$(off); admin /wp-admin/; admin /wp-admin/edit.php
+check "1c2 once fetched: Dashboard and Posts list make no call" 0 "$(calls "$O")"
+wpe 'delete_option("acft_google_fonts");'; flush
 O=$(off); admin "$ACF_SCREEN"
 check "1c upgrade: first ACF screen load makes 1 call" 1 "$(calls "$O")"
 check "1d upgrade: list saved" "3|noerr|fresh" "$(state)"
@@ -156,8 +159,8 @@ wpe 'delete_option("acft_google_fonts"); update_option("acft_test_http_mock","er
 O=$(off); admin "$ACF_SCREEN"
 check "5a error400: 1 call" 1 "$(calls "$O")"
 check "5b error stored, no list" "0|err|old" "$(state)"
-flush; O=$(off); admin "$ACF_SCREEN"; admin '/wp-admin/options-general.php?page=acf-typography-field'
-check "5c backoff: no call within the hour" 0 "$(calls "$O")"
+flush; O=$(off); admin "$ACF_SCREEN"; admin /wp-admin/; admin '/wp-admin/options-general.php?page=acf-typography-field'
+check "5c backoff: no call within the hour (ACF screen, settings, Dashboard)" 0 "$(calls "$O")"
 check "5d settings page shows Google's message" 1 "$(grep -c 'Google Fonts could not be loaded: API key not valid' "$SCRATCH/last.html")"
 
 # 6. failure keeps the old list
