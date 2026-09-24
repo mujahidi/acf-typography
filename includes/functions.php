@@ -349,23 +349,39 @@ function acft_get_google_api_key() {
 			return ACFT_GOOGLE_API_KEY;
 
 		case 'legacy_constant':
-			static $warned = false;
-			// normal wp-admin pages only: on REST and admin-ajax, a notice shown by WP_DEBUG_DISPLAY would break the JSON response
-			if ( ! $warned && is_admin() && ! wp_doing_ajax() ) {
-				$warned = true;
-				_doing_it_wrong(
-					__FUNCTION__,
-					esc_html__( 'The YOUR_API_KEY constant is deprecated and will be removed in 4.0. Define ACFT_GOOGLE_API_KEY instead.', 'acf-typography-field' ),
-					'3.3.0'
-				);
-			}
-			return YOUR_API_KEY;
+			return YOUR_API_KEY; // deprecation notice: acft_legacy_api_key_notice()
 
 		case 'option':
 			return acft_get_saved_google_api_key();
 	}
 
 	return '';
+}
+
+/**
+ *  Tell developers that the YOUR_API_KEY constant is deprecated
+ *
+ *  A debug notice (WP_DEBUG only), once per admin page view. Sent from admin_notices,
+ *  which runs only on pages that are printed: a notice shown by WP_DEBUG_DISPLAY during
+ *  a request that redirects (e.g. saving the settings or a field group), or in a REST or
+ *  admin-ajax response, would break it.
+ *
+ *  acft_legacy_api_key_notice()
+ *
+ *  @since      3.3.0
+ */
+add_action( 'admin_notices', 'acft_legacy_api_key_notice' );
+function acft_legacy_api_key_notice() {
+
+	if ( 'legacy_constant' !== acft_google_api_key_source() || ! current_user_can( 'manage_options' ) ) {
+		return;
+	}
+
+	_doing_it_wrong(
+		'YOUR_API_KEY',
+		esc_html__( 'The YOUR_API_KEY constant is deprecated and will be removed in 4.0. Define ACFT_GOOGLE_API_KEY instead.', 'acf-typography-field' ),
+		'3.3.0'
+	);
 }
 
 /**

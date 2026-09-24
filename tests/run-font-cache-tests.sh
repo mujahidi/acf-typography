@@ -203,6 +203,14 @@ O=$(off); admin "$ACF_SCREEN"
 check "11a legacy constant: 1 call" 1 "$(calls "$O")"
 check "11b cache keyed to legacy constant" "match" "$(wpe '$c=get_option("acft_google_fonts"); echo is_array($c) && $c["key_hash"]===md5("legacy-key")?"match":"nomatch";')"
 check "11c deprecation notice logged" 1 "$(newlog "$O" | grep -c 'YOUR_API_KEY constant is deprecated' | awk '{print ($1>0)?1:0}')"
+# not during a request that redirects: shown by WP_DEBUG_DISPLAY there, it would break the redirect
+admin '/wp-admin/options-general.php?page=acf-typography-field'
+NONCE=$(grep -o 'name="_wpnonce" value="[a-f0-9]*"' "$SCRATCH/last.html" | head -1 | sed 's/.*value="//; s/"//')
+O=$(off); CODE=$(curl -sS -o /dev/null -w '%{http_code}' -H "@$COOKIE_HDR" -e "$SITE_URL/wp-admin/options-general.php?page=acf-typography-field" \
+	--data-urlencode option_page=acf-typography-field --data-urlencode action=update --data-urlencode "_wpnonce=$NONCE" \
+	--data-urlencode "_wp_http_referer=/wp-admin/options-general.php?page=acf-typography-field" \
+	--data-urlencode "acft_settings[google_key]=" "$SITE_URL/wp-admin/options.php")
+check "11d settings save redirects, no notice during it" "302|0" "$CODE|$(newlog "$O" | grep -c 'YOUR_API_KEY constant is deprecated')"
 consts
 
 # 12. saving settings fetches right away (add + update hooks, and an unchanged save)
