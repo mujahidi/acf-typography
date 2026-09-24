@@ -7,7 +7,7 @@
 #
 # The site needs: this plugin active, WP_DEBUG and WP_DEBUG_LOG on, no page cache, and
 # tests/fixtures/mu-plugins/acft-test-http-mock.php and acft-test-constants.php copied to its
-# mu-plugins (acft-test-options-page.php too, with ACF Pro, for check 1f).
+# mu-plugins (acft-test-options-page.php too, with ACF Pro, for checks 1f and 17).
 # Settings come from the environment or tests/.env; see tests/.env.example.
 # It changes site options while it runs and restores them at the end. Dev only; never ship.
 #
@@ -115,8 +115,8 @@ if [ -n "$UNIT" ]; then read -r up uf <<< "$UNIT"; PASS=$((PASS+up)); FAIL=$((FA
 flush
 
 echo; echo "Part 2: page loads"
-# the list is refreshed on ACF screens, the settings page and where a Typography field is shown;
-# other admin pages and the front end never read it
+# the list is refreshed on ACF screens, the settings page, a settings save and the daily cron;
+# other admin pages, Typography fields and the front end only read the cached list
 ACF_SCREEN=/wp-admin/edit.php?post_type=acf-field-group
 # 1. upgrade from 3.2.3: option absent
 wpe 'delete_option("acft_google_fonts");'; park; flush
@@ -244,7 +244,7 @@ check "16d 503 with an HTML body: 1 call" 1 "$(calls "$O")"
 check "16e old list kept, error set" "2|err|old" "$(state)"
 check "16f settings page shows the HTTP status" 1 "$(grep -c 'Google Fonts could not be loaded: HTTP 503' "$SCRATCH/last.html")"
 
-# 17. a Typography field shown on another admin screen refreshes a stale list
+# 17. a Typography field shown on another admin screen does not fetch; a stale list is left to the daily refresh
 if [ "$(val optpage)" = 1 ]; then
 	wpe '$c=get_option("acft_google_fonts"); $c["fetched"]=time()-8*DAY_IN_SECONDS; $c["attempted"]=0; update_option("acft_google_fonts",$c,false); update_option("acft_test_http_mock","ok");'; flush
 	O=$(off); admin /wp-admin/

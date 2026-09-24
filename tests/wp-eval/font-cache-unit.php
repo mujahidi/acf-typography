@@ -1,7 +1,7 @@
 <?php
 /**
  * Google Fonts cache checks that call the plugin functions directly: the fetch lock, keeping the
- * newer result, front-end scheduling, and font weights. Dev only; never ship.
+ * newer result, the daily background refresh, reading the list only where a field is shown, and font weights. Dev only; never ship.
  *
  * Needs the plugin active and tests/fixtures/mu-plugins/acft-test-http-mock.php on the site.
  * Saves and restores the options it changes.

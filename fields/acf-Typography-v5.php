@@ -183,7 +183,7 @@ if ( ! class_exists( 'acf_field_Typography' ) ) :
 		*
 		*  Adds the Google fonts, sorted, to the Font Family choices. Called where the
 		*  choices are shown, not in the constructor: ACF builds field types on every
-		*  request, and reading (or refreshing) the list is only needed here.
+		*  request, and reading the cached list is only needed here.
 		*
 		*  @since   3.3.0
 		*/
