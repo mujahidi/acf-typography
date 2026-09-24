@@ -295,6 +295,63 @@ $type->validate_value( true, array( 'font_size' => '' ), $sf, 'acf[field_acft_mt
 t( 'p4 string required_properties still validated', array( 'acf[field_acft_mt_b][font_size]' ), wp_list_pluck( acf_get_validation_errors() ?: array(), 'input' ) );
 acf_reset_validation_errors();
 
+echo "-- required properties: validate_value()\n";
+$rq = acf_get_valid_field(
+	array(
+		'key'                 => 'field_acft_rq',
+		'name'                => 'rq',
+		'type'                => 'Typography',
+		'display_properties'  => array( 'font_size', 'letter_spacing', 'text_color' ),
+		'required_properties' => array( 'font_size', 'letter_spacing', 'font_family' ), // font_family is required but not shown
+	)
+);
+function req_errors( $type, $field, $value, $input ) {
+	acf_reset_validation_errors();
+	$type->validate_value( true, $value, $field, $input );
+	$e = wp_list_pluck( acf_get_validation_errors() ?: array(), 'input' );
+	sort( $e );
+	acf_reset_validation_errors();
+	return $e;
+}
+t( 'v1 0 and "0" count as filled in', array(), req_errors( $type, $rq, array( 'font_size' => '0', 'letter_spacing' => 0 ), 'acf[field_acft_rq]' ) );
+t( 'v2 empty and missing: one error each, on $input[property]; hidden font_family ignored', array( 'acf[field_acft_rq][font_size]', 'acf[field_acft_rq][letter_spacing]' ), req_errors( $type, $rq, array( 'font_size' => '', 'text_color' => '#000' ), 'acf[field_acft_rq]' ) );
+t( 'v3 input name inside a repeater used as is', array( 'acf[field_rep][row-0][field_acft_rq][font_size]' ), req_errors( $type, $rq, array( 'letter_spacing' => '1' ), 'acf[field_rep][row-0][field_acft_rq]' ) );
+$rq2                        = $rq;
+$rq2['required_properties'] = '';
+$rq2['display_properties']  = '';
+$n                          = count( $warn );
+t( 'v4 settings saved as "": no error, no warning', array( array(), 0 ), array( req_errors( $type, $rq2, array(), 'acf[field_acft_rq]' ), count( $warn ) - $n ) );
+
+echo "-- editor: a saved 0 is shown, not the field default\n";
+$z          = acf_get_field( 'field_acft_mt_b' );
+$z['name']  = 'acf[field_acft_mt_b]';
+$z['id']    = acf_idify( $z['name'] );
+$z['value'] = array( 'font_size' => '0', 'line_height' => 0, 'letter_spacing' => '0' );
+ob_start();
+$type->render_field( $z );
+$h = ob_get_clean();
+preg_match_all( '#name="acf\[field_acft_mt_b\]\[(font_size|line_height|letter_spacing)\]" value="([^"]*)"#', $h, $m );
+t( 'z1 font size, line height, letter spacing print value="0"', array( 'font_size' => '0', 'line_height' => '0', 'letter_spacing' => '0' ), array_combine( $m[1], $m[2] ) );
+
+echo "-- front end: fonts collected from ACF blocks, and views with no post\n";
+$blocks = parse_blocks(
+	'<!-- wp:acf/typo {"name":"acf/typo","data":{"t":{"font_family":"Lato","font_weight":"300"}}} /-->'
+	. '<p>freeform between blocks</p>'
+	. '<!-- wp:group --><div class="wp-block-group"><!-- wp:acf/typo {"name":"acf/typo","data":{"t":{"font_family":"Roboto","font_weight":"900"}}} /--></div><!-- /wp:group -->'
+	. '<!-- wp:acf/empty {"name":"acf/empty"} /-->'
+);
+$bd = acft_get_acf_blocks_data( $blocks );
+t( 'b1 top-level and nested ACF blocks found; freeform and data-less blocks skipped (GH #29)', 2, count( $bd ) );
+$w = array();
+acft_collect_font_weights( $bd, $w );
+t( 'b2 each family keeps its own weights', 'https://fonts.googleapis.com/css?family=Lato:300,400,700|Roboto:400,700,900&display=swap', acft_google_fonts_url( $w ) );
+$saved_post      = isset( $GLOBALS['post'] ) ? $GLOBALS['post'] : null;
+$GLOBALS['post'] = null;
+$n               = count( $warn );
+acft_enqueue_google_fonts_file();
+$GLOBALS['post'] = $saved_post;
+t( 'b3 no post (404, search): no warning', 0, count( $warn ) - $n );
+
 echo "-- block data: values saved in ACF's stored format are cleaned too\n";
 if ( function_exists( 'acf_parse_save_blocks' ) && function_exists( 'acf_register_block_type' ) ) {
 	if ( ! acf_has_block_type( 'acf/acft-vt' ) ) {
