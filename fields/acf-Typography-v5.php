@@ -286,7 +286,7 @@ if ( ! class_exists( 'acf_field_Typography' ) ) :
 					'instructions' => __( 'Default', 'acf-typography-field' ),
 					'type'         => 'select',
 					'name'         => 'font_family',
-					'choices'      => $this->font_family,
+					'choices'      => acft_typography_font_family_choices( $this->font_family, isset( $field['font_family'] ) ? $field['font_family'] : '' ),
 					'layout'       => 'horizontal',
 				)
 			);
@@ -438,9 +438,11 @@ if ( ! class_exists( 'acf_field_Typography' ) ) :
 
 			// create Field HTML
 
-			if ( ! empty( $field['display_properties'] ) && sizeof( $field['display_properties'] ) > 0 ) {
+			$display_properties = acft_typography_property_list( $field['display_properties'] );
 
-				foreach ( $field['display_properties'] as $f ) {
+			if ( $display_properties ) {
+
+				foreach ( $display_properties as $f ) {
 
 					$numbers = $selects = array();
 
@@ -776,8 +778,8 @@ if ( ! class_exists( 'acf_field_Typography' ) ) :
 		function validate_value( $valid, $value, $field, $input ) {
 
 			// a field group saved without these settings stores an empty string, or omits them altogether
-			$required_properties = isset( $field['required_properties'] ) && is_array( $field['required_properties'] ) ? $field['required_properties'] : array();
-			$display_properties  = isset( $field['display_properties'] ) && is_array( $field['display_properties'] ) ? $field['display_properties'] : array();
+			$required_properties = acft_typography_property_list( isset( $field['required_properties'] ) ? $field['required_properties'] : array() );
+			$display_properties  = acft_typography_property_list( isset( $field['display_properties'] ) ? $field['display_properties'] : array() );
 
 			if ( $required_properties ) {
 

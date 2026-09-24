@@ -143,6 +143,51 @@ function acft_typography_property_label( $property ) {
 }
 
 /**
+ *  Read a list of property names from a field setting
+ *
+ *  Display and required properties are saved as an array by the field group editor,
+ *  but a field registered in PHP or JSON can give a single name as a string, or an
+ *  empty string. Unknown names are dropped.
+ *
+ *  acft_typography_property_list()
+ *
+ *  @since      3.3.0
+ *  @param      mixed $setting  e.g. $field['display_properties'].
+ *  @return     string[]  Property names, in the setting's order.
+ */
+function acft_typography_property_list( $setting ) {
+
+	if ( ! is_array( $setting ) && ! is_string( $setting ) ) {
+		return array();
+	}
+
+	return array_values( array_intersect( (array) $setting, array_keys( acft_typography_property_labels() ) ) );
+}
+
+/**
+ *  Font Family choices for the field group's default, keeping a saved default missing from them
+ *
+ *  A default Google font is missing while the Google list is empty (no key yet, or
+ *  the fetch failed). Without it the select would fall back to its first choice and
+ *  saving the field group would replace the default.
+ *
+ *  acft_typography_font_family_choices()
+ *
+ *  @since      3.3.0
+ *  @param      array $choices  Font Family choices.
+ *  @param      mixed $current_default  Saved default font family.
+ *  @return     array
+ */
+function acft_typography_font_family_choices( $choices, $current_default ) {
+
+	if ( is_string( $current_default ) && '' !== $current_default && ! isset( $choices[ $current_default ] ) ) {
+		$choices = array( $current_default => $current_default ) + $choices;
+	}
+
+	return $choices;
+}
+
+/**
  *  Print the <option> elements of a typography select
  *
  *  A saved value that is missing from the choices (e.g. a Google font while the

@@ -284,7 +284,7 @@ if ( ! class_exists( 'acf_field_Typography' ) ) :
 						'type'    => 'select',
 						'name'    => 'fields[' . $key . '][font_family]',
 						'value'   => $field['font_family'],
-						'choices' => $this->font_family,
+						'choices' => acft_typography_font_family_choices( $this->font_family, $field['font_family'] ),
 						'layout'  => 'horizontal',
 					)
 				);
@@ -526,9 +526,11 @@ if ( ! class_exists( 'acf_field_Typography' ) ) :
 
 			// create Field HTML
 
-			if ( ! empty( $field['display_properties'] ) && sizeof( $field['display_properties'] ) > 0 ) {
+			$display_properties = acft_typography_property_list( $field['display_properties'] );
 
-				foreach ( $field['display_properties'] as $f ) {
+			if ( $display_properties ) {
+
+				foreach ( $display_properties as $f ) {
 
 					$numbers = $selects = array();
 

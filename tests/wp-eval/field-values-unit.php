@@ -249,6 +249,40 @@ acft_render_typography_select_options( $type->font_weight, 700 );
 $h = ob_get_clean();
 t( 'l10 a weight saved as a number selects its choice, no extra option', array( 9, 1, true ), array( substr_count( $h, '<option' ), substr_count( $h, 'selected' ), false !== strpos( $h, '<option value="700" selected>' ) ) );
 
+echo "-- field settings: a default font missing from the list is kept\n";
+t( 'd1 missing default added first', array( 'Acft Missing Font', 'initial' ), array_slice( array_keys( acft_typography_font_family_choices( $type->font_family, 'Acft Missing Font' ) ), 0, 2 ) );
+t( 'd2 listed default: choices unchanged', true, $type->font_family === acft_typography_font_family_choices( $type->font_family, 'Georgia, serif' ) );
+t( 'd3 empty or non-string default: unchanged', array( true, true ), array( $type->font_family === acft_typography_font_family_choices( $type->font_family, '' ), $type->font_family === acft_typography_font_family_choices( $type->font_family, array( 'x' ) ) ) );
+$fs = acf_get_valid_field( array( 'key' => 'field_acft_fs', 'name' => 'fs', 'type' => 'Typography', 'prefix' => 'acf_fields[1]', 'font_family' => 'Acft Missing Font' ) );
+ob_start();
+$type->render_field_settings( $fs );
+$h = ob_get_clean();
+t( 'd4 settings screen selects the missing default', 1, preg_match( '#<option value="Acft Missing Font" selected#', $h ) );
+
+echo "-- display properties given as a string (fields registered in PHP)\n";
+t( 'p1 string -> one item', array( 'font_size' ), acft_typography_property_list( 'font_size' ) );
+t( 'p2 empty string / null / unknown names', array( array(), array(), array( 'text_color' ) ), array( acft_typography_property_list( '' ), acft_typography_property_list( null ), acft_typography_property_list( array( 'foo', 'text_color', 3 ) ) ) );
+$sf                       = acf_get_field( 'field_acft_mt_b' );
+$sf['display_properties'] = 'font_size';
+$sf['name']               = 'acf[field_acft_mt_b]';
+$sf['id']                 = acf_idify( $sf['name'] );
+$sf['value']              = '';
+$n                        = count( $warn );
+try {
+	ob_start();
+	$type->render_field( $sf );
+	$h = ob_get_clean();
+	t( 'p3 string display_properties renders that one input, no warning', array( 1, 0 ), array( substr_count( $h, 'name="acf[field_acft_mt_b][' ), count( $warn ) - $n ) );
+} catch ( Throwable $e ) {
+	ob_end_clean();
+	t( 'p3 string display_properties renders that one input, no warning', 'no error', get_class( $e ) . ': ' . $e->getMessage() );
+}
+$sf['required_properties'] = 'font_size';
+acf_reset_validation_errors();
+$type->validate_value( true, array( 'font_size' => '' ), $sf, 'acf[field_acft_mt_b]' );
+t( 'p4 string required_properties still validated', array( 'acf[field_acft_mt_b][font_size]' ), wp_list_pluck( acf_get_validation_errors() ?: array(), 'input' ) );
+acf_reset_validation_errors();
+
 echo "-- block data: values saved in ACF's stored format are cleaned too\n";
 if ( function_exists( 'acf_parse_save_blocks' ) && function_exists( 'acf_register_block_type' ) ) {
 	if ( ! acf_has_block_type( 'acf/acft-vt' ) ) {
