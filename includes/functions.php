@@ -47,8 +47,6 @@ function acft_sanitize_typography_value( $value ) {
  *
  *  ACF runs update_value() for block data sent by the block editor form, but data
  *  already in ACF's stored format (e.g. typed in the Code editor) is saved as is.
- *  A value can be read by its name even without its field reference, so values are
- *  found by their shape: any array with a Typography property key.
  *
  *  acft_sanitize_block_data()
  *
@@ -67,7 +65,13 @@ function acft_sanitize_block_data( $attrs ) {
 }
 
 /**
- *  Clean every Typography-shaped array inside a value, at any depth
+ *  Clean the Typography values in a list of field values, at any depth
+ *
+ *  Each value is judged on its own, never the list as a whole: block data is a flat
+ *  name => value list, so a plain field named e.g. font_size sits beside the others.
+ *  A value whose field reference (the _name entry beside it) is a Typography field
+ *  is cleaned. A value with no usable reference is cleaned when it has a Typography
+ *  property key, since it can still be read by its name. Anything else is searched.
  *
  *  acft_sanitize_typography_values_in()
  *
@@ -77,17 +81,45 @@ function acft_sanitize_block_data( $attrs ) {
  */
 function acft_sanitize_typography_values_in( $data ) {
 
-	if ( array_intersect_key( $data, acft_typography_property_labels() ) ) {
-		return acft_sanitize_typography_value( $data );
-	}
-
 	foreach ( $data as $key => $child ) {
-		if ( is_array( $child ) ) {
+		if ( ! is_array( $child ) ) {
+			continue;
+		}
+
+		$type = acft_block_value_field_type( $data, $key );
+
+		if ( 'Typography' === $type || ( null === $type && array_intersect_key( $child, acft_typography_property_labels() ) ) ) {
+			$data[ $key ] = acft_sanitize_typography_value( $child );
+		} else {
 			$data[ $key ] = acft_sanitize_typography_values_in( $child );
 		}
 	}
 
 	return $data;
+}
+
+/**
+ *  Get the field type named by a value's field reference in block data
+ *
+ *  acft_block_value_field_type()
+ *
+ *  @since      3.3.0
+ *  @param      array      $data  Block data, or part of it.
+ *  @param      int|string $key   Key of the value.
+ *  @return     string|null  Field type, or null when there is no known field key beside the value.
+ */
+function acft_block_value_field_type( $data, $key ) {
+
+	$reference = isset( $data[ '_' . $key ] ) ? $data[ '_' . $key ] : '';
+
+	// only a field key: acf_get_field() also finds fields by name
+	if ( ! function_exists( 'acf_is_field_key' ) || ! acf_is_field_key( $reference ) ) {
+		return null;
+	}
+
+	$field = acf_get_field( $reference );
+
+	return is_array( $field ) && isset( $field['type'] ) ? (string) $field['type'] : null;
 }
 
 /**

@@ -380,6 +380,60 @@ if ( function_exists( 'acf_parse_save_blocks' ) && function_exists( 'acf_registe
 	// the block editor form sends field keys; ACF runs update_value() for those
 	$d = $save_block( array( 'field_acft_vt_typo' => array( 'font_size' => '20px;x:y' ) ) );
 	t( 'bk5 editor form format still cleaned', '20pxxy', $d['heroTypo']['font_size'] );
+
+	// a block with a plain field named like a Typography property: ACF flattens block data,
+	// so that field sits beside every other field (Codex review, 3.3.0)
+	acf_add_local_field_group(
+		array(
+			'key'      => 'group_acft_vt_block',
+			'title'    => 'ACFT values test block',
+			'fields'   => array(
+				array( 'key' => 'field_acft_vt_b_size', 'name' => 'font_size', 'type' => 'number', 'label' => 'Font size' ),
+				array( 'key' => 'field_acft_vt_b_intro', 'name' => 'intro', 'type' => 'text', 'label' => 'Intro' ),
+				array( 'key' => 'field_acft_vt_b_body', 'name' => 'body', 'type' => 'textarea', 'label' => 'Body' ),
+				array( 'key' => 'field_acft_vt_b_tags', 'name' => 'tags', 'type' => 'checkbox', 'label' => 'Tags', 'choices' => array( 'a' => 'A', 'b' => 'B' ) ),
+				array( 'key' => 'field_acft_vt_b_cta', 'name' => 'cta', 'type' => 'link', 'label' => 'Button' ),
+				array( 'key' => 'field_acft_vt_b_typo', 'name' => 'blockTypo', 'type' => 'Typography', 'label' => 'Block' ),
+			),
+			'location' => array( array( array( 'param' => 'block', 'operator' => '==', 'value' => 'acf/acft-vt' ) ) ),
+		)
+	);
+	$intro = 'Visit https://example.com; open 9:00';
+	$body  = "<p>Line one</p>\n<p>Line two</p>";
+	$cta   = array( 'title' => 'Book', 'url' => 'https://example.com/book', 'target' => '' );
+	$d     = $save_block(
+		array(
+			'field_acft_vt_b_size'  => '16',
+			'field_acft_vt_b_intro' => $intro,
+			'field_acft_vt_b_body'  => $body,
+			'field_acft_vt_b_tags'  => array( 'a', 'b' ),
+			'field_acft_vt_b_cta'   => $cta,
+			'field_acft_vt_b_typo'  => array( 'font_size' => '18px;position:fixed', 'font_family' => 'Lato' ),
+		)
+	);
+	t( 'bk6 plain font_size field beside others: its value kept', '16', $d['font_size'] ?? null );
+	t( 'bk7 ... text and textarea beside it unchanged', array( $intro, $body ), array( $d['intro'] ?? null, $d['body'] ?? null ) );
+	t( 'bk8 ... checkbox and link beside it kept', array( array( 'a', 'b' ), $cta ), array( $d['tags'] ?? null, $d['cta'] ?? null ) );
+	t( 'bk9 ... Typography value beside it kept and cleaned', array( '18pxpositionfixed', 'Lato' ), array( $d['blockTypo']['font_size'] ?? null, $d['blockTypo']['font_family'] ?? null ) );
+
+	// stored format, hand-edited
+	$d = $save_block(
+		array(
+			'font_size'  => '16',
+			'_font_size' => 'field_acft_vt_b_size',
+			'blockTypo'  => array( 'not_a_property' => 'red;x' ),
+			'_blockTypo' => 'field_acft_vt_b_typo',
+			'looseTypo'  => array( 'font_size' => '1;a:b', 'made_up' => 'c;d', 'deep' => array( 'x' ) ),
+			'byName'     => array( 'font_family' => 'Lato;x' ),
+			'_byName'    => 'blockTypo',
+			'linkish'    => array( 'url' => 'https://example.com', 'inner' => array( 'line_height' => '2;y' ) ),
+			'_linkish'   => 'field_acft_vt_b_cta',
+		)
+	);
+	t( 'bk10 value with a Typography field reference cleaned, whatever its keys', 'redx', $d['blockTypo']['not_a_property'] ?? null );
+	t( 'bk11 value without a reference and with an extra key still cleaned', array( '1ab', 'cd', false ), array( $d['looseTypo']['font_size'] ?? null, $d['looseTypo']['made_up'] ?? null, array_key_exists( 'deep', $d['looseTypo'] ?? array() ) ) );
+	t( 'bk12 a reference by name, not key, counts as no reference', 'Latox', $d['byName']['font_family'] ?? null );
+	t( 'bk13 other field: its own value kept, Typography value inside it cleaned', array( 'https://example.com', '2y' ), array( $d['linkish']['url'] ?? null, $d['linkish']['inner']['line_height'] ?? null ) );
 } else {
 	echo "SKIP  block data checks (need ACF Pro)\n";
 }
