@@ -89,9 +89,23 @@ function acft_google_key_field() {
 		}
 
 		if ( $fonts_cache['fetched'] ) {
-			/* translators: 1: number of Google Fonts, 2: date and time of the last update */
-			echo '<p class="description">' . esc_html( sprintf( __( '%1$d Google Fonts available, last updated %2$s.', 'acf-typography-field' ), count( $fonts_cache['families'] ), wp_date( get_option( 'date_format' ) . ' ' . get_option( 'time_format' ), $fonts_cache['fetched'] ) ) ) . '</p>';
+			$fonts_count = count( $fonts_cache['families'] );
+			$fetched_on  = wp_date( get_option( 'date_format' ) . ' ' . get_option( 'time_format' ), $fonts_cache['fetched'] );
+
+			// after a failed fetch the list is the last good one, not from the key in the field
+			if ( '' !== $fonts_cache['error'] ) {
+				/* translators: 1: number of Google Fonts, 2: date and time the list was fetched */
+				$fonts_status = sprintf( __( 'Still using the last good list: %1$d Google Fonts, from %2$s.', 'acf-typography-field' ), $fonts_count, $fetched_on );
+			} else {
+				/* translators: 1: number of Google Fonts, 2: date and time of the last update */
+				$fonts_status = sprintf( __( '%1$d Google Fonts available, last updated %2$s.', 'acf-typography-field' ), $fonts_count, $fetched_on );
+			}
+
+			echo '<p class="description">' . esc_html( $fonts_status ) . '</p>';
 		}
+	} else {
+		/* translators: %s: URL of Google's guide to getting an API key */
+		echo '<p class="description">' . wp_kses( sprintf( __( 'No key is saved, so editors can only pick web-safe fonts. <a href="%s">Get a Google Fonts API key</a> to offer Google Fonts.', 'acf-typography-field' ), esc_url( 'https://developers.google.com/fonts/docs/developer_api#APIKey' ) ), array( 'a' => array( 'href' => array() ) ) ) . '</p>';
 	}
 	?>
 	</div>
