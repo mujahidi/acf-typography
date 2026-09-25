@@ -115,6 +115,7 @@ Compatibility and bug-fix release for WordPress up to 7.1 and PHP 8.x. Now requi
 * [BUG] Fixed warnings and errors on PHP 8.x and when ACF is inactive.
 * [BUG] The Google Fonts list is cached in the database and refreshed daily in the background, not during page loads.
 * [BUG] Saved values are kept: a font missing from the list, a field group's default font, and 0 (e.g. letter spacing).
+* [BUG] Admin screens: property checkboxes are no longer cut off on small screens, and the settings page is easier to use with a screen reader and explains a missing or bad key.
 * Security: values are cleaned when saved, output is escaped, and the `[acf_typography]` shortcode only reads Typography fields.
 * The plugin can now be translated on WordPress.org (text domain `acf-typography-field`).
 * Deleting the plugin now removes its settings and the cached font list.

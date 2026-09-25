@@ -14,6 +14,8 @@
 * [BUG] A saved 0 (e.g. letter spacing) now counts as a value: it passes the required check, and the editor shows 0 instead of the default.
 * [BUG] The Tahoma and Times New Roman choices had wrong values; field groups that use them as the default are corrected when loaded.
 * [BUG] Field labels are now closed and linked to their inputs, and each field has its own input ids. Admin CSS or JS that targeted the old ids (e.g. `#acf-font_size`) should use `[data-name="font_size"]` instead.
+* [BUG] In field group settings, Display Properties and Required Properties are listed one per row, so no checkbox is cut off on laptop, tablet or phone screens.
+* [BUG] Settings page: the Google Fonts Key field is labelled for screen readers and the title is the page heading. The page now says when no key is saved (only web-safe fonts are offered) and when a failed fetch means the last good font list is still in use.
 * Security: escaped output and sanitized settings and shortcode attributes.
 * Security: values are cleaned when saved, including in ACF blocks: HTML tags and the characters `; : { } \` are removed, so a value cannot add extra CSS. Values saved before 3.3.0 are not changed.
 * Security: the `[acf_typography]` shortcode now only reads Typography fields, and a field key only where that field is saved. Before, a Contributor could use it to read other stored data.
