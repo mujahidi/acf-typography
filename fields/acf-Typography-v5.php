@@ -252,7 +252,7 @@ if ( ! class_exists( 'acf_field_Typography' ) ) :
 					'type'         => 'checkbox',
 					'name'         => 'display_properties',
 					'choices'      => acft_typography_property_labels(),
-					'layout'       => 'horizontal',
+					'layout'       => 'vertical',
 				)
 			);
 
@@ -264,7 +264,7 @@ if ( ! class_exists( 'acf_field_Typography' ) ) :
 					'type'         => 'checkbox',
 					'name'         => 'required_properties',
 					'choices'      => acft_typography_property_labels(),
-					'layout'       => 'horizontal',
+					'layout'       => 'vertical',
 				)
 			);
 
