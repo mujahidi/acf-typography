@@ -70,8 +70,9 @@ function acft_sanitize_block_data( $attrs ) {
  *  Each value is judged on its own, never the list as a whole: block data is a flat
  *  name => value list, so a plain field named e.g. font_size sits beside the others.
  *  A value whose field reference (the _name entry beside it) is a Typography field
- *  is cleaned. A value with no usable reference is cleaned when it has a Typography
- *  property key, since it can still be read by its name. Anything else is searched.
+ *  is cleaned. A value with no usable reference that has a Typography property key
+ *  can still be read by its name, so its Typography properties are cleaned; the rest
+ *  of it may belong to another field and is only searched. Anything else is searched.
  *
  *  acft_sanitize_typography_values_in()
  *
@@ -81,6 +82,8 @@ function acft_sanitize_block_data( $attrs ) {
  */
 function acft_sanitize_typography_values_in( $data ) {
 
+	$labels = acft_typography_property_labels();
+
 	foreach ( $data as $key => $child ) {
 		if ( ! is_array( $child ) ) {
 			continue;
@@ -88,8 +91,11 @@ function acft_sanitize_typography_values_in( $data ) {
 
 		$type = acft_block_value_field_type( $data, $key );
 
-		if ( 'Typography' === $type || ( null === $type && array_intersect_key( $child, acft_typography_property_labels() ) ) ) {
+		if ( 'Typography' === $type ) {
 			$data[ $key ] = acft_sanitize_typography_value( $child );
+		} elseif ( null === $type && array_intersect_key( $child, $labels ) ) {
+			$properties   = array_filter( array_intersect_key( $child, $labels ), 'is_string' );
+			$data[ $key ] = array_replace( acft_sanitize_typography_values_in( $child ), acft_sanitize_typography_value( $properties ) );
 		} else {
 			$data[ $key ] = acft_sanitize_typography_values_in( $child );
 		}

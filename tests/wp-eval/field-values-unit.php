@@ -431,9 +431,32 @@ if ( function_exists( 'acf_parse_save_blocks' ) && function_exists( 'acf_registe
 		)
 	);
 	t( 'bk10 value with a Typography field reference cleaned, whatever its keys', 'redx', $d['blockTypo']['not_a_property'] ?? null );
-	t( 'bk11 value without a reference and with an extra key still cleaned', array( '1ab', 'cd', false ), array( $d['looseTypo']['font_size'] ?? null, $d['looseTypo']['made_up'] ?? null, array_key_exists( 'deep', $d['looseTypo'] ?? array() ) ) );
+	t( 'bk11 value without a reference: Typography property cleaned, other keys kept', array( '1ab', 'c;d', array( 'x' ) ), array( $d['looseTypo']['font_size'] ?? null, $d['looseTypo']['made_up'] ?? null, $d['looseTypo']['deep'] ?? null ) );
 	t( 'bk12 a reference by name, not key, counts as no reference', 'Latox', $d['byName']['font_family'] ?? null );
 	t( 'bk13 other field: its own value kept, Typography value inside it cleaned', array( 'https://example.com', '2y' ), array( $d['linkish']['url'] ?? null, $d['linkish']['inner']['line_height'] ?? null ) );
+
+	// a value whose reference names a field this site does not have (e.g. content copied from
+	// another site) may be another plugin's data that shares a property name (Codex review, 3.3.0)
+	$css = 'font-size: 12px;color:red; background:blue';
+	$d   = $save_block(
+		array(
+			'style'     => array(
+				'font_size'  => '16px;position:fixed',
+				'custom_css' => $css,
+				'hover'      => array( 'color' => 'blue' ),
+				'sizes'      => array( 'mobile' => array( 'line_height' => '1;a:b' ) ),
+				'font_style' => array( 'a;b' ),
+				'order'      => 2,
+			),
+			'_style'    => 'field_acft_vt_not_on_this_site',
+			'customCss' => $css,
+		)
+	);
+	t( 'bk14 unknown reference: Typography property cleaned', '16pxpositionfixed', $d['style']['font_size'] ?? null );
+	t( 'bk15 ... its other text, nested data and numbers kept', array( $css, array( 'color' => 'blue' ), 2 ), array( $d['style']['custom_css'] ?? null, $d['style']['hover'] ?? null, $d['style']['order'] ?? null ) );
+	t( 'bk16 ... a Typography value inside it cleaned; a list under a property name kept', array( '1ab', array( 'a;b' ) ), array( $d['style']['sizes']['mobile']['line_height'] ?? null, $d['style']['font_style'] ?? null ) );
+	t( 'bk17 ... keys keep their order', array( 'font_size', 'custom_css', 'hover', 'sizes', 'font_style', 'order' ), array_keys( $d['style'] ?? array() ) );
+	t( 'bk18 a text value with CSS in it is never touched', $css, $d['customCss'] ?? null );
 } else {
 	echo "SKIP  block data checks (need ACF Pro)\n";
 }
