@@ -8,3 +8,9 @@
 ehthumbs.db
 Thumbs.db
 .vscode
+
+# Dev tooling
+/vendor/
+
+# Local test settings
+/tests/.env

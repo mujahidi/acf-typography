@@ -1,22 +1,46 @@
 name: Deploy to WordPress.org
 
+# Deploys only when a version tag (e.g. 3.3.0) is pushed.
+# Pushes to master never deploy. The action takes the version from the tag name.
 on:
   push:
     tags:
-      - '*'
-    branches:
-      - master
+      - '[0-9]+.[0-9]+.[0-9]+'
+
+permissions:
+  contents: read
 
 jobs:
   deploy-plugin:
     name: Deploy Plugin
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@master
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - name: Check tag matches plugin version
+        # Stops the deploy if the tag, the plugin header, the version in code and the readme Stable tag disagree.
+        run: |
+          tag="$GITHUB_REF_NAME"
+          header=$(sed -n 's/^Version:[[:space:]]*//p' acf-typography.php | head -n 1 | tr -d '[:space:]')
+          code=$(sed -n "s/.*'version'[[:space:]]*=>[[:space:]]*'\([^']*\)'.*/\1/p" acf-typography.php | head -n 1)
+          stable=$(sed -n 's/^Stable tag:[[:space:]]*//p' readme.txt | head -n 1 | tr -d '[:space:]')
+
+          echo "Tag:                             $tag"
+          echo "acf-typography.php Version:      $header"
+          echo "acf-typography.php 'version' =>: $code"
+          echo "readme.txt Stable tag:           $stable"
+
+          failed=0
+          [ "$header" = "$tag" ] || { echo "::error::Version header in acf-typography.php is '$header', but the tag is '$tag'."; failed=1; }
+          [ "$code" = "$tag" ] || { echo "::error::'version' => in acf-typography.php is '$code', but the tag is '$tag'."; failed=1; }
+          [ "$stable" = "$tag" ] || { echo "::error::Stable tag in readme.txt is '$stable', but the tag is '$tag'."; failed=1; }
+          if [ "$failed" -ne 0 ]; then
+            echo "Nothing was deployed. Fix the versions, delete the tag and push it again."
+            exit 1
+          fi
+          echo "All versions match $tag."
       - name: WordPress Plugin Deploy
-        uses: 10up/action-wordpress-plugin-deploy@stable
+        uses: 10up/action-wordpress-plugin-deploy@54bd289b8525fd23a5c365ec369185f2966529c2 # 2.3.0
         env:
           SVN_PASSWORD: ${{ secrets.SVN_PASSWORD }}
           SVN_USERNAME: ${{ secrets.SVN_USERNAME }}
           SLUG: acf-typography-field
-          VERSION: 3.2.3
